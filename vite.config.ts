@@ -18,14 +18,16 @@ export function getENV() {
 export default defineConfig(({ mode }) => {
   // const { VITE_BASE } = getENV()
 
+  const isProduction = mode === 'production';
+  const isNetlify = process.env.NETLIFY === 'true' || isProduction;
+
   return {
     // base: VITE_BASE,
     plugins: [
       tailwindcss(),
       reactRouter(),
       tsconfigPaths(),
-      netlifyReactRouter(),
-      netlify()
+      ...(isNetlify ? [netlifyReactRouter(), netlify()] : [])
     ],
   }
 });

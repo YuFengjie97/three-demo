@@ -1,5 +1,6 @@
 import { NavLink } from "react-router";
 import type { Route } from "./+types/home";
+import Link from '~/components/Link'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,14 +10,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-
-  console.log(import.meta.env);
-  
   return (
     <>
     <div className="py-20 px-10">
-      <h1 className="text-7xl">THREE.js</h1>
-      <NavLink to="/three/csm">CSM</NavLink>
+      <h1 className="text-7xl mb-10">THREE.js</h1>
+      <Link to='/three/csm'>custom shader material</Link>
     </div>
     </>
   )

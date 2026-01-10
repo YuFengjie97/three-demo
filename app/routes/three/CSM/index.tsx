@@ -2,7 +2,7 @@ import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { useRef } from 'react'
 import { OrbitControls, useHelper, Environment } from '@react-three/drei'
 import * as THREE from 'three'
-
+import CustomShaderMaterial from 'three-custom-shader-material'
 
 function RotateCube({ castShadow }: { castShadow: boolean }) {
   const boxRef = useRef<THREE.Mesh>(null!)
@@ -64,6 +64,19 @@ function Plane() {
   )
 }
 
+function CSM() {
+  return (
+    <>
+      <mesh>
+        <icosahedronGeometry></icosahedronGeometry>
+        <CustomShaderMaterial>
+          <meshPhysicalMaterial></meshPhysicalMaterial>
+        </CustomShaderMaterial>
+      </mesh>
+    </>
+  )
+}
+
 export default function main() {
   const envHdrPath = '/img/env/hdr/sunny_rose_garden_1k.hdr'
 
@@ -80,12 +93,16 @@ export default function main() {
           <Environment files={envHdrPath} background />
           {/* <perspectiveCamera /> */}
           <OrbitControls />
+
           <ambientLight intensity={1} />
           <DirectionLight />
+
           <axesHelper args={[20]} />
 
           <RotateCube castShadow={true} />
           <Plane />
+
+          {/* <CSM /> */}
         </Canvas>
       </div>
     </>

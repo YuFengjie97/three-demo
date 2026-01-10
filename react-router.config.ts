@@ -1,11 +1,11 @@
 import type { Config } from "@react-router/dev/config";
+import { getENV } from "vite.config";
 
-const base = process.env.NODE_ENV === 'production' ? '/three-demo/' : '/'
 
-
+const {VITE_BASE} = getENV()
 
 export default {
-  basename: base,
+  basename: VITE_BASE,
   // Config options...
   // Server-side render by default, to enable SPA mode set this to `false`
   ssr: false,

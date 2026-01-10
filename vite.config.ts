@@ -1,19 +1,26 @@
 import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 
+console.log('process.env.NODE_ENV',process.env.NODE_ENV);
+
+
+export function getENV(){
+  const mode = process.env.NODE_ENV as string
+  const env = loadEnv(mode, process.cwd())
+  console.log(env);
+  
+  return env
+}
+
 
 export default defineConfig(({mode}) => {
-
-  const base = mode === 'production' ? '/three-demo/' : '/'
-
-  console.log(mode,   base);
-  
+  const {VITE_BASE} = getENV()
 
   return {
-    base,
+    base: VITE_BASE,
     plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   }
 });

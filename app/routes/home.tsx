@@ -9,6 +9,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+
+  console.log(import.meta.env);
+  
   return (
     <>
     <div className="py-20 px-10">

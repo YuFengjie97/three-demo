@@ -6,10 +6,10 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc",
-    "deploy": "gh-pages -d build/client/three-demo"
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@netlify/vite-plugin-react-router": "^2.1.2",
     "@react-router/node": "7.12.0",
     "@react-router/serve": "7.12.0",
     "@react-three/drei": "^10.7.7",
@@ -21,6 +21,7 @@
     "three": "^0.182.0"
   },
   "devDependencies": {
+    "@netlify/vite-plugin": "^2.7.19",
     "@react-router/dev": "7.12.0",
     "@tailwindcss/vite": "^4.1.13",
     "@types/node": "^22",

@@ -1,5 +1,5 @@
+import { NavLink } from "react-router";
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +9,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <>
+    <div className="py-20 px-10">
+      <h1 className="text-7xl">THREE.js</h1>
+      <NavLink to="/three/csm">CSM</NavLink>
+    </div>
+    </>
+  )
 }

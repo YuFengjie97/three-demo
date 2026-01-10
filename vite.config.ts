@@ -3,10 +3,17 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-const base = process.env.NODE_ENV === 'production' ? '/three-demo/' : '/'
 
 
-export default defineConfig({
-  base,
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+export default defineConfig(({mode}) => {
+
+  const base = mode === 'production' ? '/three-demo/' : '/'
+
+  console.log(mode,   base);
+  
+
+  return {
+    base,
+    plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  }
 });

@@ -3,7 +3,6 @@ import { useRef } from 'react'
 import { OrbitControls, useHelper, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 
-const baseUrl = import.meta.env.BASE_URL
 
 function RotateCube({ castShadow }: { castShadow: boolean }) {
   const boxRef = useRef<THREE.Mesh>(null!)
@@ -15,7 +14,7 @@ function RotateCube({ castShadow }: { castShadow: boolean }) {
 
   const tex_matCap = useLoader(
     THREE.TextureLoader,
-    baseUrl + 'img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png'
+    '/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png'
   )
 
   return (
@@ -66,7 +65,7 @@ function Plane() {
 }
 
 export default function main() {
-  const envHdrPath = baseUrl + 'img/env/hdr/sunny_rose_garden_1k.hdr'
+  const envHdrPath = '/img/env/hdr/sunny_rose_garden_1k.hdr'
 
   return (
     <>

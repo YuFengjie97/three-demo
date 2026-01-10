@@ -7,7 +7,7 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "deploy": "gh-pages -d build/client"
+    "deploy": "gh-pages -d build/client/three-demo"
   },
   "dependencies": {
     "@react-router/node": "7.12.0",

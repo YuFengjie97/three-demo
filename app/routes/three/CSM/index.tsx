@@ -3,6 +3,10 @@ import { useRef } from 'react'
 import { OrbitControls, useHelper, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
+import vertex from './vertex.glsl'
+import fragment from './fragment.glsl'
+import { useControls, Leva } from 'leva'
+
 
 function RotateCube({ castShadow }: { castShadow: boolean }) {
   const boxRef = useRef<THREE.Mesh>(null!)
@@ -65,23 +69,53 @@ function Plane() {
 }
 
 function CSM() {
+  const csmRef = useRef(null!)
+
+  const uniforms = {
+    uTime: {value: 0},
+    uDelta: {value: 0},
+  }
+
+  useFrame((state, delta) => {
+    const {clock} = state
+    const elapsed = clock.getElapsedTime()
+    uniforms.uDelta.value = delta
+    uniforms.uTime.value = elapsed    
+  })
+
   return (
     <>
       <mesh>
         <icosahedronGeometry></icosahedronGeometry>
-        <CustomShaderMaterial>
-          <meshPhysicalMaterial></meshPhysicalMaterial>
+        <CustomShaderMaterial
+          baseMaterial={THREE.MeshPhysicalMaterial}
+          ref={csmRef}
+          uniforms={uniforms}
+          vertexShader={vertex}
+          fragmentShader={fragment}
+          >
         </CustomShaderMaterial>
       </mesh>
     </>
   )
 }
 
+
+
+
+function MyComponent() {
+  const { myValue } = useControls({ myValue: 10 })
+  return null
+}
+
+
 export default function main() {
   const envHdrPath = '/img/env/hdr/sunny_rose_garden_1k.hdr'
 
   return (
     <>
+      <Leva />
+      <MyComponent />
       <div className='h-screen'>
         <Canvas
           shadows={{
@@ -102,7 +136,7 @@ export default function main() {
           <RotateCube castShadow={true} />
           <Plane />
 
-          {/* <CSM /> */}
+          <CSM />
         </Canvas>
       </div>
     </>

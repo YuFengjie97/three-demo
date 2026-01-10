@@ -4,6 +4,7 @@ import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import netlifyReactRouter from "@netlify/vite-plugin-react-router";
 import netlify from "@netlify/vite-plugin";
+import glsl from 'vite-plugin-glsl'
 
 
 export function getENV() {
@@ -27,6 +28,7 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       reactRouter(),
       tsconfigPaths(),
+      glsl(),
       ...(isNetlify ? [netlifyReactRouter(), netlify()] : [])
     ],
   }

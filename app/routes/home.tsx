@@ -13,6 +13,8 @@ export default function Home() {
   return (
     <>
     <div className="py-20 px-10">
+      <Link to='/reactTest'>test</Link>
+
       <h1 className="text-7xl mb-10">THREE.js</h1>
       <Link to='/three/csm'>custom shader material</Link>
     </div>

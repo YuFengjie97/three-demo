@@ -1,20 +1,29 @@
-#pragma glslify: snoise3 = require('glsl-noise/simplex/3d')
+#pragma glslify: snoise4 = require('glsl-noise/simplex/4d')
 
 
 #define T uTime
 
 uniform float uTime;
+uniform bool uUseNoise4D;
 
 attribute vec4 tangent;
 
 varying vec3 aColor;
 
 vec3 getDistortion(vec3 p){
-  // p += (sin(p.zxy*1.*2. + T * 2.))*1.*.3;
-  // p += (sin(p.zxy*2.*2. - T * 2.))*.5*.3;
-  // p += (sin(p.zxy*4.*2. + T * 2.))*.2*.3;
+  
 
-  p += snoise3(p);
+  if(uUseNoise4D) {
+    float v = snoise4(vec4(p, T))*.5;
+    v += snoise4(vec4(p*2., T)) * .2;
+    v += snoise4(vec4(p*4., T)) * .1;
+    p += v * normal;
+  }else{
+    p += (sin(p.zxy*1.*2. + T * 2.))*1.*.3;
+    p += (sin(p.zxy*2.*2. - T * 2.))*.5*.3;
+    p += (sin(p.zxy*4.*2. + T * 2.))*.2*.3;
+  }
+  
 
   return p;
 }

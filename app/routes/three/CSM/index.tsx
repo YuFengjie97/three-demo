@@ -1,10 +1,6 @@
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
-import {
-  OrbitControls,
-  useHelper,
-  Environment,
-} from '@react-three/drei'
+import { OrbitControls, useHelper, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
@@ -88,6 +84,7 @@ function CSM() {
   const uniforms = {
     uTime: { value: 0 },
     uDelta: { value: 0 },
+    uUseNoise4D: {value: true}
   }
 
   useFrame((state, delta) => {
@@ -103,19 +100,45 @@ function CSM() {
     metalness: { value: 0, min: 0, max: 1 },
     roughness: { value: 0.2, min: 0, max: 1 },
     ior: { value: 1.5, min: 0, max: 2.33 },
-    transparent: true,
-    opacity: { value: 1, min: 0, max: 1, render: (get) => get('transparent') },
-    transmission: { value: 1, min: 0, max: 1 },
+    transparent: false,
+    opacity: { value: 0, min: 0, max: 1, render: (get) => get('transparent') },
+    transmission: { value: 0, min: 0, max: 1 },
+  })
+
+  const { detail } = useControls({
+    detail: { value: 20, min: 4, max: 40, step: 1, order: -2 },
   })
 
   const geo = useMemo(() => {
-    const geo = new THREE.IcosahedronGeometry(2, 20)
-    console.log(geo.attributes.position.count)
-
+    const geo = new THREE.IcosahedronGeometry(2, detail)
     const merged = mergeVertices(geo)
     merged.computeTangents()
     return merged
-  }, [])
+  }, [detail])
+
+  const vertexCount = geo.attributes.position.count
+  const [, set] = useControls(() => ({
+    vertices: {
+      value: 0,
+      disabled: true,
+      order: -1,
+    },
+  }))
+  useEffect(() => {
+    set({ vertices: vertexCount })
+  }, [vertexCount])
+
+
+  const { shape } = useControls({
+    shape: {
+      options: {
+        turbulance: false,
+        noise4D: true,
+      },
+      value: true,
+    },
+  })
+  uniforms.uUseNoise4D.value = shape
 
   return (
     <>

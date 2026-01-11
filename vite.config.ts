@@ -29,7 +29,6 @@ export default defineConfig(({ mode }) => {
       reactRouter(),
       tsconfigPaths(),
       glsl(),
-      ...[netlifyReactRouter(), netlify()],
       ...(isNetlify ? [netlifyReactRouter(), netlify()] : [])
     ],
   }

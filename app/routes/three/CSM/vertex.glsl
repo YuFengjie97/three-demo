@@ -32,7 +32,7 @@ void main(){
 
   vec3 normal_new = normalize(cross(toA, toB));
 
-  aColor = sin(vec3(3,2,1) + dot(cos(pos), vec3(10.1))) * .5 + .5;
+  aColor = sin(vec3(3,2,1) + T + dot(cos(pos), vec3(1.1))) * .5 + .5;
 
   csm_Position.xyz = pos;
   csm_Normal = normal_new;

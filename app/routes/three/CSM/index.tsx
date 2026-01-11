@@ -4,7 +4,6 @@ import {
   OrbitControls,
   useHelper,
   Environment,
-  Wireframe,
 } from '@react-three/drei'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'

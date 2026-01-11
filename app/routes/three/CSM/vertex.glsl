@@ -1,3 +1,6 @@
+#pragma glslify: snoise3 = require('glsl-noise/simplex/3d')
+
+
 #define T uTime
 
 uniform float uTime;
@@ -7,11 +10,17 @@ attribute vec4 tangent;
 varying vec3 aColor;
 
 vec3 getDistortion(vec3 p){
-  p += (sin(p.zxy*1.*2. + T * 2.))*1.*.3;
-  p += (sin(p.zxy*2.*2. - T * 2.))*.5*.3;
-  p += (sin(p.zxy*4.*2. + T * 2.))*.2*.3;
+  // p += (sin(p.zxy*1.*2. + T * 2.))*1.*.3;
+  // p += (sin(p.zxy*2.*2. - T * 2.))*.5*.3;
+  // p += (sin(p.zxy*4.*2. + T * 2.))*.2*.3;
+
+  p += snoise3(p);
+
   return p;
 }
+
+
+
 
 void main(){
   float e = .01;
@@ -33,6 +42,7 @@ void main(){
   vec3 normal_new = normalize(cross(toA, toB));
 
   aColor = sin(vec3(3,2,1) + T + dot(cos(pos), vec3(1.1))) * .5 + .5;
+
 
   csm_Position.xyz = pos;
   csm_Normal = normal_new;

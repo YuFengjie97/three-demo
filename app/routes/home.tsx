@@ -17,6 +17,7 @@ export default function Home() {
 
       <h1 className="text-7xl mb-10">THREE.js</h1>
       <Link to='/three/csm'>custom shader material</Link>
+      <Link to='/three/sea'>海洋</Link>
     </div>
     </>
   )

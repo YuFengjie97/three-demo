@@ -1,45 +1,54 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Leva, useControls } from 'leva'
 import * as THREE from 'three'
 
-export default function main() {
-  let val = 1
-
-  function addVal() {
-    console.log('click')
-
-    val += 1
-  }
-
-  const [count, setCount] = useState(0)
-  const [count2, setCount2] = useState(2)
-
-  function addCount() {
-    setCount(count + 1)
-  }
-  function addCount2() {
-    setCount2(count2 + 1)
-  }
-
-
+function Foo(){
+  const [count,setCount] = useState(1)
+  console.log('child');
   useEffect(() => {
-    console.log('useEffect')
-    setCount(10)
+    console.log('child useEffect');
+  },[])
+  
+  return (
+    <>
+      <div>child</div>
+    </>
+  )
+}
 
-    return () => {
-      console.log('page out')
-    }
-  }, [count2])
+export function Counter() {
+  const [number, setNumber] = useState(0);
+  console.log('Counter');
+  
 
   return (
     <>
-      <Leva />
-      <div onClick={addVal}>addVal</div>
-      val: {val}
-      <div onClick={addCount}>addCount</div>
-      count: {count}
-      <div onClick={addCount2}>addCount2</div>
-      count2: {count2}
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(number + 1);
+        setNumber(number + 1);
+        setNumber(number + 1);
+      }}>+3</button>
+    </>
+  )
+}
+
+export default function main() {
+  const [count, setCount] = useState(0)
+  console.log('main');
+  useEffect(() => {
+    console.log('main useEffect');
+  }, [count])
+  useMemo(() => {
+    console.log('main useMemo');
+  }, [count])
+  
+  return(
+    <>
+      {/* {count} */}
+      {/* <button onClick={() => {setCount(count + 1)}}>main add count</button> */}
+      {/* <Foo /> */}
+      <Counter/>
     </>
   )
 }

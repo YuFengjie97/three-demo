@@ -20,6 +20,7 @@ export default function Home() {
       <Link to='/three/sea'>海洋</Link>
       <Link to='/three/points'>点云与线</Link>
       <Link to='/three/planet'>行星</Link>
+      <Link to='/three/skull-csm'>自定义材质骷髅头</Link>
     </div>
     </>
   )

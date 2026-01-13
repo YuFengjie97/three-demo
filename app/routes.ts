@@ -5,5 +5,6 @@ export default [
   route('/three/csm', 'routes/three/CSM/index.tsx'),
   route('/three/sea', 'routes/three/sea/index.tsx'),
   route('/three/points', 'routes/three/points/index.tsx'),
+  route('/three/planet', 'routes/three/planet/index.tsx'),
   route('/reactTest', 'routes/reactTest.tsx')
 ] satisfies RouteConfig;

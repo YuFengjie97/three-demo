@@ -11,6 +11,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useControls } from 'leva'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
+
 function Planet() {
   const uniforms = {
     uEvolution: new THREE.Uniform(0),
@@ -125,7 +126,7 @@ function Light() {
 function Stars() {
   const geo = useMemo(() => {
     const geo = new THREE.BufferGeometry()
-    const count = 1000
+    const count = 2000
     const postions = new Float32Array(count*3)
     const range = 10
     for (let i = 0; i < count; i++) {
@@ -139,15 +140,20 @@ function Stars() {
     }
     geo.setAttribute('position', new THREE.BufferAttribute(postions, 3))
 
-    console.log(geo);
-    
     return geo
   }, [])
 
   const tex = useLoader(THREE.TextureLoader, '/img/texture/particle/star_09.png')
   const uniforms = {
-    uTex: new THREE.Uniform(tex)
+    uTex: new THREE.Uniform(tex),
+    uTime: new THREE.Uniform(0),
+    uDelta: new THREE.Uniform(0),
   }
+  useFrame((state, delta) => {
+    const { clock } = state
+    uniforms.uTime.value = clock.getElapsedTime()
+    uniforms.uDelta.value = delta
+  })
 
   return (
     <>

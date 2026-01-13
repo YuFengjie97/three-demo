@@ -6,6 +6,7 @@ uniform float uTime;
 
 varying vec2 vUv;
 varying float vAlpha;
+varying vec3 vCol;
 
 
 mat2 rotate(float a){
@@ -35,6 +36,8 @@ void main(){
 
   // vAlpha = step(0.5, snoise3(pos));
   vAlpha = smoothstep(0., 1., snoise3(pos));
+
+  vCol = sin(vec3(3,2,1) + dot(pos, vec3(4.1))) * .5 + .5;
 
 
   csm_Position.xyz = pos;

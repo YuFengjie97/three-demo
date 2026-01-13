@@ -2,6 +2,7 @@
 
 varying vec2 vUv;
 varying float vAlpha;
+varying vec3 vCol;
 
 void main(){
 
@@ -9,7 +10,8 @@ void main(){
   // d = smoothstep(.1, 0., d-.2);
   d = pow(.1/d, 2.);
 
-  vec3 col = vec3(1,.3,0);
+  // vec3 col = vec3(1,.3,0);
+  vec3 col = vCol;
   col *= d;
 
   csm_FragColor.rgb = col;

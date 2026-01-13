@@ -20,27 +20,28 @@ function MyPoints() {
     uniforms.uDelta.value = delta
   })
 
-  // const geo = useMemo(() => {
-  //   const geo = new THREE.IcosahedronGeometry(2, 10)
-  //   return geo
-  // }, [])
-  const { geo, tubeGeo } = useMemo(() => {
-    const geo = new THREE.IcosahedronGeometry(2, 15)
-    // geo.setIndex(null)
-    const positions = geo.getAttribute('position')
-    const points: THREE.Vector3[] = []
-    for (let i = 0; i < positions.count; i++) {
-      const x = positions.getX(i)
-      const y = positions.getY(i)
-      const z = positions.getZ(i)
-      points.push(new THREE.Vector3(x, y, z))
-    }
-
-    const curve = new THREE.CatmullRomCurve3(points)
-    const tubeGeo = new THREE.TubeGeometry(curve,1000,.01,6)
-
-    return { geo, tubeGeo }
+  const geo = useMemo(() => {
+    const geo = new THREE.IcosahedronGeometry(2, 10)
+    geo.setIndex(null)
+    return geo
   }, [])
+  // const { geo, tubeGeo } = useMemo(() => {
+  //   const geo = new THREE.IcosahedronGeometry(2, 15)
+  //   // geo.setIndex(null)
+  //   const positions = geo.getAttribute('position')
+  //   const points: THREE.Vector3[] = []
+  //   for (let i = 0; i < positions.count; i++) {
+  //     const x = positions.getX(i)
+  //     const y = positions.getY(i)
+  //     const z = positions.getZ(i)
+  //     points.push(new THREE.Vector3(x, y, z))
+  //   }
+
+  //   const curve = new THREE.CatmullRomCurve3(points)
+  //   const tubeGeo = new THREE.TubeGeometry(curve,1000,.01,6)
+
+  //   return { geo, tubeGeo }
+  // }, [])
 
 
   return (

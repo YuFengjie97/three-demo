@@ -7,5 +7,8 @@ export default [
   route('/three/points', 'routes/three/points/index.tsx'),
   route('/three/planet', 'routes/three/planet/index.tsx'),
   route('/three/skull-csm', 'routes/three/skullCSM/index.tsx'),
+  route('/three/instanced-mesh', 'routes/three/instancedMesh/index.tsx'),
+
+
   route('/reactTest', 'routes/reactTest.tsx')
 ] satisfies RouteConfig;

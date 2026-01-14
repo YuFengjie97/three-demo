@@ -21,6 +21,7 @@ export default function Home() {
       <Link to='/three/points'>点云与线</Link>
       <Link to='/three/planet'>行星</Link>
       <Link to='/three/skull-csm'>自定义材质骷髅头</Link>
+      <Link to='/three/instanced-mesh'>骷髅头 instancedMesh</Link>
     </div>
     </>
   )

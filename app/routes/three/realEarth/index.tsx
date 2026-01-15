@@ -44,12 +44,28 @@ function Earth() {
   texDay.anisotropy = 8
   texNight.anisotropy = 8
   texCloud.anisotropy = 8
-  const texNor = useLoader(THREE.TextureLoader, '/img/texture/earth_2k/2k_earth_normal_map.jpg')
-  const texSpe = useLoader(THREE.TextureLoader, '/img/texture/earth_2k/2k_earth_specular_map.jpg')
-  
+  const texSpe = useLoader(
+    THREE.TextureLoader,
+    '/img/texture/earth_2k/2k_earth_specular_map.jpg'
+  )
 
-  const sunPos: [number, number, number] = [2, 0, 0]
+  const { r, phi, theta, cloudVal, dayCol, toNightCol } = useControls({
+    r: { value: 1.5, min: 1, max: 3 },
+    phi: { value: 1.57, min: -3.15, max: 3.15 },
+    theta: { value: 1.57, min: -3.15, max: 3.15 },
+    cloudVal: {
+      value: .2,
+      min: 0,
+      max: 0.4,
+    },
+    dayCol: { value: '#00aaff' },
+    toNightCol: { value: '#ff6600'},
+  })
+  
   const sunRef = useRef<THREE.Mesh>(null!)
+  const sunSph = new THREE.Spherical().set(r, phi, theta)
+  const sunPos = new THREE.Vector3().setFromSpherical(sunSph)
+  
 
   const uniforms = useMemo(() => {
     return {
@@ -58,30 +74,27 @@ function Earth() {
       uTexNight: new THREE.Uniform(texNight),
       uTexCloud: new THREE.Uniform(texCloud),
       uTexSpe: new THREE.Uniform(texSpe),
-      uSunPos: new THREE.Uniform(new THREE.Vector3(...sunPos)),
-      uCloudVal: new THREE.Uniform(0.2),
-      uAtomsphereDayCol: new THREE.Uniform(new THREE.Color(0x00aaff)),
-      uAtomsphereToNightCol: new THREE.Uniform(new THREE.Color(0xff6600)),
+      uSunPos: new THREE.Uniform(sunPos),
+      uCloudVal: new THREE.Uniform(cloudVal),
+      uAtomsphereDayCol: new THREE.Uniform(new THREE.Color(dayCol)),
+      uAtomsphereToNightCol: new THREE.Uniform(new THREE.Color(toNightCol)),
     }
   }, [])
 
-  const { cloudVal, dayCol, toNightCol } = useControls({
-    cloudVal: {
-      value: uniforms.uCloudVal.value,
-      min: 0,
-      max: .4,
-    },
-    dayCol: { value: '#' + uniforms.uAtomsphereDayCol.value.getHexString() },
-    toNightCol: {
-      value: '#' + uniforms.uAtomsphereToNightCol.value.getHexString(),
-    },
-  })
+
+  useEffect(() => {
+    sunSph.set(r, phi, theta)
+    sunPos.setFromSpherical(sunSph)
+    sunRef.current.position.set(...sunPos.toArray())
+    uniforms.uSunPos.value.set(...sunPos.toArray())
+  }, [r, phi, theta])
+
+
   useEffect(() => {
     uniforms.uCloudVal.value = cloudVal
     uniforms.uAtomsphereDayCol.value.set(dayCol)
     uniforms.uAtomsphereToNightCol.value.set(toNightCol)
   }, [cloudVal, dayCol, toNightCol])
-
 
   const earthRef = useRef<THREE.Mesh>(null!)
   useFrame((_, delta) => {

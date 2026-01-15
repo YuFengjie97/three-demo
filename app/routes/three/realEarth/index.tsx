@@ -57,7 +57,6 @@ function Earth() {
       uTexDay: new THREE.Uniform(texDay),
       uTexNight: new THREE.Uniform(texNight),
       uTexCloud: new THREE.Uniform(texCloud),
-      uTexNor: new THREE.Uniform(texNor),
       uTexSpe: new THREE.Uniform(texSpe),
       uSunPos: new THREE.Uniform(new THREE.Vector3(...sunPos)),
       uCloudVal: new THREE.Uniform(0.2),

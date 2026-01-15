@@ -1,7 +1,6 @@
 uniform sampler2D uTexDay;
 uniform sampler2D uTexNight;
 uniform sampler2D uTexCloud;
-uniform sampler2D uTexNor;
 uniform sampler2D uTexSpe;
 
 uniform vec3 uSunPos;
@@ -24,7 +23,6 @@ void main(){
   vec3 texDay = texture(uTexDay, uv).rgb;
   vec3 texNight = texture(uTexNight, uv).rgb;
   vec3 texCloud = texture(uTexCloud, uv).rgb;
-  vec3 texNor = texture(uTexNor, uv).rgb;
   vec3 texSpe = texture(uTexSpe, uv).rgb;
 
 
@@ -48,11 +46,8 @@ void main(){
                       1. - max(0.,dot(-viewDir, vWorldNormal)),
                     2.);
   col = mix(col, atomCol, atomMix * fresnel);
-  // col = atomCol;
 
-  // diff
-  // float diff = max(0., dot(-ligthDir, texNor));
-  // col = col * diff;
+
 
 
   // 反射高光

@@ -8,6 +8,7 @@ export default [
   route('/three/planet', 'routes/three/planet/index.tsx'),
   route('/three/skull-csm', 'routes/three/skullCSM/index.tsx'),
   route('/three/instanced-mesh', 'routes/three/instancedMesh/index.tsx'),
+  route('/three/real-earth', 'routes/three/realEarth/index.tsx'),
 
 
   route('/reactTest', 'routes/reactTest.tsx')

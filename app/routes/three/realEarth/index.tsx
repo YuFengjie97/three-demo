@@ -1,7 +1,6 @@
 import { OrbitControls, useHelper } from '@react-three/drei'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
-import CustomShaderMaterial from 'three-custom-shader-material'
 import * as THREE from 'three'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
@@ -10,20 +9,9 @@ import { useControls } from 'leva'
 
 import atomVertex from './atomVertex.glsl'
 import atomFragment from './atomFragment.glsl'
+import { useUniformTime } from '~/hook/useUniformTime'
 
-const uniformTime = {
-  uTime: new THREE.Uniform(0),
-  uDelta: new THREE.Uniform(0),
-}
 
-function UniformTime() {
-  useFrame((state, delta) => {
-    const { clock } = state
-    uniformTime.uTime.value = clock.getElapsedTime()
-    uniformTime.uDelta.value = delta
-  })
-  return <></>
-}
 
 function Earth() {
   const texDay = useLoader(
@@ -38,12 +26,15 @@ function Earth() {
     THREE.TextureLoader,
     '/img/texture/earth_2k/2k_earth_clouds.jpg'
   )
-  texDay.colorSpace = THREE.SRGBColorSpace
-  texNight.colorSpace = THREE.SRGBColorSpace
-  texCloud.colorSpace = THREE.SRGBColorSpace
-  texDay.anisotropy = 8
-  texNight.anisotropy = 8
-  texCloud.anisotropy = 8
+  useEffect(() => {
+    texDay.colorSpace = THREE.SRGBColorSpace
+    texNight.colorSpace = THREE.SRGBColorSpace
+    texCloud.colorSpace = THREE.SRGBColorSpace
+    texDay.anisotropy = 8
+    texNight.anisotropy = 8
+    texCloud.anisotropy = 8
+  }, [texDay,texNight,texCloud])
+  
   const texSpe = useLoader(
     THREE.TextureLoader,
     '/img/texture/earth_2k/2k_earth_specular_map.jpg'
@@ -63,9 +54,10 @@ function Earth() {
   })
   
   const sunRef = useRef<THREE.Mesh>(null!)
-  const sunSph = new THREE.Spherical().set(r, phi, theta)
-  const sunPos = new THREE.Vector3().setFromSpherical(sunSph)
+  const sunSph = useMemo(() => new THREE.Spherical(), [])
+  const sunPos = useMemo(() => new THREE.Vector3(), [])
   
+  const uniformTime = useUniformTime()
 
   const uniforms = useMemo(() => {
     return {
@@ -85,8 +77,10 @@ function Earth() {
   useEffect(() => {
     sunSph.set(r, phi, theta)
     sunPos.setFromSpherical(sunSph)
-    sunRef.current.position.set(...sunPos.toArray())
-    uniforms.uSunPos.value.set(...sunPos.toArray())
+    // sunRef.current.position.set(...sunPos.toArray())
+    // uniforms.uSunPos.value.set(...sunPos.toArray())
+    sunRef.current.position.copy(sunPos)
+    uniforms.uSunPos.value.copy(sunPos)
   }, [r, phi, theta])
 
 
@@ -149,7 +143,6 @@ export default function main() {
             far: 10,
           }}
         >
-          <UniformTime />
           <Perf position='top-left' showGraph />
           <OrbitControls />
           <ambientLight />

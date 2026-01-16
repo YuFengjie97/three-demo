@@ -2,8 +2,6 @@ import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import netlifyReactRouter from "@netlify/vite-plugin-react-router";
-import netlify from "@netlify/vite-plugin";
 // import glsl from 'vite-plugin-glsl'
 import glslify from "vite-plugin-glslify";
 
@@ -21,7 +19,6 @@ export default defineConfig(({ mode }) => {
   // const { VITE_BASE } = getENV()
 
   const isProduction = mode === 'production';
-  const isNetlify = process.env.NETLIFY === 'true' || isProduction;
 
   return {
     // base: VITE_BASE,
@@ -30,7 +27,6 @@ export default defineConfig(({ mode }) => {
       reactRouter(),
       tsconfigPaths(),
       glslify(),
-      ...(isNetlify ? [netlifyReactRouter(), netlify()] : [])
     ],
   }
 });

@@ -9,7 +9,6 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@netlify/vite-plugin-react-router": "^2.1.2",
     "@react-router/node": "7.12.0",
     "@react-router/serve": "7.12.0",
     "@react-three/drei": "^10.7.7",
@@ -26,7 +25,6 @@
     "three-custom-shader-material": "^6.4.0"
   },
   "devDependencies": {
-    "@netlify/vite-plugin": "^2.7.19",
     "@react-router/dev": "7.12.0",
     "@tailwindcss/vite": "^4.1.13",
     "@types/node": "^22",

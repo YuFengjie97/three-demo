@@ -32,9 +32,9 @@ function Trails() {
 
   useFrame((state, delta) => {
     const t = state.clock.getElapsedTime()
-    groupRefs.current.forEach((item) => {
-      item.rotation.x += delta * 2
-      item.rotation.y += delta * 2
+    groupRefs.current.forEach((item, ndx) => {
+      item.rotation.x += delta * (2 * (ndx % 2 + 1) / 2 + 1)
+      item.rotation.y += delta * (2 * (ndx % 2 + 1) / 2 + 1)
 
       // item.traverse(obj => {
       //   if(obj.name === 'ball') {

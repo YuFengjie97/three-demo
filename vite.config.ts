@@ -28,15 +28,14 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
       glslify(),
       // 将public下所有资源复制到three-demo目录下
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'public/*',
-            dest: 'three-demo',
-          },
-        ],
-      }),
-      
+      // viteStaticCopy({
+      //   targets: [
+      //     {
+      //       src: 'public/*',
+      //       dest: 'three-demo',
+      //     },
+      //   ],
+      // }),
     ],
     // build: {
     //   // outDir: 'build/client/three-demo',  // 不知道是不是react-router.config配置覆盖了,没用

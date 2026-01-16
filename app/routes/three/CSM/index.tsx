@@ -165,7 +165,7 @@ function CSM() {
 }
 
 export default function main() {
-  const envHdrPath = '/img/env/hdr/sunny_rose_garden_1k.hdr'
+  const envHdrPath = asset('/img/env/hdr/sunny_rose_garden_1k.hdr')
 
   return (
     <>

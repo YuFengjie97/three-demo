@@ -10,10 +10,10 @@ import { asset } from '~/utils/asset'
 
 // instancedMesh
 function SkullsMesh() {
-  const model = useLoader(GLTFLoader, '/model/skull_downloadable/scene.gltf')
+  const model = useLoader(GLTFLoader, asset('/model/skull_downloadable/scene.gltf'))
   const tex = useLoader(
     THREE.TextureLoader,
-    '/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png'
+    asset('/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png')
   )
 
   const geo = useMemo(() => {
@@ -65,7 +65,7 @@ function SkullsMesh() {
 }
 
 function Skulls() {
-  const model = useLoader(GLTFLoader, '/model/skull_downloadable/scene.gltf')
+  const model = useLoader(GLTFLoader, asset('/model/skull_downloadable/scene.gltf'))
   const geo = useMemo(() => {
     const geos: THREE.BufferGeometry[] = []
     model.scene.traverse((obj) => {

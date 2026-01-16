@@ -3,10 +3,11 @@ import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
 import { useEffect, useMemo, useRef, type RefObject } from 'react'
 import * as THREE from 'three'
+import { asset } from '~/utils/asset'
 
 function Trails() {
   const count = 100
-  const tex = useLoader(THREE.TextureLoader, '/img/texture/matcap/3B6E10_E3F2C3_88AC2E_99CE51.png')
+  const tex = useLoader(THREE.TextureLoader, asset('/img/texture/matcap/3B6E10_E3F2C3_88AC2E_99CE51.png'))
 
   const mat = useMemo(() => {
     // const mat = new THREE.MeshNormalMaterial({ flatShading: true })

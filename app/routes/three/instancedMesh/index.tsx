@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
+import { asset } from '~/utils/asset'
 
 // instancedMesh
 function SkullsMesh() {
@@ -83,23 +84,23 @@ function Skulls() {
   const texs = [
     useLoader(
       THREE.TextureLoader,
-      '/img/texture/matcap/2A2A2A_B3B3B3_6D6D6D_848C8C.png'
+      asset('/img/texture/matcap/2A2A2A_B3B3B3_6D6D6D_848C8C.png')
     ),
     useLoader(
       THREE.TextureLoader,
-      '/img/texture/matcap/6D1616_E6CDBA_DE2B24_230F0F.png'
+      asset('/img/texture/matcap/6D1616_E6CDBA_DE2B24_230F0F.png')
     ),
     useLoader(
       THREE.TextureLoader,
-      '/img/texture/matcap/3B6E10_E3F2C3_88AC2E_99CE51.png'
+      asset('/img/texture/matcap/3B6E10_E3F2C3_88AC2E_99CE51.png')
     ),
     useLoader(
       THREE.TextureLoader,
-      '/img/texture/matcap/3E95CC_65D9F1_A2E2F6_679BD4.png'
+      asset('/img/texture/matcap/3E95CC_65D9F1_A2E2F6_679BD4.png')
     ),
     useLoader(
       THREE.TextureLoader,
-      '/img/texture/matcap/3E2335_D36A1B_8E4A2E_2842A5.png'
+      asset('/img/texture/matcap/3E2335_D36A1B_8E4A2E_2842A5.png')
     ),
   ]
 

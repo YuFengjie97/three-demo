@@ -10,21 +10,22 @@ import { useControls } from 'leva'
 import atomVertex from './atomVertex.glsl'
 import atomFragment from './atomFragment.glsl'
 import { useUniformTime } from '~/hook/useUniformTime'
+import { asset } from '~/utils/asset'
 
 
 
 function Earth() {
   const texDay = useLoader(
     THREE.TextureLoader,
-    '/img/texture/earth_2k/2k_earth_daymap.jpg'
+    asset('/img/texture/earth_2k/2k_earth_daymap.jpg')
   )
   const texNight = useLoader(
     THREE.TextureLoader,
-    '/img/texture/earth_2k/2k_earth_nightmap.jpg'
+    asset('/img/texture/earth_2k/2k_earth_nightmap.jpg')
   )
   const texCloud = useLoader(
     THREE.TextureLoader,
-    '/img/texture/earth_2k/2k_earth_clouds.jpg'
+    asset('/img/texture/earth_2k/2k_earth_clouds.jpg')
   )
   useEffect(() => {
     texDay.colorSpace = THREE.SRGBColorSpace
@@ -37,7 +38,7 @@ function Earth() {
   
   const texSpe = useLoader(
     THREE.TextureLoader,
-    '/img/texture/earth_2k/2k_earth_specular_map.jpg'
+    asset('/img/texture/earth_2k/2k_earth_specular_map.jpg')
   )
 
   const { r, phi, theta, cloudVal, dayCol, toNightCol } = useControls({

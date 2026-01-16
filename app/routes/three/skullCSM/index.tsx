@@ -8,12 +8,13 @@ import { useEffect, useMemo, useRef } from 'react'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { useControls } from 'leva'
 import { metalness } from 'three/tsl'
+import { asset } from '~/utils/asset'
 
 const uTime = new THREE.Uniform(0)
 const uDelta = new THREE.Uniform(0.)
 
 function Skull() {
-  const model = useLoader(GLTFLoader, '/model/skull_downloadable/scene.gltf')
+  const model = useLoader(GLTFLoader, asset('/model/skull_downloadable/scene.gltf'))
 
   const uniforms = {
     uTime,

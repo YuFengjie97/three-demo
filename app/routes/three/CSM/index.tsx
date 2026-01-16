@@ -7,6 +7,7 @@ import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import { useControls, Leva } from 'leva'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { asset } from '~/utils/asset'
 
 function RotateCube({ castShadow }: { castShadow: boolean }) {
   const boxRef = useRef<THREE.Mesh>(null!)
@@ -18,7 +19,7 @@ function RotateCube({ castShadow }: { castShadow: boolean }) {
 
   const tex_matCap = useLoader(
     THREE.TextureLoader,
-    '/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png'
+    asset('/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png')
   )
 
   return (

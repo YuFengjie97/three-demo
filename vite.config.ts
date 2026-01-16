@@ -9,19 +9,18 @@ import glslify from "vite-plugin-glslify";
 export function getENV() {
   const mode = process.env.NODE_ENV as string
   const env = loadEnv(mode, process.cwd())
-  // console.log(env);
 
   return env
 }
 
 
 export default defineConfig(({ mode }) => {
-  // const { VITE_BASE } = getENV()
+  const { VITE_BASE } = getENV()
 
   const isProduction = mode === 'production';
 
   return {
-    // base: VITE_BASE,
+    base: VITE_BASE,
     plugins: [
       tailwindcss(),
       reactRouter(),

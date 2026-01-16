@@ -10,6 +10,7 @@ import starsFragment from './starsFragment.glsl'
 import { useEffect, useMemo, useRef } from 'react'
 import { useControls } from 'leva'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { asset } from '~/utils/asset'
 
 
 function Planet() {
@@ -143,7 +144,7 @@ function Stars() {
     return geo
   }, [])
 
-  const tex = useLoader(THREE.TextureLoader, '/img/texture/particle/star_09.png')
+  const tex = useLoader(THREE.TextureLoader, asset('/img/texture/particle/star_09.png'))
   const uniforms = {
     uTex: new THREE.Uniform(tex),
     uTime: new THREE.Uniform(0),

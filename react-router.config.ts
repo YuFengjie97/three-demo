@@ -1,15 +1,21 @@
 import type { Config } from "@react-router/dev/config";
-// import { getENV } from "vite.config";
+import { getENV } from "vite.config";
+import routes from './app/routes'
 
 
-// const {VITE_BASE} = getENV()
+function getAllPath(): string[]{
+  const paths = routes.map(item=>item?.path ?? '/') as string[]
+  console.log(paths);
+  return paths
+}
+getAllPath()
+
+const {VITE_BASE} = getENV()
 
 export default {
-  // basename: VITE_BASE,
+  basename: VITE_BASE,
   // Config options...
   // Server-side render by default, to enable SPA mode set this to `false`
-  ssr: true,
-  // async prerender() {
-  //   return ["/", "/three/csm"];
-  // },
+  ssr: false,
+  prerender: getAllPath(),
 } satisfies Config;

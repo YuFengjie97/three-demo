@@ -1,0 +1,6 @@
+import{o as e,t as s,w as o}from"./chunk-EPOLDU6W-B0aIzJ9t.js";function t({to:r,children:n}){return e.jsx(e.Fragment,{children:e.jsx(s,{className:`inline-block px-4 py-2 mr-4 mb-2 rounded-md bg-amber-50 text-amber-950
+        hover:bg-amber-950 hover:text-amber-50
+        transition-all
+        delay-150
+        ease-in-out
+      `,to:r,children:n})})}function i({}){return[{title:"New React Router App"},{name:"description",content:"Welcome to React Router!"}]}const c=o(function(){return e.jsx(e.Fragment,{children:e.jsxs("div",{className:"py-20 px-10",children:[e.jsx(t,{to:"/reactTest",children:"test"}),e.jsx(t,{to:"/three/some-test",children:"test"}),e.jsx("h1",{className:"text-7xl mb-10",children:"THREE.js"}),e.jsx(t,{to:"/three/csm",children:"custom shader material"}),e.jsx(t,{to:"/three/sea",children:"海洋"}),e.jsx(t,{to:"/three/points",children:"点云与线"}),e.jsx(t,{to:"/three/planet",children:"行星"}),e.jsx(t,{to:"/three/skull-csm",children:"自定义材质骷髅头"}),e.jsx(t,{to:"/three/instanced-mesh",children:"骷髅头 instancedMesh"}),e.jsx(t,{to:"/three/real-earth",children:"地球"}),e.jsx(t,{to:"/three/trail",children:"尾迹"})]})})});export{c as default,i as meta};

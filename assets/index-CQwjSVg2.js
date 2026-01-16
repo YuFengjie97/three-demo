@@ -1,4 +1,4 @@
-import{w as C,o as e,r as m}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{G as L,K as j,a0 as t,$ as y,y as g,I as b,Q as S,a3 as T,a4 as A,s as G,a2 as _,X as I}from"./OrbitControls-BeN5Vx9q.js";import{j as w}from"./three-custom-shader-material.es-HcGUKqKs.js";import{u as h}from"./leva.esm-rd6fLeBd.js";import{m as D}from"./BufferGeometryUtils-DPZxlksj.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-BdQd3_SU.js";import"./index-XD7JBPcQ.js";import"./client-Cu2R2QOy.js";import"./index-C_sia4Et.js";const F=`#define GLSLIFY 1
+import{w as C,o as e,r as m}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{G as L,K as j,a0 as t,$ as y,y as g,I as b,X as S,a3 as T,a4 as A,s as G,Q as _,a2 as I}from"./OrbitControls-CIYDMInU.js";import{j as w}from"./three-custom-shader-material.es-BBoU3hlk.js";import{u as h}from"./leva.esm-rd6fLeBd.js";import{m as D}from"./BufferGeometryUtils-BdaFPgzX.js";import{a as F}from"./asset-BpGYVK5y.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-DomXwfiO.js";import"./index-XD7JBPcQ.js";import"./client-Cu2R2QOy.js";import"./index-C_sia4Et.js";const M=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -203,14 +203,14 @@ void main(){
 
   csm_Position = pos;
 
-}`,M=`#define GLSLIFY 1
+}`,Y=`#define GLSLIFY 1
 
 varying vec3 vCol;
 
 void main(){
 
   csm_DiffuseColor.xyz = vCol; 
-}`,Y=`#define GLSLIFY 1
+}`,V=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -372,7 +372,7 @@ void main(){
 
   csm_Position.xyz = pos;
 }
-`,V=`#define GLSLIFY 1
+`,E=`#define GLSLIFY 1
 uniform sampler2D uTex;
 
 varying vec3 vCol;
@@ -391,4 +391,4 @@ void main(){
   // csm_DiffuseColor.a = col.a;
 }
 
-`;function E(){const o={uEvolution:new t(0),uTime:new t(0),uDelta:new t(0),uColLand:new t(new y(15909393)),uColSea:new t(new y(1485534)),uColGrass:new t(new y(4576525)),uLandVal:new t(.02),uLandHeight:new t(.04)};g((r,f)=>{const{clock:z}=r;o.uTime.value=z.getElapsedTime(),o.uDelta.value=f});const{evolution:x,detail:a,wireframe:s,landCol:n,seaCol:i,grassCol:l,landVal:v,landHeight:d}=h({evolution:!1,detail:{value:60,min:10,max:100,step:1},wireframe:!1,landCol:`#${o.uColLand.value.getHexString()}`,seaCol:`#${o.uColSea.value.getHexString()}`,grassCol:`#${o.uColGrass.value.getHexString()}`,landVal:{value:o.uLandVal.value,min:-1,max:1,label:"landRange"},landHeight:{value:o.uLandHeight.value,min:0,max:1}});o.uColSea.value.set(n),o.uColLand.value.set(i),o.uColGrass.value.set(l),o.uLandVal.value=v,o.uLandHeight.value=d,o.uEvolution.value=x?1:0;const{geo:p}=m.useMemo(()=>{let r=new b(1,a);return r=D(r),r.computeTangents(),{geo:r}},[a]),[,u]=h(()=>({vertices:{value:0,editable:!1,label:"Vertices"}}));m.useEffect(()=>{u({vertices:p.attributes.position.count})},[p,u]);const c=m.useRef(null);return g((r,f)=>{c.current.rotation.y+=f*.1}),e.jsx(e.Fragment,{children:e.jsx("group",{ref:c,children:e.jsx("mesh",{geometry:p,children:e.jsx(w,{baseMaterial:S,uniforms:o,vertexShader:F,fragmentShader:M,wireframe:s})})})})}function q(){const o=m.useRef(null),{intensity:x}=h({intensity:{value:2,min:.1,max:40,step:.1}});return e.jsx(e.Fragment,{children:e.jsx("pointLight",{ref:o,position:[0,0,2],intensity:x})})}function Z(){const o=m.useMemo(()=>{const s=new T,n=2e3,i=new Float32Array(n*3),l=10;for(let v=0;v<n;v++){const d=(Math.random()-.5)*l,p=(Math.random()-.5)*l,u=(Math.random()-.5)*l,c=v*3;i[c+0]=d,i[c+1]=p,i[c+2]=u}return s.setAttribute("position",new A(i,3)),s},[]),x=G(I,"/img/texture/particle/star_09.png"),a={uTex:new t(x),uTime:new t(0),uDelta:new t(0)};return g((s,n)=>{const{clock:i}=s;a.uTime.value=i.getElapsedTime(),a.uDelta.value=n}),e.jsx(e.Fragment,{children:e.jsx("points",{geometry:o,children:e.jsx(w,{baseMaterial:_,uniforms:a,size:.1,transparent:!0,alphaTest:.01,depthWrite:!1,vertexShader:Y,fragmentShader:V})})})}const Q=C(function(){return e.jsx(e.Fragment,{children:e.jsx("div",{className:"h-screen",children:e.jsxs(L,{camera:{position:[0,2,2]},children:[e.jsx(j,{}),e.jsx("axesHelper",{args:[20]}),e.jsx("ambientLight",{intensity:.4}),e.jsx(q,{}),e.jsx(E,{}),e.jsx(Z,{})]})})})});export{Q as default};
+`;function q(){const o={uEvolution:new t(0),uTime:new t(0),uDelta:new t(0),uColLand:new t(new y(15909393)),uColSea:new t(new y(1485534)),uColGrass:new t(new y(4576525)),uLandVal:new t(.02),uLandHeight:new t(.04)};g((r,f)=>{const{clock:z}=r;o.uTime.value=z.getElapsedTime(),o.uDelta.value=f});const{evolution:x,detail:a,wireframe:s,landCol:n,seaCol:i,grassCol:l,landVal:v,landHeight:d}=h({evolution:!1,detail:{value:60,min:10,max:100,step:1},wireframe:!1,landCol:`#${o.uColLand.value.getHexString()}`,seaCol:`#${o.uColSea.value.getHexString()}`,grassCol:`#${o.uColGrass.value.getHexString()}`,landVal:{value:o.uLandVal.value,min:-1,max:1,label:"landRange"},landHeight:{value:o.uLandHeight.value,min:0,max:1}});o.uColSea.value.set(n),o.uColLand.value.set(i),o.uColGrass.value.set(l),o.uLandVal.value=v,o.uLandHeight.value=d,o.uEvolution.value=x?1:0;const{geo:p}=m.useMemo(()=>{let r=new b(1,a);return r=D(r),r.computeTangents(),{geo:r}},[a]),[,u]=h(()=>({vertices:{value:0,editable:!1,label:"Vertices"}}));m.useEffect(()=>{u({vertices:p.attributes.position.count})},[p,u]);const c=m.useRef(null);return g((r,f)=>{c.current.rotation.y+=f*.1}),e.jsx(e.Fragment,{children:e.jsx("group",{ref:c,children:e.jsx("mesh",{geometry:p,children:e.jsx(w,{baseMaterial:S,uniforms:o,vertexShader:M,fragmentShader:Y,wireframe:s})})})})}function Z(){const o=m.useRef(null),{intensity:x}=h({intensity:{value:2,min:.1,max:40,step:.1}});return e.jsx(e.Fragment,{children:e.jsx("pointLight",{ref:o,position:[0,0,2],intensity:x})})}function P(){const o=m.useMemo(()=>{const s=new T,n=2e3,i=new Float32Array(n*3),l=10;for(let v=0;v<n;v++){const d=(Math.random()-.5)*l,p=(Math.random()-.5)*l,u=(Math.random()-.5)*l,c=v*3;i[c+0]=d,i[c+1]=p,i[c+2]=u}return s.setAttribute("position",new A(i,3)),s},[]),x=G(_,F("/img/texture/particle/star_09.png")),a={uTex:new t(x),uTime:new t(0),uDelta:new t(0)};return g((s,n)=>{const{clock:i}=s;a.uTime.value=i.getElapsedTime(),a.uDelta.value=n}),e.jsx(e.Fragment,{children:e.jsx("points",{geometry:o,children:e.jsx(w,{baseMaterial:I,uniforms:a,size:.1,transparent:!0,alphaTest:.01,depthWrite:!1,vertexShader:V,fragmentShader:E})})})}const W=C(function(){return e.jsx(e.Fragment,{children:e.jsx("div",{className:"h-screen",children:e.jsxs(L,{camera:{position:[0,2,2]},children:[e.jsx(j,{}),e.jsx("axesHelper",{args:[20]}),e.jsx("ambientLight",{intensity:.4}),e.jsx(Z,{}),e.jsx(q,{}),e.jsx(P,{})]})})})});export{W as default};

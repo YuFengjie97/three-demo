@@ -10,7 +10,7 @@ export default [
   route('/three/instanced-mesh', 'routes/three/instancedMesh/index.tsx'),
   route('/three/real-earth', 'routes/three/realEarth/index.tsx'),
   route('/three/trail', 'routes/three/trail/index.tsx'),
-
+  route('/three/cloth-pattern', 'routes/three/clothPattern/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

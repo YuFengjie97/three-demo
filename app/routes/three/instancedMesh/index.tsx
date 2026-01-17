@@ -10,7 +10,10 @@ import { asset } from '~/utils/asset'
 
 // instancedMesh
 function SkullsMesh() {
-  const model = useLoader(GLTFLoader, asset('/model/skull_downloadable/scene.gltf'))
+  const model = useLoader(
+    GLTFLoader,
+    asset('/model/skull_downloadable/scene.gltf')
+  )
   const tex = useLoader(
     THREE.TextureLoader,
     asset('/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png')
@@ -33,8 +36,11 @@ function SkullsMesh() {
 
   const skullsRef = useRef<THREE.InstancedMesh>(null!)
 
-  const count = 10
-  const dummy = new THREE.Object3D()
+  const { count } = useControls({
+    count: { value: 10, min: 1, max: 100 },
+  })
+
+  const dummy = useMemo(() => new THREE.Object3D(), [])
   useEffect(() => {
     const range = 5
     for (let i = 0; i < count; i++) {
@@ -46,14 +52,36 @@ function SkullsMesh() {
       dummy.rotation.y = Math.random() * 10
       dummy.rotation.z = Math.random() * 10
 
-      let s = Math.random() + 0.1
+      let s = Math.random() * 0.4 + 0.2
       dummy.scale.set(s, s, s)
 
       dummy.updateMatrix()
 
       skullsRef.current.setMatrixAt(i, dummy.matrix)
+      skullsRef.current.count = count
+      skullsRef.current.instanceMatrix.needsUpdate = true
     }
-  }, [])
+  }, [count])
+
+  useFrame(({ clock }, delta) => {
+    const t = clock.getElapsedTime()
+    for (let i = 0; i < count; i++) {
+      skullsRef.current.getMatrixAt(i, dummy.matrix)
+      dummy.matrix.decompose(
+        dummy.position,
+        dummy.quaternion,
+        dummy.scale
+      )
+      // dummy.position.x = Math.cos(t) * i * 1.2
+      // dummy.position.z = Math.sin(t) * i * 1.2
+      dummy.rotation.y += delta*2
+      dummy.rotation.x += delta*2
+      dummy.updateMatrix()
+      skullsRef.current.setMatrixAt(i, dummy.matrix)
+    }
+    skullsRef.current.instanceMatrix.needsUpdate = true
+
+  })
 
   return (
     <>
@@ -65,7 +93,10 @@ function SkullsMesh() {
 }
 
 function Skulls() {
-  const model = useLoader(GLTFLoader, asset('/model/skull_downloadable/scene.gltf'))
+  const model = useLoader(
+    GLTFLoader,
+    asset('/model/skull_downloadable/scene.gltf')
+  )
   const geo = useMemo(() => {
     const geos: THREE.BufferGeometry[] = []
     model.scene.traverse((obj) => {
@@ -106,17 +137,15 @@ function Skulls() {
 
   const groupRef = useRef<THREE.Group>(null!)
   useFrame((_, delta) => {
-    groupRef.current.children.forEach(child => {
-      child.rotation.x += .5 *delta
-      child.rotation.y += .5 *delta
+    groupRef.current.children.forEach((child) => {
+      child.rotation.x += 0.5 * delta
+      child.rotation.y += 0.5 * delta
     })
   })
 
   return (
     <group ref={groupRef}>
-
       {[...Array(count)].map((item, ndx) => {
-        
         const tex = texs[ndx % texs.length]
         const x = (Math.random() - 0.5) * 10
         const y = (Math.random() - 0.5) * 10
@@ -149,13 +178,14 @@ export default function main() {
     <>
       <div className='h-screen'>
         <Canvas>
-          <Perf position='top-left'/>
+          <Perf position='top-left' />
+          <axesHelper args={[10]}/>
           <ambientLight />
           <hemisphereLight args={['#74b9ff', '#fdcb6e', 1]} />
           <OrbitControls />
           {/* <axesHelper args={[10]} /> */}
-          {/* <SkullsMesh /> */}
-          <Skulls />
+          <SkullsMesh />
+          {/* <Skulls /> */}
         </Canvas>
       </div>
     </>

@@ -25,6 +25,7 @@ export default function Home() {
       <Link to='/three/instanced-mesh'>骷髅头 instancedMesh</Link>
       <Link to='/three/real-earth'>地球</Link>
       <Link to='/three/trail'>尾迹</Link>
+      <Link to='/three/cloth-pattern'>自定义衣服图案</Link>
     </div>
     </>
   )

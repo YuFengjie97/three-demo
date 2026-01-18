@@ -79,6 +79,8 @@ function Light() {
 }
 
 export default function main() {
+  console.log('sea page console test');
+  
   return (
     <>
       <div className='h-screen'>

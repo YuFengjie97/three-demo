@@ -1,4 +1,4 @@
-import{w as x,o as e,r as v}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{G as l,K as m,y as p,I as d,i as y,a0 as r,a1 as h,a2 as u}from"./OrbitControls-CIYDMInU.js";import{j as a}from"./three-custom-shader-material.es-BBoU3hlk.js";import"./three-custom-shader-material.es-DomXwfiO.js";import"./index-7OC5HNn7.js";const n=`#define GLSLIFY 1
+import{w as x,o as e,r as v}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{C as l,O as m,u as p,I as d,e as y,U as r,A as h,f as u}from"./OrbitControls-CTxfpBDD.js";import{j as a}from"./three-custom-shader-material.es-DtCKQSrW.js";import"./three-custom-shader-material.es-ByruyeS5.js";import"./index-7OC5HNn7.js";const n=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -137,7 +137,7 @@ void main(){
   vCol = sin(vec3(3,2,1) + dot(pos, vec3(4.1))) * .5 + .5;
 
   csm_Position.xyz = pos;
-}`,g=`#define GLSLIFY 1
+}`,f=`#define GLSLIFY 1
 
 varying vec2 vUv;
 varying float vAlpha;
@@ -155,11 +155,11 @@ void main(){
 
   csm_FragColor.rgb = col;
   csm_FragColor.a = d * vAlpha;
-}`,f=`#define GLSLIFY 1
+}`,g=`#define GLSLIFY 1
 varying float vAlpha;
 
 void main(){
 
   csm_FragColor.rgb = vec3(1.,.0,1.);
   csm_FragColor.a = vAlpha;
-}`;function z(){const o={uTime:new r(0),uDelta:new r(0)};p((t,i)=>{const{clock:c}=t;o.uTime.value=c.getElapsedTime(),o.uDelta.value=i});const s=v.useMemo(()=>{const t=new d(2,10);return t.setIndex(null),t},[]);return e.jsxs(e.Fragment,{children:[e.jsx("lineSegments",{geometry:s,children:e.jsx(a,{uniforms:o,baseMaterial:y,vertexShader:n,fragmentShader:f,transparent:!0})}),e.jsx("points",{geometry:s,children:e.jsx(a,{baseMaterial:u,uniforms:o,vertexShader:n,fragmentShader:g,color:16711680,size:.3,sizeAttenuation:!0,transparent:!0,blending:h,alphaTest:.01,depthWrite:!1})})]})}const _=x(function(){return e.jsx(e.Fragment,{children:e.jsx("div",{className:"h-screen",children:e.jsxs(l,{camera:{position:[0,0,4]},children:[e.jsx(m,{}),e.jsx("axesHelper",{args:[20]}),e.jsx("ambientLight",{}),e.jsx(z,{})]})})})});export{_ as default};
+}`;function z(){const o={uTime:new r(0),uDelta:new r(0)};p((t,i)=>{const{clock:c}=t;o.uTime.value=c.getElapsedTime(),o.uDelta.value=i});const s=v.useMemo(()=>{const t=new d(2,10);return t.setIndex(null),t},[]);return e.jsxs(e.Fragment,{children:[e.jsx("lineSegments",{geometry:s,children:e.jsx(a,{uniforms:o,baseMaterial:y,vertexShader:n,fragmentShader:g,transparent:!0})}),e.jsx("points",{geometry:s,children:e.jsx(a,{baseMaterial:u,uniforms:o,vertexShader:n,fragmentShader:f,color:16711680,size:.3,sizeAttenuation:!0,transparent:!0,blending:h,alphaTest:.01,depthWrite:!1})})]})}const _=x(function(){return e.jsx(e.Fragment,{children:e.jsx("div",{className:"h-screen",children:e.jsxs(l,{camera:{position:[0,0,4]},children:[e.jsx(m,{}),e.jsx("axesHelper",{args:[20]}),e.jsx("ambientLight",{}),e.jsx(z,{})]})})})});export{_ as default};

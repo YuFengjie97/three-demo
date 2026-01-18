@@ -1,4 +1,4 @@
-import{w as u,o as e,r as x}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{G as f,Z as y,K as h,y as v,P as d,$ as c,D as g,X as C,Y as z}from"./OrbitControls-CIYDMInU.js";import{L as w,u as i}from"./leva.esm-rd6fLeBd.js";import{j as b}from"./three-custom-shader-material.es-BBoU3hlk.js";import{m as j}from"./BufferGeometryUtils-BdaFPgzX.js";import{u as D}from"./Helper-C9U5mWbx.js";import"./index-7OC5HNn7.js";import"./index-XD7JBPcQ.js";import"./client-Cu2R2QOy.js";import"./index-C_sia4Et.js";import"./three-custom-shader-material.es-DomXwfiO.js";const S=`#define GLSLIFY 1
+import{w as l,o as e,r as n}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{C as p,O as u,u as f,b as y,c as x,d,M as h,D as C}from"./OrbitControls-CTxfpBDD.js";import{u as g}from"./leva.esm-BHWSPH14.js";import{j as z}from"./three-custom-shader-material.es-DtCKQSrW.js";import{m as b}from"./BufferGeometryUtils-Cbmk4DjJ.js";import{u as w}from"./useUniformTime-BwTYM6du.js";import{P as j}from"./Perf-DQV9Fi6v.js";import{u as D}from"./Helper-CIc0hsdc.js";import"./index-7OC5HNn7.js";import"./index-XD7JBPcQ.js";import"./client-Cu2R2QOy.js";import"./index-C_sia4Et.js";import"./three-custom-shader-material.es-ByruyeS5.js";const S=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -116,10 +116,10 @@ float fbm(vec2 p, float t){
   float v = 0.;
   float fre = 1.;
   float amp = 1.;
-  for(float i=0.;i<4.;i++){
+  for(float i=0.;i<5.;i++){
     v += snoise(vec3(p * fre, t)) * amp;
     fre *= 2.;
-    amp *= .5;
+    amp *= .3;
   }
   return v;
 }
@@ -135,7 +135,7 @@ float wave(out vec3 p){
 
   float v = fbm(p.xy*.25, t); 
 
-  p.z += v;
+  p.z += v*.3;
   return v;
 }
 
@@ -161,7 +161,7 @@ void main(){
 
   float v = wave(pos);
 
-  vCol = mix(uSurfaceCol, uDepthCol, smoothstep(-1.,1.,v));
+  vCol = mix(uSurfaceCol, uDepthCol, smoothstep(1.,-1.,v));
 
   csm_Normal = calcNormal(pos);
   csm_Position.xyz = pos;
@@ -173,4 +173,4 @@ varying vec3 vCol;
 
 void main(){
   csm_DiffuseColor.rgb = vCol;
-}`;function _(){const t=x.useMemo(()=>{let o=new d(10,10,200,200);return console.log(o.attributes.position.count),o=j(o),o.computeTangents(),console.log(o),o},[]),s={uTime:{value:0},uDelta:{value:0},uDepthCol:{value:new c(16711680)},uSurfaceCol:{value:new c(65280)}};v((o,m)=>{const{clock:p}=o;s.uTime.value=p.getElapsedTime(),s.uDelta.value=m});const{depthCol:n,surfaceCol:a}=i({surfaceCol:"#00ff00",depthCol:"#ff0000"});s.uDepthCol.value.set(n),s.uSurfaceCol.value.set(a);const{metalness:r,roughness:l}=i({metalness:{value:0,min:0,max:1},roughness:{value:1,min:0,max:1}});return e.jsx(e.Fragment,{children:e.jsx("mesh",{geometry:t,rotation:[-Math.PI/2,0,0],receiveShadow:!0,children:e.jsx(b,{baseMaterial:C,vertexShader:S,fragmentShader:L,uniforms:s,side:g,metalness:r,roughness:l})})})}function M(){const t=x.useRef(null);return D(t,z,1),v((s,n)=>{const{clock:a}=s,r=a.getElapsedTime();t.current.position.x=Math.cos(r)*3,t.current.position.z=Math.sin(r)*3}),e.jsx(e.Fragment,{children:e.jsx("directionalLight",{ref:t,position:[0,2,0],castShadow:!0})})}const R=u(function(){return e.jsxs(e.Fragment,{children:[e.jsx(w,{}),e.jsx("div",{className:"h-screen",children:e.jsxs(f,{shadows:{type:y,enabled:!1},camera:{position:[0,2,4]},children:[e.jsx("ambientLight",{}),e.jsx(M,{}),e.jsx("axesHelper",{args:[20]}),e.jsx(h,{}),e.jsx(_,{})]})})]})});export{R as default};
+}`;function M(){const o=n.useMemo(()=>{const a=new y(10,10,300,300),c=b(a);return c.computeTangents(),a.dispose(),c},[]),i=w(),t=n.useMemo(()=>({...i,uDepthCol:{value:new x(1449539)},uSurfaceCol:{value:new x(56319)}}),[]),{depthCol:r,surfaceCol:s,metalness:v,roughness:m}=g({surfaceCol:"#"+t.uSurfaceCol.value.getHexString(),depthCol:"#"+t.uDepthCol.value.getHexString(),metalness:{value:.5,min:0,max:1},roughness:{value:0,min:0,max:1}});return n.useEffect(()=>{t.uDepthCol.value.set(r),t.uSurfaceCol.value.set(s)},[r,s]),e.jsx(e.Fragment,{children:e.jsx("mesh",{geometry:o,rotation:[-Math.PI/2,0,0],children:e.jsx(z,{baseMaterial:h,vertexShader:S,fragmentShader:L,uniforms:t,side:d,metalness:v,roughness:m})})})}function _(){const o=n.useRef(null);return D(o,C,1),f((i,t)=>{const{clock:r}=i,s=r.getElapsedTime();o.current.position.x=Math.cos(s)*3,o.current.position.z=Math.sin(s)*3}),e.jsx(e.Fragment,{children:e.jsx("directionalLight",{ref:o,position:[0,2,0]})})}const Y=l(function(){return e.jsx(e.Fragment,{children:e.jsx("div",{className:"h-screen",children:e.jsxs(p,{camera:{position:[0,2,4]},children:[e.jsx(j,{position:"top-left"}),e.jsx("ambientLight",{}),e.jsx(_,{}),e.jsx("axesHelper",{args:[20]}),e.jsx(u,{}),e.jsx(M,{})]})})})});export{Y as default};

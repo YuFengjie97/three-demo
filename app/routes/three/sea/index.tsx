@@ -8,51 +8,44 @@ import fragment from './fragment.glsl'
 import * as THREE from 'three'
 import { useEffect, useMemo, useRef } from 'react'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { metalness, roughness } from 'three/tsl'
+import { useUniformTime } from '~/hook/useUniformTime'
+import { Perf } from 'r3f-perf'
 
 function CSM() {
   const geo = useMemo(() => {
-    let geo: THREE.BufferGeometry = new THREE.PlaneGeometry(10, 10, 200, 200)
-    console.log(geo.attributes.position.count)
-    geo = mergeVertices(geo)
+    const baseGeo: THREE.BufferGeometry = new THREE.PlaneGeometry(10, 10, 300, 300)
+    const geo = mergeVertices(baseGeo)
     geo.computeTangents()
-    console.log(geo)
+
+    baseGeo.dispose()
 
     return geo
   }, [])
 
-  const uniforms = {
-    uTime: { value: 0 },
-    uDelta: { value: 0 },
-    uDepthCol: {value: new THREE.Color(0xff0000)},
-    uSurfaceCol: {value: new THREE.Color(0x00ff00)}
-  }
-  useFrame((state, delta) => {
-    const { clock } = state
-    uniforms.uTime.value = clock.getElapsedTime()
-    uniforms.uDelta.value = delta
+  const uniformTime = useUniformTime()
+
+  const uniforms = useMemo(() => {
+    return {
+      ...uniformTime,
+      uDepthCol: { value: new THREE.Color(0x161e43) },
+      uSurfaceCol: { value: new THREE.Color(0x00dbff) },
+    }
+  }, [])
+  const { depthCol, surfaceCol, metalness, roughness } = useControls({
+    surfaceCol: '#' + uniforms.uSurfaceCol.value.getHexString(),
+    depthCol: '#' + uniforms.uDepthCol.value.getHexString(),
+    metalness: { value: 0.5, min: 0, max: 1 },
+    roughness: { value: 0, min: 0, max: 1 },
   })
 
-  const {depthCol, surfaceCol} = useControls({
-    surfaceCol: '#00ff00',
-    depthCol: '#ff0000'
-  })
-  uniforms.uDepthCol.value.set(depthCol)
-  uniforms.uSurfaceCol.value.set(surfaceCol)
-
-  const {metalness, roughness} = useControls({
-    metalness:{value: 0., min: 0., max: 1.},
-    roughness: {value: 1, min: 0., max: 1.}
-  })
-  
+  useEffect(() => {
+    uniforms.uDepthCol.value.set(depthCol)
+    uniforms.uSurfaceCol.value.set(surfaceCol)
+  }, [depthCol, surfaceCol])
 
   return (
     <>
-      <mesh
-        geometry={geo}
-        rotation={[-Math.PI / 2, 0, 0]}
-        receiveShadow
-      >
+      <mesh geometry={geo} rotation={[-Math.PI / 2, 0, 0]}>
         <CustomShaderMaterial
           baseMaterial={THREE.MeshPhysicalMaterial}
           vertexShader={vertex}
@@ -80,7 +73,7 @@ function Light() {
 
   return (
     <>
-      <directionalLight ref={lightRef} position={[0, 2, 0]} castShadow />
+      <directionalLight ref={lightRef} position={[0, 2, 0]} />
     </>
   )
 }
@@ -88,15 +81,9 @@ function Light() {
 export default function main() {
   return (
     <>
-      <Leva />
       <div className='h-screen'>
-        <Canvas
-          shadows={{
-            type: THREE.PCFSoftShadowMap,
-            enabled: false,
-          }}
-          camera={{position: [0, 2, 4]}}
-        >
+        <Canvas camera={{ position: [0, 2, 4] }}>
+          <Perf position='top-left' />
           <ambientLight />
           <Light />
           <axesHelper args={[20]} />

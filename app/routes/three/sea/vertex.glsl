@@ -15,10 +15,10 @@ float fbm(vec2 p, float t){
   float v = 0.;
   float fre = 1.;
   float amp = 1.;
-  for(float i=0.;i<4.;i++){
+  for(float i=0.;i<5.;i++){
     v += snoise3(vec3(p * fre, t)) * amp;
     fre *= 2.;
-    amp *= .5;
+    amp *= .3;
   }
   return v;
 }
@@ -34,7 +34,7 @@ float wave(out vec3 p){
 
   float v = fbm(p.xy*.25, t); 
 
-  p.z += v;
+  p.z += v*.3;
   return v;
 }
 
@@ -62,7 +62,7 @@ void main(){
 
   float v = wave(pos);
 
-  vCol = mix(uSurfaceCol, uDepthCol, smoothstep(-1.,1.,v));
+  vCol = mix(uSurfaceCol, uDepthCol, smoothstep(1.,-1.,v));
 
 
   csm_Normal = calcNormal(pos);

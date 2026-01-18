@@ -158,7 +158,7 @@ float fbm(vec4 p){
   return v;
 }
 
-float morph(out vec3 p, float t){
+float morph(inout vec3 p, float t){
   // float v = snoise4(vec4(p*4., t));
   float v = fbm(vec4(p*2., t));
   float v_land =  S(uLandVal, uLandVal + .01,v);
@@ -177,7 +177,7 @@ float morph(out vec3 p, float t){
   return v;
 }
 
-vec3 calcNormal(out vec3 pos){
+vec3 calcNormal(inout vec3 pos){
   float e = 0.01;
 
   vec3 biTangent = normalize(cross(csm_Normal, tangent.xyz));

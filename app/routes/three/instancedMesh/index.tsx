@@ -1,44 +1,64 @@
-import { OrbitControls } from '@react-three/drei'
+import { Environment, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { GLTFLoader } from 'three/examples/jsm/Addons.js'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
 import { asset } from '~/utils/asset'
+import { createTextureArray } from '~/utils/textureArray'
+import CustomShaderMaterial from 'three-custom-shader-material'
+import vertex from './vertex.glsl'
+import fragment from './fragment.glsl'
+import { useUniformTime } from '~/hook/useUniformTime'
+
+
+
 
 // instancedMesh
 function SkullsMesh() {
-  const model = useLoader(
-    GLTFLoader,
-    asset('/model/skull_downloadable/scene.gltf')
-  )
-  const tex = useLoader(
-    THREE.TextureLoader,
-    asset('/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png')
-  )
+  const {nodes} = useGLTF(asset('/model/skull_downloadable/scene.gltf'))
+
+  const tex1 = useTexture(asset('/img/texture/particle/spark_01.png'))
+  const tex2 = useTexture(asset('/img/texture/particle/spark_02.png'))
+  const tex3 = useTexture(asset('/img/texture/particle/spark_03.png'))
+  const tex4 = useTexture(asset('/img/texture/particle/spark_04.png'))
+  const texs = [tex1, tex2, tex3, tex4]
+  const dataTexture = createTextureArray(texs)
+
+  const uniformTime = useUniformTime()
+
+  const uniforms = {
+    ...uniformTime,
+    uTextureArray: new THREE.Uniform(dataTexture)
+  }
 
   const geo = useMemo(() => {
-    const geos: THREE.BufferGeometry[] = []
-    model.scene.traverse((obj) => {
-      if (obj instanceof THREE.Mesh) {
-        // obj.updateWorldMatrix(true, false)
-        // const g = obj.geometry.clone()
-        // g.applyMatrix4(obj.matrixWorld)
-
-        geos.push(obj.geometry)
+    const meshs = Object.values(nodes).map(item => {
+      if(item instanceof THREE.Mesh){
+        return item
       }
-    })
-    const geo = mergeGeometries(geos)
-    return geo
-  }, [model])
+    }).filter(item => item)
+
+    return mergeGeometries(meshs.map(item => item?.geometry))
+  }, [])
 
   const skullsRef = useRef<THREE.InstancedMesh>(null!)
-
   const { count } = useControls({
     count: { value: 10, min: 1, max: 100 },
   })
+
+  useLayoutEffect(() => {
+    if(!skullsRef.current) return
+
+    const instanceIds = new Float32Array(count)
+    for(let i = 0;i<count;i++){
+      instanceIds[i] = i
+    }
+    skullsRef.current.geometry.setAttribute('aInstanceId', new THREE.InstancedBufferAttribute(instanceIds, 1))
+  }, [])
+
 
   const dummy = useMemo(() => new THREE.Object3D(), [])
   useEffect(() => {
@@ -48,11 +68,11 @@ function SkullsMesh() {
       const y = (Math.random() - 0.5) * range
       const z = (Math.random() - 0.5) * range
       dummy.position.set(x, y, z)
-      dummy.rotation.x = Math.random() * 10
-      dummy.rotation.y = Math.random() * 10
-      dummy.rotation.z = Math.random() * 10
+      // dummy.rotation.x = Math.random() * 4
+      // dummy.rotation.y = Math.random() * 4
+      // dummy.rotation.z = Math.random() * 4
 
-      let s = Math.random() * 0.4 + 0.2
+      let s = Math.random() * 0.5 + 0.5
       dummy.scale.set(s, s, s)
 
       dummy.updateMatrix()
@@ -63,30 +83,19 @@ function SkullsMesh() {
     }
   }, [count])
 
-  useFrame(({ clock }, delta) => {
-    const t = clock.getElapsedTime()
-    for (let i = 0; i < count; i++) {
-      skullsRef.current.getMatrixAt(i, dummy.matrix)
-      dummy.matrix.decompose(
-        dummy.position,
-        dummy.quaternion,
-        dummy.scale
-      )
-      // dummy.position.x = Math.cos(t) * i * 1.2
-      // dummy.position.z = Math.sin(t) * i * 1.2
-      dummy.rotation.y += delta*2
-      dummy.rotation.x += delta*2
-      dummy.updateMatrix()
-      skullsRef.current.setMatrixAt(i, dummy.matrix)
-    }
-    skullsRef.current.instanceMatrix.needsUpdate = true
-
-  })
 
   return (
     <>
       <instancedMesh ref={skullsRef} args={[geo, undefined, count]}>
-        <meshMatcapMaterial matcap={tex} />
+        <CustomShaderMaterial
+          baseMaterial={THREE.MeshPhysicalMaterial}
+          uniforms={uniforms}
+          vertexShader={vertex}
+          fragmentShader={fragment}
+          alphaTest={.1}
+          transparent
+          // blending={THREE.AdditiveBlending}
+        />
       </instancedMesh>
     </>
   )
@@ -173,19 +182,36 @@ function Skulls() {
   )
 }
 
+function Env(){
+  const tex = useTexture(asset('/img/texture/matcap/2A2A2A_B3B3B3_6D6D6D_848C8C.png'))
+  return (
+    <Environment
+      background
+      blur={1.}
+    >
+      <mesh scale={100}>
+        <icosahedronGeometry args={[1,64]}/>
+        <meshBasicMaterial map={tex} side={THREE.BackSide}/>
+      </mesh>
+    </Environment>
+  )
+}
+
 export default function main() {
   return (
     <>
       <div className='h-screen'>
         <Canvas>
           <Perf position='top-left' />
-          <axesHelper args={[10]}/>
+          {/* <axesHelper args={[10]}/> */}
           <ambientLight />
-          <hemisphereLight args={['#74b9ff', '#fdcb6e', 1]} />
+          {/* <hemisphereLight args={['#74b9ff', '#fdcb6e', 1]} /> */}
           <OrbitControls />
           {/* <axesHelper args={[10]} /> */}
           <SkullsMesh />
           {/* <Skulls /> */}
+
+          <Env />
         </Canvas>
       </div>
     </>

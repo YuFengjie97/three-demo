@@ -23,7 +23,7 @@ float fbm(vec2 p, float t){
   return v;
 }
 
-float wave(out vec3 p){
+float wave(inout vec3 p){
 
   float t = T * .5;
 
@@ -38,7 +38,7 @@ float wave(out vec3 p){
   return v;
 }
 
-vec3 calcNormal(out vec3 pos){
+vec3 calcNormal(inout vec3 pos){
   float e = .01;
   vec3 bi_tangent = normalize(cross(csm_Normal, tangent.xyz));
   vec3 posA = pos + tangent.xyz * e;

@@ -41,7 +41,7 @@ function CSM() {
   useEffect(() => {
     uniforms.uDepthCol.value.set(depthCol)
     uniforms.uSurfaceCol.value.set(surfaceCol)
-  }, [depthCol, surfaceCol])
+  }, [depthCol, surfaceCol,uniforms])
 
   return (
     <>

@@ -1,1 +1,0 @@
-import{r as o}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{U as r,u as a}from"./OrbitControls-CTxfpBDD.js";function i(){const e=o.useMemo(()=>({uTime:new r(0),uDelta:new r(0)}),[]);return a(({clock:u},m)=>{e.uTime.value=u.getElapsedTime(),e.uDelta.value=m}),e}export{i as u};

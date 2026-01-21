@@ -2,34 +2,43 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Leva, useControls } from 'leva'
 
 
-export default function main(){
-  console.log('main');
-  const [count, setCount] = useState(0)
-  useEffect(() => {
-    console.log('main effect');
-  },[])
+function Hello({val}: {val: number}){
+  console.log('child 冲渲染');
+  
 
-  const {val} = useControls({
-    val: 0
-  })
-  useEffect(()=>{
-    console.log('我用val', val);
+  useEffect(() => {
+    console.log('useEffect child prop val change');
+    
   }, [val])
 
-  const texRef = useRef(null!)
+  return <h1>child prop {val}</h1>
+}
 
-  const a = useMemo(() => {
-    console.log('useMemo');
-    return 10000
+
+export default function main(){
+  console.log('重新渲染');
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    console.log('useEffect');
+  }, [count])
+
+  const p = {
+    name: 111
+  }
+  useEffect(() => {
+    console.log('p name update');
+    p.name = 222
   }, [])
 
-  console.log(a);
-  
+  function getP(){
+    console.log(p);
+  }
   
   return (
     <>
-    <button  className='p-4 bg-amber-900 text-amber-50' onClick={() => setCount(count + 1)}>addCount</button>
-    <span ref={texRef}>{count}</span>
+    <button  className='p-4 bg-amber-900 text-amber-50' onClick={() => setCount(count + 1)}>addCount {count}</button>
+    <button onClick={getP}>dddd</button>
     </>
   )
 }

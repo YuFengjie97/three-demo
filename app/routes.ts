@@ -13,6 +13,9 @@ export default [
   route('/three/cloth-pattern', 'routes/three/clothPattern/index.tsx'),
 
 
+  route('/three/mv1', 'routes/three/mv1/index.tsx'),
+
+
   route('/three/some-test', 'routes/three/someTest/index.tsx'),
   route('/reactTest', 'routes/reactTest.tsx')
 ] satisfies RouteConfig;

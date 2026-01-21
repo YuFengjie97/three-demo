@@ -9,7 +9,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { asset } from '~/utils/asset'
 import * as THREE from 'three'
 import { Perf } from 'r3f-perf'
-import { useMemo, useRef, type RefObject } from 'react'
+import { useMemo, useRef } from 'react'
 import { button, useControls } from 'leva'
 import { useAudioAnalyser } from '~/hook/useAudioAnalyser'
 
@@ -42,9 +42,9 @@ function Cube() {
   const cubeGap = 0.02
   const audioApi = useAudioAnalyser(
     // asset('/sound/hero.mp3')
-    asset('/sound/savageLove.aac')
+    asset('/sound/shaderToy_5.mp3')
+    // asset('/sound/savageLove.aac')
   )
-  console.log(audioApi)
 
   const{lerpV}=useControls({
     lerpV: {value: .3, min:0, max: 1,step: .1},

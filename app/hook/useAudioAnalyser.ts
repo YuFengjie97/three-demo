@@ -24,7 +24,6 @@ export function useAudioAnalyser(audioUrl: string) {
   useEffect(() => {
     // 首次渲染
     if (instance.refCount === 0) {
-      console.log('audioAnalyser 初始化', instance.refCount);
       instance.listener = new THREE.AudioListener()
       camera.add(instance.listener)
       instance.sound = new THREE.Audio(instance.listener)
@@ -62,7 +61,7 @@ export function useAudioAnalyser(audioUrl: string) {
     return instance.freqData
   }
 
-
+  // 外部使用不能解构赋值,会为null
   return {
     get sound() { return instance.sound },
     get analyser() { return instance.analyser },

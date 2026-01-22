@@ -39,7 +39,7 @@ type Feature = {
 
 const uniforms = {
   uColor: new THREE.Uniform(new THREE.Color(0x74b9ff)),
-  uSideColor: new THREE.Uniform(new THREE.Color(0x49f86c)),
+  uSideColor: new THREE.Uniform(new THREE.Color(0xf50a0a)),
   uTime: new THREE.Uniform(0),
   uDelta: new THREE.Uniform(0),
 }
@@ -163,10 +163,10 @@ function China() {
   const data = useLoader(THREE.FileLoader, asset('/data/china.json'))
   const json = typeof data === 'string' ? JSON.parse(data) : data
 
-  const features = json.features as Feature[]
+  const features = json.features.slice(0, 34) as Feature[]
   const center = json.properties.center as Coord[]
 
-  console.log(features)
+  console.log(json.features)
 
   const { uTime, uDelta } = useUniformTime()
   uniforms.uTime = uTime

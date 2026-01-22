@@ -26,6 +26,7 @@ export default function Home() {
       <Link to='/three/real-earth'>地球</Link>
       <Link to='/three/trail'>尾迹</Link>
       <Link to='/three/cloth-pattern'>自定义衣服图案</Link>
+      <Link to='/three/china-3d'>中国3D</Link>
 
       <h1 className="text-5xl my-10">Music Visual</h1>
       <Link to='/three/mv1'>music visual 1</Link>

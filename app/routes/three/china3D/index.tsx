@@ -1,4 +1,4 @@
-import { Center, Html, MeshReflectorMaterial, OrbitControls } from '@react-three/drei'
+import { Center, Html, Loader, MeshReflectorMaterial, OrbitControls } from '@react-three/drei'
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { asset } from '~/utils/asset'
@@ -217,6 +217,7 @@ export default function () {
         </Suspense>
 
       </Canvas>
+      <Loader/>
     </div>
   )
 }

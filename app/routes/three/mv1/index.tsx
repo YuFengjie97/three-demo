@@ -1,6 +1,7 @@
 import {
   Center,
   Environment,
+  Loader,
   MeshReflectorMaterial,
   OrbitControls,
   useTexture,
@@ -12,56 +13,18 @@ import { Perf } from 'r3f-perf'
 import { useMemo, useRef } from 'react'
 import { button, useControls } from 'leva'
 import { useAudioAnalyser } from '~/hook/useAudioAnalyser'
+import CustomShaderMaterial from 'three-custom-shader-material'
+import ringVertex from './ringVertex.glsl'
+import ringFragment from './ringFragment.glsl'
+import { useUniformTime } from '~/hook/useUniformTime'
 
-function Env() {
-  const tex = useTexture(
-    asset('/img/texture/matcap/3E2335_D36A1B_8E4A2E_2842A5.png'),
-    // asset('/img/texture/particle/spark_05.png'),
-  )
-  tex.repeat.set(2, 2)
-  tex.wrapS = THREE.MirroredRepeatWrapping
-  tex.wrapT = THREE.MirroredRepeatWrapping
-  // tex.minFilter = THREE.NearestFilter
-  // tex.magFilter = THREE.NearestFilter
 
-  return (
-    <Environment blur={1} background>
-      <mesh scale={20}>
-        <icosahedronGeometry args={[1, 32]} />
-        <meshBasicMaterial map={tex} side={THREE.BackSide} />
-      </mesh>
-    </Environment>
-  )
-}
-
-function Cube() {
+function Cube({ audioApi }: { audioApi: ReturnType<typeof useAudioAnalyser> }) {
   const tex = useTexture(
     asset('/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png'),
   )
   const cubeSize = 0.1 // 半径
   const cubeGap = 0.02
-  const audioApi = useAudioAnalyser(
-    // asset('/sound/hero.mp3')
-    asset('/sound/shaderToy_5.mp3')
-    // asset('/sound/savageLove.aac')
-  )
-
-  const{lerpV}=useControls({
-    lerpV: {value: .3, min:0, max: 1,step: .1},
-    play: button(() => {
-      const { sound } = audioApi
-      if (sound && !sound.isPlaying) {
-        sound?.play()
-      }
-    }),
-    pause: button(() => {
-      const { sound } = audioApi
-
-      if (sound && sound.isPlaying) {
-        sound.pause()
-      }
-    }),
-  })
 
   const { geo, mat } = useMemo(() => {
     const geo = new THREE.BoxGeometry()
@@ -69,9 +32,7 @@ function Cube() {
     const mat = new THREE.MeshMatcapMaterial({ matcap: tex })
     return { geo, mat }
   }, [])
-  const { count } = useControls({
-    count: { value: 40, min: 1, max: 80, step: 1 },
-  })
+  const count = 40
   const cubePosX = useMemo(() => {
     const pos = []
     for (let i = 0; i < count; i++) {
@@ -84,16 +45,15 @@ function Cube() {
   const groupRef = useRef<THREE.Group>(null!)
 
   useFrame(({ clock }, delta) => {
-    const { analyser, getLerpFreqData } = audioApi
+    const { analyser, lerpFreqData } = audioApi
+    
     if (!analyser) return
-
-    const freqData = getLerpFreqData(lerpV)
 
     groupRef.current.children.forEach((item, ndx) => {
       const dataNdx = Math.floor(
         (ndx / count) * (analyser.analyser.fftSize / 2),
       )
-      const height = Math.max(0.01, freqData[dataNdx] * 2)
+      const height = Math.max(0.01, lerpFreqData[dataNdx] * 2)
 
       item.scale.set(...[cubeSize, height, cubeSize])
     })
@@ -118,6 +78,40 @@ function Cube() {
   )
 }
 
+function Ring({audioApi}: { audioApi: ReturnType<typeof useAudioAnalyser> }) {
+  const geo = useMemo(() => {
+    const geo = new THREE.TorusGeometry(3, .2, 10, 80)
+    geo.translate(0,.1,0)
+    geo.rotateX(Math.PI/2)
+    return geo
+
+    // const geo = new THREE.IcosahedronGeometry(.4, 30);
+    // return geo
+  }, [])
+
+  const uniformTime = useUniformTime()
+  const uniforms = {
+    ...uniformTime,
+    uFreqTex: new THREE.Uniform(audioApi.dataTex)
+  }
+
+  return (
+    <mesh geometry={geo}>
+      <CustomShaderMaterial
+        baseMaterial={THREE.MeshStandardMaterial}
+        uniforms={uniforms}
+        vertexShader={ringVertex}
+        fragmentShader={ringFragment}
+        // roughness={.1}
+        // metalness={.5}
+        // depthWrite={false}
+        // transparent={false}
+        // alphaTest={0.01}
+      />
+    </mesh>
+  )
+}
+
 function MirrorPlane() {
   return (
     <mesh rotation-x={-Math.PI / 2} position-y={-0.1} scale={40}>
@@ -138,6 +132,36 @@ function MirrorPlane() {
   )
 }
 
+function Wrap() {
+  const audioApi = useAudioAnalyser(
+    asset('/sound/hero.mp3')
+    // asset('/sound/shaderToy_5.mp3'),
+    // asset('/sound/savageLove.aac')
+  )
+
+  useControls({
+    play: button(() => {
+      const {sound} = audioApi
+      if (sound && !sound.isPlaying) {
+        audioApi.sound?.play()
+      }
+    }),
+    pause: button(() => {
+      const {sound} = audioApi
+      if (sound && sound.isPlaying) {
+        sound.pause()
+      }
+    }),
+  })
+
+  return (
+    <>
+      <Cube audioApi={audioApi} />
+      <Ring audioApi={audioApi}/>
+    </>
+  )
+}
+
 export default function () {
   return (
     <div className='h-screen'>
@@ -146,17 +170,16 @@ export default function () {
         <fog attach={'fog'} args={['#191920', 0.1, 20]} />
         <Perf position='top-left' />
         <ambientLight />
-        <directionalLight position={[10, 10, -10]} intensity={100} />
+        <directionalLight position={[0, 10, 0]} intensity={20} />
 
-        {/* <axesHelper args={[10]} /> */}
+        <axesHelper args={[10]} />
         <OrbitControls makeDefault />
-
-        <Cube />
-
+        <Wrap />
         <MirrorPlane />
 
         {/* <Env /> */}
       </Canvas>
+      <Loader />
     </div>
   )
 }

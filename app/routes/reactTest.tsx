@@ -14,9 +14,22 @@ function Hello({val}: {val: number}){
   return <h1>child prop {val}</h1>
 }
 
+function useTest(url: string){
+  useEffect(() => {
+    console.log(11111, url);
+  }, [])
+}
+
 
 export default function main(){
   console.log('重新渲染');
+
+  useTest('hello1')
+  useTest('hello2')
+  useTest('hello3')
+  useTest('hello4')
+  useTest('hello5')
+
   const [count, setCount] = useState(0)
 
   useEffect(() => {

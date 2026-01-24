@@ -14,7 +14,7 @@ void main(){
   vec2 uv = gl_PointCoord-.5;
   // float d = length(uv);
   float d = texture(uTexPoint, gl_PointCoord).r;
-  d *= pow(.2/length(uv),2.);
+  // d *= pow(.1/length(uv),2.);
   // d = .1/d;
   if(d<.01){
     discard;
@@ -22,6 +22,6 @@ void main(){
 
   float fadeInOut = smoothstep(.5,.0,abs(life-.5));
 
-  csm_FragColor.rgb = col * d;
+  csm_FragColor.rgb = col * 2. * d;
   csm_FragColor.a = fadeInOut;
 }

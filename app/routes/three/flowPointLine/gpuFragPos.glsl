@@ -3,6 +3,7 @@
 uniform float uTime;
 uniform float uDelta;
 uniform sampler2D uDefaultPos;
+uniform float uLifeSpeed;
 
 
 void main(){
@@ -21,7 +22,7 @@ void main(){
   vec3 vel = texture(texVel, uv).rgb;
   pos += vel * uDelta;
 
-  life += dt * .1;
+  life += dt * uLifeSpeed;
 
   if(life >= 1.){
     pos = pos_def;

@@ -1,6 +1,6 @@
 import { OrbitControls, useFBO, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
@@ -12,6 +12,7 @@ import { useUniformTime } from '~/hook/useUniformTime'
 import { asset } from '~/utils/asset'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
+import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
 
 const { cos, sin, random, PI, ceil, sqrt } = Math
 
@@ -36,6 +37,8 @@ function fillPosTex(tex: THREE.DataTexture) {
     arr[i4 + 3] = random() // life
   }
 }
+
+// 占位,实际的vel向量来自fs中的noise
 function fillVelTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
   for (let i = 0; i < arr?.length; i++) {
@@ -50,6 +53,43 @@ function fillVelTex(tex: THREE.DataTexture) {
 function useGpu(size: number) {
   const { gl } = useThree()
   const uniformTime = useUniformTime()
+  const uniforms = {
+    ...uniformTime,
+    uSpeed: new THREE.Uniform(3.),
+    uRangeMin: new THREE.Uniform(-1.),
+    uRangeMax: new THREE.Uniform(.5),
+    uLifeSpeed: new THREE.Uniform(.1),
+  }
+
+  useControls({
+    speed: {
+      value: uniforms.uSpeed.value,
+      min: 0.,
+      max: 10.,
+      step: .1,
+      onChange(val) {
+        uniforms.uSpeed.value = val
+      }
+    },
+    moveRange: {
+      min: -1.,
+      max: 1.,
+      value: [uniforms.uRangeMin.value, uniforms.uRangeMax.value],
+      hint: '粒子位置-->噪音值-->smoothstep确定是否移动',
+      onChange(val){
+        uniforms.uRangeMin.value = val[0]
+        uniforms.uRangeMax.value = val[1]
+      }
+    },
+    lifeSpeed: {
+      min: 0.,
+      max: 2.,
+      value: uniforms.uLifeSpeed.value,
+      onChange(val){
+        uniforms.uLifeSpeed.value = val
+      }
+    },
+  })
 
   const { gpuCompute, posVar, velVar } = useMemo(() => {
     const gpuCompute = new GPUComputationRenderer(size, size, gl)
@@ -61,10 +101,10 @@ function useGpu(size: number) {
     const velVar = gpuCompute.addVariable('texVel', gpuFragVel, velTex)
 
     posVar.material.uniforms = {
-      ...uniformTime,
+      ... uniforms,
       uDefaultPos: new THREE.Uniform(posTex), // 初始位置作为默认位置
     }
-    velVar.material.uniforms = { ...uniformTime }
+    velVar.material.uniforms = { ...uniforms }
 
     gpuCompute.setVariableDependencies(posVar, [posVar, velVar])
     gpuCompute.setVariableDependencies(velVar, [posVar, velVar])
@@ -166,7 +206,8 @@ function Particle() {
           sizeAttenuation={true}
           transparent={true}
           blending={THREE.AdditiveBlending}
-          // depthWrite={false}
+          depthWrite={false}
+          toneMapped={false}
           // alphaTest={.4}
         />
       </points>
@@ -195,6 +236,10 @@ export default function () {
         <OrbitControls />
         {/* <axesHelper args={[10]} /> */}
         <Particle />
+
+        <EffectComposer>
+          <Bloom />
+        </EffectComposer>
       </Canvas>
     </div>
   )

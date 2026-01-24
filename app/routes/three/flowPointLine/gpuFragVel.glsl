@@ -5,6 +5,9 @@
 // uniform sampler2D texVel;
 uniform float uTime;
 uniform float uDelta;
+uniform float uSpeed;
+uniform float uRangeMin;
+uniform float uRangeMax;
 
 void main(){
   float t =uTime;
@@ -15,16 +18,16 @@ void main(){
 
   // 速度大小
   float velLen = snoise3(pos);
-  velLen = smoothstep(-.4, 1., velLen) * 2.;
+  velLen = smoothstep(uRangeMin, uRangeMax, velLen) * uSpeed;
 
   // 速度方向改变
-  vec3 velOff = vec3(
-    snoise3(pos+vec3(1.,0.,t)),
-    snoise3(pos+vec3(0.,1.,0.)),
-    snoise3(pos+vec3(0.,0.,1.))
+  vec3 velNew = vec3(
+    snoise3(pos*.5+vec3(1.,0.,t)),
+    snoise3(pos*.5+vec3(0.,1.,0.)),
+    snoise3(pos*.5+vec3(0.,0.,1.))
   );
 
-  vel = velOff;
+  vel = velNew;
   vel = normalize(vel) * velLen;
 
   gl_FragColor = vec4(vel, 1);

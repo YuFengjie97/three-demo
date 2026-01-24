@@ -21,7 +21,7 @@ void main(){
   vec3 vel = texture(texVel, uv).rgb;
   pos += vel * uDelta;
 
-  life += dt * 2.1;
+  life += dt * .1;
 
   if(life >= 1.){
     pos = pos_def;

@@ -11,25 +11,38 @@ import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { asset } from '~/utils/asset'
 import { Perf } from 'r3f-perf'
+import { useControls } from 'leva'
 
+const { cos, sin, random, PI, ceil, sqrt } = Math
 
-function fillPosTex(tex: THREE.DataTexture){
+function fillPosTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
-  for(let i=0.;i<arr?.length;i++){
+  for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    arr[i4 + 0] = (Math.random()-.5)*4
-    arr[i4 + 1] = (Math.random()-.5)*4
-    arr[i4 + 2] = (Math.random()-.5)*4
-    arr[i4 + 3] = Math.random() // life
+    // arr[i4 + 0] = (random()-.5)*4
+    // arr[i4 + 1] = (random()-.5)*4
+    // arr[i4 + 2] = (random()-.5)*4
+
+    const theta = random() * PI
+    const phi = random() * PI * 2
+    const r = random() * 1 + 2
+    const x = r * cos(phi) * cos(theta)
+    const y = r * cos(phi) * sin(theta)
+    const z = r * sin(phi)
+    arr[i4 + 0] = x
+    arr[i4 + 1] = y
+    arr[i4 + 2] = z
+
+    arr[i4 + 3] = random() // life
   }
 }
-function fillVelTex(tex: THREE.DataTexture){
+function fillVelTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
-  for(let i=0.;i<arr?.length;i++){
+  for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    arr[i4 + 0] = 1.
-    arr[i4 + 1] = 1.
-    arr[i4 + 2] = 1.
+    arr[i4 + 0] = 1
+    arr[i4 + 1] = 1
+    arr[i4 + 2] = 1
     arr[i4 + 3] = 0 // 不使用
   }
 }
@@ -38,7 +51,7 @@ function useGpu(size: number) {
   const { gl } = useThree()
   const uniformTime = useUniformTime()
 
-  const { gpuCompute,  posVar, velVar } = useMemo(() => {
+  const { gpuCompute, posVar, velVar } = useMemo(() => {
     const gpuCompute = new GPUComputationRenderer(size, size, gl)
     const posTex = gpuCompute.createTexture()
     const velTex = gpuCompute.createTexture()
@@ -49,10 +62,9 @@ function useGpu(size: number) {
 
     posVar.material.uniforms = {
       ...uniformTime,
-      uDefaultPos: new THREE.Uniform(posTex) // 初始位置作为默认位置
+      uDefaultPos: new THREE.Uniform(posTex), // 初始位置作为默认位置
     }
-    velVar.material.uniforms = {...uniformTime}
-
+    velVar.material.uniforms = { ...uniformTime }
 
     gpuCompute.setVariableDependencies(posVar, [posVar, velVar])
     gpuCompute.setVariableDependencies(velVar, [posVar, velVar])
@@ -74,9 +86,9 @@ function useGpu(size: number) {
 
 function Particle() {
   const count = 4000
-  const size = Math.ceil(Math.sqrt(count))
+  const size = ceil(sqrt(count))
 
-  const {geo} = useMemo(() => {
+  const { geo } = useMemo(() => {
     const position = new Float32Array(count * 3)
     const texCoord = new Float32Array(count * 2)
     for (let x = 0; x < size; x++) {
@@ -94,12 +106,12 @@ function Particle() {
     const geo = new THREE.BufferGeometry()
     geo.setAttribute('position', new THREE.BufferAttribute(position, 3))
     geo.setAttribute('aTexCoord', new THREE.BufferAttribute(texCoord, 2))
-    
+
     return {
       geo,
     }
   }, [])
-  
+
   const { gpuCompute, posVar, velVar } = useGpu(size)
 
   const uniformTime = useUniformTime()
@@ -115,7 +127,7 @@ function Particle() {
     uTexVel: new THREE.Uniform(
       gpuCompute.getCurrentRenderTarget(velVar).texture,
     ),
-    uTexPoint: new THREE.Uniform(tex)
+    uTexPoint: new THREE.Uniform(tex),
   }
 
   const posHelperMat = useRef<THREE.MeshBasicMaterial>(null)
@@ -125,8 +137,20 @@ function Particle() {
     gpuCompute.compute()
     uniforms.uTexPos.value = gpuCompute.getCurrentRenderTarget(posVar).texture
     uniforms.uTexVel.value = gpuCompute.getCurrentRenderTarget(velVar).texture
-    posHelperMat.current!.map = gpuCompute.getCurrentRenderTarget(posVar).texture
-    velHelperMat.current!.map = gpuCompute.getCurrentRenderTarget(velVar).texture
+    posHelperMat.current!.map =
+      gpuCompute.getCurrentRenderTarget(posVar).texture
+    velHelperMat.current!.map =
+      gpuCompute.getCurrentRenderTarget(velVar).texture
+  })
+
+  const helpRef = useRef<THREE.Group>(null!)
+  useControls({
+    showHelper: {
+      value: false,
+      onChange(val) {
+        helpRef.current.visible = val
+      },
+    },
   })
 
   return (
@@ -140,21 +164,24 @@ function Particle() {
           fragmentShader={fragment}
           size={0.1}
           sizeAttenuation={true}
-          transparent = {true}
+          transparent={true}
+          blending={THREE.AdditiveBlending}
           // depthWrite={false}
           // alphaTest={.4}
         />
       </points>
 
-      <mesh scale={2} position={[-4, 0, 0]}>
-        <planeGeometry />
-        <meshBasicMaterial ref={posHelperMat} side={THREE.DoubleSide} />
-      </mesh>
+      <group ref={helpRef}>
+        <mesh scale={2} position={[-4, 0, 0]}>
+          <planeGeometry />
+          <meshBasicMaterial ref={posHelperMat} side={THREE.DoubleSide} />
+        </mesh>
 
-      <mesh scale={2} position={[4, 0, 0]}>
-        <planeGeometry />
-        <meshBasicMaterial ref={velHelperMat} side={THREE.DoubleSide} />
-      </mesh>
+        <mesh scale={2} position={[4, 0, 0]}>
+          <planeGeometry />
+          <meshBasicMaterial ref={velHelperMat} side={THREE.DoubleSide} />
+        </mesh>
+      </group>
     </>
   )
 }
@@ -163,7 +190,7 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas>
-        <Perf />
+        <Perf position='top-left' />
         {/* <ambientLight intensity={1} /> */}
         <OrbitControls />
         {/* <axesHelper args={[10]} /> */}

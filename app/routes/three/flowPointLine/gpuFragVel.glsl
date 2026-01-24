@@ -15,11 +15,11 @@ void main(){
 
   // 速度大小
   float velLen = snoise3(pos);
-  velLen = smoothstep(-.4, 1., velLen);
+  velLen = smoothstep(-.4, 1., velLen) * 2.;
 
   // 速度方向改变
   vec3 velOff = vec3(
-    snoise3(pos+vec3(1.,0.,0.)),
+    snoise3(pos+vec3(1.,0.,t)),
     snoise3(pos+vec3(0.,1.,0.)),
     snoise3(pos+vec3(0.,0.,1.))
   );

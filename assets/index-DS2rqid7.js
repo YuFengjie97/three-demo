@@ -1,4 +1,4 @@
-import{w as T,o as e,r as o}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{C as M,O as j,a as n,T as m,S as d,ar as W,n as A,U as r,c as D,u as L,I as F,ap as U}from"./OrbitControls-BG7KWy93.js";import{P as k}from"./Perf-VLlsS3RQ.js";import{u as z}from"./leva.esm-BHWSPH14.js";import{u as V}from"./useUniformTime-vIUN2tVY.js";import{a as v}from"./asset-BvcpElq9.js";import"./index-7OC5HNn7.js";import"./index-C_sia4Et.js";import"./client-Cu2R2QOy.js";import"./index-XD7JBPcQ.js";const G=`#define GLSLIFY 1
+import{w as T,o as e,r as o}from"./chunk-EPOLDU6W-B0aIzJ9t.js";import{C as M,O as j,a as n,T as m,S as d,ar as W,n as A,U as r,c as D,u as L,I as F,ap as U}from"./OrbitControls-BjQ9zg-v.js";import{P as k}from"./Perf-C8NO2NiO.js";import{u as z}from"./leva.esm-BHWSPH14.js";import{u as V}from"./useUniformTime-qY0f1_oE.js";import{a as v}from"./asset-BvcpElq9.js";import"./index-7OC5HNn7.js";import"./index-C_sia4Et.js";import"./client-Cu2R2QOy.js";import"./index-XD7JBPcQ.js";const G=`#define GLSLIFY 1
 varying vec2 vUv;
 varying vec3 vPos;
 varying vec3 vWorldNormal;

@@ -22,9 +22,9 @@ void main(){
 
   // 速度方向改变
   vec3 velNew = vec3(
-    snoise3(pos*.5+vec3(1.,0.,t)),
-    snoise3(pos*.5+vec3(0.,1.,0.)),
-    snoise3(pos*.5+vec3(0.,0.,1.))
+    snoise3(pos*.4+vec3(1.,0.,t)),
+    snoise3(pos*.4+vec3(0.,1.,0.)),
+    snoise3(pos*.4+vec3(0.,0.,1.))
   );
 
   vel = velNew;

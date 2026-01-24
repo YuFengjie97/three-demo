@@ -1,4 +1,4 @@
-import { OrbitControls, useFBO, useTexture } from '@react-three/drei'
+import { OrbitControls, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
@@ -12,7 +12,7 @@ import { useUniformTime } from '~/hook/useUniformTime'
 import { asset } from '~/utils/asset'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
-import { Bloom, DepthOfField, EffectComposer, Noise, Vignette } from '@react-three/postprocessing'
+import { Bloom, EffectComposer, GodRays } from '@react-three/postprocessing'
 
 const { cos, sin, random, PI, ceil, sqrt } = Math
 
@@ -125,7 +125,7 @@ function useGpu(size: number) {
 }
 
 function Particle() {
-  const count = 4000
+  const count = 6000
   const size = ceil(sqrt(count))
 
   const { geo } = useMemo(() => {
@@ -228,6 +228,8 @@ function Particle() {
 }
 
 export default function () {
+
+  const lightSource = useRef<THREE.Mesh>(null!)
   return (
     <div className='h-screen'>
       <Canvas>
@@ -235,10 +237,17 @@ export default function () {
         {/* <ambientLight intensity={1} /> */}
         <OrbitControls />
         {/* <axesHelper args={[10]} /> */}
+
         <Particle />
+
+        <mesh ref={lightSource}>
+          <icosahedronGeometry args={[.4, 0]}/>
+          <meshNormalMaterial />
+        </mesh>
 
         <EffectComposer>
           <Bloom />
+          <GodRays sun={lightSource}/>
         </EffectComposer>
       </Canvas>
     </div>

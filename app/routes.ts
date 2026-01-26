@@ -13,6 +13,7 @@ export default [
   route('/three/cloth-pattern', 'routes/three/clothPattern/index.tsx'),
   route('/three/china-3d', 'routes/three/china3D/index.tsx'),
   route('/three/flow-point-line', 'routes/three/flowPointLine/index.tsx'),
+  route('/three/hexagon-vertex-offset', 'routes/three/hexagonVS/index.tsx'),
 
 
   route('/three/mv1', 'routes/three/mv1/index.tsx'),

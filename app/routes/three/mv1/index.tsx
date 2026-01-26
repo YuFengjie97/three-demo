@@ -17,9 +17,14 @@ import CustomShaderMaterial from 'three-custom-shader-material'
 import ringVertex from './ringVertex.glsl'
 import ringFragment from './ringFragment.glsl'
 import { useUniformTime } from '~/hook/useUniformTime'
+import patternFragment from './patternFragment.glsl'
+import patternVertex from './patternVertex.glsl'
+import { Bloom, EffectComposer } from '@react-three/postprocessing'
+
+type AudioApiRT = ReturnType<typeof useAudioAnalyser>
 
 
-function Cube({ audioApi }: { audioApi: ReturnType<typeof useAudioAnalyser> }) {
+function Cube({ audioApi }: { audioApi: AudioApiRT }) {
   const tex = useTexture(
     asset('/img/texture/matcap/2E763A_78A0B7_B3D1CF_14F209.png'),
   )
@@ -78,7 +83,7 @@ function Cube({ audioApi }: { audioApi: ReturnType<typeof useAudioAnalyser> }) {
   )
 }
 
-function Ring({audioApi}: { audioApi: ReturnType<typeof useAudioAnalyser> }) {
+function Ring({audioApi}: { audioApi: AudioApiRT }) {
   const geo = useMemo(() => {
     const geo = new THREE.TorusGeometry(3, .2, 10, 80)
     geo.translate(0,.1,0)
@@ -110,6 +115,27 @@ function Ring({audioApi}: { audioApi: ReturnType<typeof useAudioAnalyser> }) {
       />
     </mesh>
   )
+}
+
+function Pattern({audioApi}: {audioApi: AudioApiRT}){
+
+  const uniformTime = useUniformTime()
+  const uniforms = {
+    ...uniformTime,
+    uFreqTex: new THREE.Uniform(audioApi.dataTex)
+  }
+
+  return <mesh scale={40} rotation-x={-Math.PI/2}>
+    <planeGeometry />
+    <CustomShaderMaterial
+      baseMaterial={THREE.MeshBasicMaterial}
+      uniforms={uniforms}
+      vertexShader={patternVertex}
+      fragmentShader={patternFragment}
+      side={THREE.DoubleSide}
+      transparent={true}
+    />
+  </mesh>
 }
 
 function MirrorPlane() {
@@ -157,7 +183,8 @@ function Wrap() {
   return (
     <>
       <Cube audioApi={audioApi} />
-      <Ring audioApi={audioApi}/>
+      {/* <Ring audioApi={audioApi}/> */}
+      <Pattern audioApi={audioApi}/>
     </>
   )
 }
@@ -166,8 +193,8 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas camera={{ position: [-2, 1, 3] }}>
-        <color attach={'background'} args={['#191920']} />
-        <fog attach={'fog'} args={['#191920', 0.1, 20]} />
+        <color attach={'background'} args={['#000']} />
+        <fog attach={'fog'} args={['#000', 0.1, 10]} />
         <Perf position='top-left' />
         <ambientLight />
         <directionalLight position={[0, 10, 0]} intensity={20} />
@@ -175,9 +202,12 @@ export default function () {
         <axesHelper args={[10]} />
         <OrbitControls makeDefault />
         <Wrap />
-        <MirrorPlane />
+        {/* <MirrorPlane /> */}
 
         {/* <Env /> */}
+         {/* <EffectComposer>
+          <Bloom />
+        </EffectComposer> */}
       </Canvas>
       <Loader />
     </div>

@@ -29,6 +29,7 @@ export default function Home() {
       <Link to='/three/china-3d'>中国3D</Link>
       <Link to='/three/flow-point-line'>flow point line</Link>
       <Link to='/three/hexagon-vertex-offset'>蜂巢顶点偏移</Link>
+      <Link to='/three/boxframes'>boxFrames</Link>
 
       <h1 className="text-5xl my-10">Music Visual</h1>
       <Link to='/three/mv1'>music visual 1</Link>

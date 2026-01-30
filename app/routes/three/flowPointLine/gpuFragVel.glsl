@@ -1,4 +1,5 @@
 #pragma glslify: snoise3 = require('glsl-noise/simplex/3d')
+#pragma glslify: snoise2 = require('glsl-noise/simplex/2d')
 
 
 // uniform sampler2D texPos;
@@ -22,10 +23,15 @@ void main(){
 
   // 速度方向改变
   vec3 velNew = vec3(
-    snoise3(pos*.4+vec3(1.,0.,t)),
-    snoise3(pos*.4+vec3(0.,1.,0.)),
+    snoise3(pos*.4+vec3(1.,0.,0.)),
+    snoise3(pos*.4+vec3(0.,1.,t)),
     snoise3(pos*.4+vec3(0.,0.,1.))
   );
+  // vec3 velNew = vec3(
+  //   snoise2(vec2(pos.xy*.4) + t),
+  //   snoise2(vec2(pos.yz*.4) + 0.),
+  //   snoise2(vec2(pos.zx*.4) + 0.)
+  // );
 
   vel = velNew;
   vel = normalize(vel) * velLen;

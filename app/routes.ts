@@ -15,6 +15,7 @@ export default [
   route('/three/flow-point-line', 'routes/three/flowPointLine/index.tsx'),
   route('/three/hexagon-vertex-offset', 'routes/three/hexagonVS/index.tsx'),
   route('/three/boxframes', 'routes/three/boxFrame/index.tsx'),
+  route('/three/swords', 'routes/three/swords/index.tsx'),
 
 
 

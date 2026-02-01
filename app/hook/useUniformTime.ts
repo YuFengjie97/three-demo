@@ -11,7 +11,7 @@ export function useUniformTime() {
 
   useFrame(({ clock }, delta) => {
     uniforms.uTime.value = clock.getElapsedTime()
-    uniforms.uDelta.value = delta
+    uniforms.uDelta.value = Math.min(1., delta)
   })
 
   return uniforms

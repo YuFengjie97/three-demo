@@ -95,9 +95,10 @@ function useGpu(count: number) {
 
     gsap.to(velVar.material.uniforms.uSeparationR, 
       {
-        value:velVar.material.uniforms.uAlignmentR.value + 10,
-        duration: 3,
-        yoyo: true
+        value: velVar.material.uniforms.uAlignmentR.value + 5,
+        duration: 5,
+        yoyo: true,
+        repeat: -1,
     })
 
     return {
@@ -139,15 +140,15 @@ function Swords() {
   const radius = [0, 50]
 
   useControls({
-    uSeparationR: {
-      value: velVar.material.uniforms.uSeparationR.value,
-      min: radius[0],
-      max: radius[1],
-      onChange(val) {
-        velVar.material.uniforms.uSeparationR.value = val
-      },
-      label: '分离半径',
-    },
+    // uSeparationR: {
+    //   value: velVar.material.uniforms.uSeparationR.value,
+    //   min: radius[0],
+    //   max: radius[1],
+    //   onChange(val) {
+    //     velVar.material.uniforms.uSeparationR.value = val
+    //   },
+    //   label: '分离半径',
+    // },
     uSeparationFactor: {
       value: velVar.material.uniforms.uSeparationFactor.value,
       min: factor[0],

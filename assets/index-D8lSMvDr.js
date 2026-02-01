@@ -1,4 +1,4 @@
-import{w as R,o as t,r as _}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as V,O as A,U as s,u as I,d as P,e as D,al as L}from"./OrbitControls-wRqzCdd_.js";import{a as G}from"./asset-BvcpElq9.js";import{d as U,w as Y}from"./index-DfcyJC69.js";import{j as E}from"./three-custom-shader-material.es-00gjT4E9.js";import{u as z}from"./useUniformTime-BN-1ekZ-.js";import{u as q}from"./leva.esm-BV3Tl-wj.js";import{u as b}from"./Gltf-BEo4OFDX.js";import{c as N,b as y}from"./Instances-CFM4OqfW.js";import{G as O}from"./GPUComputationRenderer-BG-USugS.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-WfkYmuit.js";import"./index-D369hMBv.js";import"./client-EdRjCdko.js";import"./index-n5PR1bfd.js";import"./constants-BdHQ5oRD.js";const B=`#define GLSLIFY 1
+import{w as R,o as a,r as _}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as V,O as A,U as s,u as I,d as D,e as P,al as L}from"./OrbitControls-wRqzCdd_.js";import{a as G}from"./asset-BvcpElq9.js";import{d as U,w as Y}from"./index-DfcyJC69.js";import{j as E}from"./three-custom-shader-material.es-00gjT4E9.js";import{u as z}from"./useUniformTime-BN-1ekZ-.js";import{u as q}from"./leva.esm-BV3Tl-wj.js";import{u as b}from"./Gltf-BEo4OFDX.js";import{c as N,b as y}from"./Instances-CFM4OqfW.js";import{G as O}from"./GPUComputationRenderer-BG-USugS.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-WfkYmuit.js";import"./index-D369hMBv.js";import"./client-EdRjCdko.js";import"./index-n5PR1bfd.js";import"./constants-BdHQ5oRD.js";const B=`#define GLSLIFY 1
 uniform float uTime;
 uniform sampler2D uTexPos;
 uniform sampler2D uTexVel;
@@ -70,7 +70,7 @@ void main(){
 
   vUv = uv;
   vPos = pos;
-  float glow = dot(cos(vec3(3,2,1) + id), vec3(.1)) * 2. + 1.;
+  float glow = dot(cos(vec3(3,2,1) + id), vec3(.1)) * 3. + .5;
   vCol = glow * (sin(vec3(3,2,1) + instance_pos * .1)*.5+.5);
   csm_Position = pos;
 }`,Z=`#define GLSLIFY 1
@@ -84,7 +84,8 @@ void main(){
   // float d = length(vUv);
   // d = .1/d;
 
-  csm_DiffuseColor.rgb = col*1.2;
+  vec3 rgb = csm_DiffuseColor.rgb;
+  csm_DiffuseColor.rgb = mix(rgb, col, .5);
 }`,X=`#define GLSLIFY 1
 
 uniform float uTime;
@@ -216,8 +217,11 @@ uniform float uAlignmentR;
 uniform float uAlignmentFactor;
 uniform float uCohesionR;
 uniform float uCohesionFactor;
-uniform float uCenterFactor;
+
 uniform float uMaxSpeed;
+uniform float uMinSpeed;
+
+uniform float uCenterFactor;
 uniform float uCenterMin;
 uniform float uCenterMax;
 
@@ -266,15 +270,15 @@ void main(){
       if(dist < separation_r) {
         vec3 to_nei = vec3(pos - nei_pos);
         vec3 separation_force = normalize(to_nei);
-        float strength = 1. / max(0.01, length(to_nei));
+        float strength = separation_r / max(0.01, dist);
         separation_vel += separation_force * strength;
         separation_count++;
       }
-      if(dist < alignment_r){
+      else if(dist < alignment_r){
         alignment_vel += nei_vel;
         alignment_count++;
       }
-      if(dist < cohesion_r) {
+      else if(dist < cohesion_r) {
         cohesion_center += nei_pos;
         cohesion_count++;
       }
@@ -310,10 +314,9 @@ void main(){
   acc += center_vel * center_strength * center_factor;
 
   vec3 vel = texture(texVel, uv).xyz;
-  vel += acc;
+  vel = mix(vel, acc, .4);
 
-  float max_speed = uMaxSpeed;
-  float speed = min(length(vel), max_speed);
+  float speed = max(min(length(vel), uMaxSpeed), uMinSpeed);
   vel = normalize(vel) * speed;
 
   // vec3 acc = vec3(
@@ -325,4 +328,4 @@ void main(){
   // vec3 acc = normalize(sin(vec3(30,20,10) + pos + t));
 
   gl_FragColor = vec4(vel, 1.);
-}`,{random:p,sqrt:w,ceil:F,floor:H}=Math,S=G("/model/sword-transformed.glb");b.preload(S);function J(x){const n=x.image.data;for(let a=0;a<n?.length;a++){const r=a*4,v=(p()-.5)*2*80,u=(p()-.5)*2*80,l=(p()-.5)*2*80;n[r+0]=v,n[r+1]=u,n[r+2]=l,n[r+3]=a}}function K(x){const n=x.image.data;for(let a=0;a<n?.length;a++){const r=a*4;n[r+0]=(p()-.5)*2,n[r+1]=(p()-.5)*2,n[r+2]=(p()-.5)*2,n[r+3]=a}}function Q(x){const{gl:n}=L(),a=F(w(x)),r=z(),{gpu:v,posVar:u,velVar:l}=_.useMemo(()=>{const c=new O(a,a,n),e=c.createTexture();J(e);const h=c.createTexture();K(h);const m=c.addVariable("texPos",X,e),i=c.addVariable("texVel",k,h);return m.material.uniforms={...r},i.material.uniforms={...r,uSize:new s(a),uSeparationFactor:new s(16),uAlignmentFactor:new s(.7),uCohesionFactor:new s(4),uSeparationR:new s(10),uAlignmentR:new s(4),uCohesionR:new s(4),uCenterMin:new s(4),uCenterMax:new s(20),uCenterFactor:new s(2),uMaxSpeed:new s(40)},c.setVariableDependencies(m,[m,i]),c.setVariableDependencies(i,[m,i]),c.init(),{gpu:c,posVar:m,velVar:i}},[n,a]);return{gpu:v,posVar:u,velVar:l}}function W(){const{nodes:x,materials:n}=b(S),[a,r]=N(),v=800,u=F(w(v)),{gpu:l,posVar:c,velVar:e}=Q(v),m={...z(),uTexPos:new s(l.getCurrentRenderTarget(c).texture),uTexVel:new s(l.getCurrentRenderTarget(e).texture)},i=[0,30],f=[0,10];q({uSeparationR:{value:e.material.uniforms.uSeparationR.value,min:f[0],max:f[1],onChange(o){e.material.uniforms.uSeparationR.value=o},label:"分离半径"},uSeparationFactor:{value:e.material.uniforms.uSeparationFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uSeparationFactor.value=o},label:"分离系数"},uAlignmentR:{value:e.material.uniforms.uAlignmentR.value,min:f[0],max:f[1],onChange(o){e.material.uniforms.uAlignmentR.value=o},label:"对齐半径"},uAlignmentFactor:{value:e.material.uniforms.uAlignmentFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uAlignmentFactor.value=o},label:"对齐系数"},uCohesionR:{value:e.material.uniforms.uCohesionR.value,min:f[0],max:f[1],onChange(o){e.material.uniforms.uCohesionR.value=o},label:"聚集半径"},uCohesionFactor:{value:e.material.uniforms.uCohesionFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uCohesionFactor.value=o},label:"聚集系数"},uCenterFactor:{value:e.material.uniforms.uCenterFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uCenterFactor.value=o},label:"中心引力系数"},uCenterRange:{value:[e.material.uniforms.uCenterMin.value,e.material.uniforms.uCenterMax.value],min:1,max:50,onChange([o,d]){e.material.uniforms.uCenterMin.value=o,e.material.uniforms.uCenterMax.value=d},label:"中心引力范围"},uMaxSpeed:{value:e.material.uniforms.uMaxSpeed.value,min:0,max:200,onChange(o){e.material.uniforms.uMaxSpeed.value=o},label:"最大速度"}});const C=_.useRef(null);I(()=>{l.compute(),m.uTexPos.value=l.getCurrentRenderTarget(c).texture,m.uTexVel.value=l.getCurrentRenderTarget(e).texture,C.current.map=l.getCurrentRenderTarget(e).texture});const T=_.useMemo(()=>Array.from({length:v}).map((o,d)=>{const j=d;let g=H(d/u),M=(d-g*u+.5)/u;return g=(g+.5)/u,{instanceId:j,texCoord:[M,g]}}),[v,u]);return t.jsxs(t.Fragment,{children:[t.jsxs("mesh",{scale:3,visible:!1,children:[t.jsx("planeGeometry",{}),t.jsx("meshBasicMaterial",{side:P,ref:C})]}),t.jsxs(a,{limit:1e3,range:1e3,geometry:x["Freedom-Sworn_mesh_Freedom-Sworn_0001"].geometry,children:[t.jsx(E,{baseMaterial:D,uniforms:m,vertexShader:B,fragmentShader:Z}),t.jsx(y,{name:"instanceId",defaultValue:0}),t.jsx(y,{name:"texCoord",defaultValue:[0,0]}),T.map(o=>t.jsx(r,{scale:.2,instanceId:o.instanceId,texCoord:o.texCoord},o.instanceId))]})]})}const de=R(function(){return t.jsx("div",{className:"h-screen",children:t.jsxs(V,{children:[t.jsx("ambientLight",{}),t.jsx(A,{}),t.jsx(W,{}),t.jsx(U,{children:t.jsx(Y,{})})]})})});export{de as default};
+}`,{random:d,sqrt:S,ceil:w,floor:H}=Math,F=G("/model/sword-transformed.glb");b.preload(F);function J(x){const t=x.image.data;for(let n=0;n<t?.length;n++){const r=n*4,v=(d()-.5)*2*10,u=(d()-.5)*2*10,l=(d()-.5)*2*10;t[r+0]=v,t[r+1]=u,t[r+2]=l,t[r+3]=n}}function K(x){const t=x.image.data;for(let n=0;n<t?.length;n++){const r=n*4;t[r+0]=(d()-.5)*10,t[r+1]=(d()-.5)*10,t[r+2]=(d()-.5)*10,t[r+3]=n}}function Q(x){const{gl:t}=L(),n=w(S(x)),r=z(),{gpu:v,posVar:u,velVar:l}=_.useMemo(()=>{const c=new O(n,n,t),e=c.createTexture();J(e);const h=c.createTexture();K(h);const m=c.addVariable("texPos",X,e),i=c.addVariable("texVel",k,h);return m.material.uniforms={...r},i.material.uniforms={...r,uSize:new s(n),uSeparationFactor:new s(1),uAlignmentFactor:new s(1),uCohesionFactor:new s(1),uSeparationR:new s(20),uAlignmentR:new s(15),uCohesionR:new s(30),uCenterMin:new s(20),uCenterMax:new s(30),uCenterFactor:new s(2),uMinSpeed:new s(60),uMaxSpeed:new s(80)},c.setVariableDependencies(m,[m,i]),c.setVariableDependencies(i,[m,i]),c.init(),{gpu:c,posVar:m,velVar:i}},[t,n]);return{gpu:v,posVar:u,velVar:l}}function W(){const{nodes:x,materials:t}=b(F),[n,r]=N(),v=800,u=w(S(v)),{gpu:l,posVar:c,velVar:e}=Q(v),m={...z(),uTexPos:new s(l.getCurrentRenderTarget(c).texture),uTexVel:new s(l.getCurrentRenderTarget(e).texture)},i=[0,30],p=[0,50];q({uSeparationR:{value:e.material.uniforms.uSeparationR.value,min:p[0],max:p[1],onChange(o){e.material.uniforms.uSeparationR.value=o},label:"分离半径"},uSeparationFactor:{value:e.material.uniforms.uSeparationFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uSeparationFactor.value=o},label:"分离系数"},uAlignmentR:{value:e.material.uniforms.uAlignmentR.value,min:p[0],max:p[1],onChange(o){e.material.uniforms.uAlignmentR.value=o},label:"对齐半径"},uAlignmentFactor:{value:e.material.uniforms.uAlignmentFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uAlignmentFactor.value=o},label:"对齐系数"},uCohesionR:{value:e.material.uniforms.uCohesionR.value,min:p[0],max:p[1],onChange(o){e.material.uniforms.uCohesionR.value=o},label:"聚集半径"},uCohesionFactor:{value:e.material.uniforms.uCohesionFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uCohesionFactor.value=o},label:"聚集系数"},uCenterFactor:{value:e.material.uniforms.uCenterFactor.value,min:i[0],max:i[1],onChange(o){e.material.uniforms.uCenterFactor.value=o},label:"中心引力系数"},uCenterRange:{value:[e.material.uniforms.uCenterMin.value,e.material.uniforms.uCenterMax.value],min:1,max:50,onChange([o,f]){e.material.uniforms.uCenterMin.value=o,e.material.uniforms.uCenterMax.value=f},label:"中心引力范围"},uSpeed:{value:[e.material.uniforms.uMinSpeed.value,e.material.uniforms.uMaxSpeed.value],min:0,max:100,onChange([o,f]){e.material.uniforms.uMinSpeed.value=o,e.material.uniforms.uMaxSpeed.value=f},label:"速度"}});const C=_.useRef(null);I(()=>{l.compute(),m.uTexPos.value=l.getCurrentRenderTarget(c).texture,m.uTexVel.value=l.getCurrentRenderTarget(e).texture,C.current.map=l.getCurrentRenderTarget(e).texture});const T=_.useMemo(()=>Array.from({length:v}).map((o,f)=>{const M=f;let g=H(f/u),j=(f-g*u+.5)/u;return g=(g+.5)/u,{instanceId:M,texCoord:[j,g]}}),[v,u]);return console.log(t["Freedom-Sworn"]),a.jsxs(a.Fragment,{children:[a.jsxs("mesh",{scale:3,visible:!1,children:[a.jsx("planeGeometry",{}),a.jsx("meshBasicMaterial",{side:D,ref:C})]}),a.jsxs(n,{limit:1e3,range:1e3,geometry:x["Freedom-Sworn_mesh_Freedom-Sworn_0001"].geometry,children:[a.jsx(E,{baseMaterial:P,map:t["Freedom-Sworn"].map,uniforms:m,vertexShader:B,fragmentShader:Z}),a.jsx(y,{name:"instanceId",defaultValue:0}),a.jsx(y,{name:"texCoord",defaultValue:[0,0]}),T.map(o=>a.jsx(r,{scale:.2,instanceId:o.instanceId,texCoord:o.texCoord},o.instanceId))]})]})}const de=R(function(){return a.jsx("div",{className:"h-screen",children:a.jsxs(V,{children:[a.jsx("ambientLight",{}),a.jsx(A,{}),a.jsx(W,{}),a.jsx(U,{children:a.jsx(Y,{})})]})})});export{de as default};

@@ -8,7 +8,7 @@ import {
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { asset } from '~/utils/asset'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import vertex from './vertex.glsl'
@@ -19,6 +19,7 @@ import { Perf } from 'r3f-perf'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import gpuPos from './gpuPos.glsl'
 import gpuVel from './gpuVel.glsl'
+import { useControls } from 'leva'
 
 const { random, sqrt, ceil, sin, cos, PI, floor } = Math
 
@@ -33,24 +34,25 @@ function fillPosTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
   for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    arr[i4 + 0] = (random() - 0.5) * 10
-    arr[i4 + 1] = (random() - 0.5) * 10
-    arr[i4 + 2] = (random() - 0.5) * 10
-    // arr[i4 + 0] = i * 4.
-    // arr[i4 + 1] = i * 4.
-    // arr[i4 + 2] = i * 4.
+    const x = (random() - 0.5) * 2 * 80
+    const y = (random() - 0.5) * 2 * 80
+    const z = (random() - 0.5) * 2 * 80
+    arr[i4 + 0] = x
+    arr[i4 + 1] = y
+    arr[i4 + 2] = z
 
-    // const theta = random() * PI
-    // const phi = random() * PI * 2
-    // const r = random() * 1 + 2
-    // const x = r * cos(phi) * cos(theta)
-    // const y = r * cos(phi) * sin(theta)
-    // const z = r * sin(phi)
-    // arr[i4 + 0] = x
-    // arr[i4 + 1] = y
-    // arr[i4 + 2] = z
+    arr[i4 + 3] = i
+  }
+}
+function fillVelTex(tex: THREE.DataTexture){
+  const arr = tex.image.data!
+  for (let i = 0; i < arr?.length; i++) {
+    const i4 = i * 4
+    arr[i4 + 0] = (random()-.5)*2.
+    arr[i4 + 1] = (random()-.5)*2.
+    arr[i4 + 2] = (random()-.5)*2.
 
-    arr[i4 + 3] = random()
+    arr[i4 + 3] = i
   }
 }
 
@@ -63,16 +65,29 @@ function useGpu(count: number) {
     const gpu = new GPUComputationRenderer(size, size, gl)
     const posTex = gpu.createTexture()
     fillPosTex(posTex)
-
-    // 不需要对vel纹理初始化,因为值都是通过noise直接计算,不需要考虑上一帧的速度
     const velTex = gpu.createTexture()
+    fillVelTex(velTex)
     const posVar = gpu.addVariable('texPos', gpuPos, posTex)
     const velVar = gpu.addVariable('texVel', gpuVel, velTex)
     posVar.material.uniforms = {
       ...uniformTime,
+      // uDefaultPosTex: new THREE.Uniform(posTex)
     }
     velVar.material.uniforms = {
       ...uniformTime,
+      uSize: new THREE.Uniform(size),
+      uSeparationFactor: new THREE.Uniform(16.),
+      uAlignmentFactor: new THREE.Uniform(.7),
+      uCohesionFactor: new THREE.Uniform(4.),
+
+      uSeparationR: new THREE.Uniform(10.),
+      uAlignmentR: new THREE.Uniform(4.),
+      uCohesionR: new THREE.Uniform(4.),
+
+      uCenterMin: new THREE.Uniform(4.),  // 中心引力范围
+      uCenterMax: new THREE.Uniform(20.), // 中心引力范围
+      uCenterFactor: new THREE.Uniform(2.),
+      uMaxSpeed: new THREE.Uniform(40.),
     }
     gpu.setVariableDependencies(posVar, [posVar, velVar])
     gpu.setVariableDependencies(velVar, [posVar, velVar])
@@ -94,14 +109,14 @@ function useGpu(count: number) {
 
 interface SwordAttrubites {
   instanceId: number
-  texCoord: THREE.Vector2
+  texCoord: [number, number]
 }
 
 function Swords() {
   const { nodes, materials } = useGLTF(swordGlbUrl)
   const [SwordInstances, Sword] = createInstances<SwordAttrubites>()
 
-  const count = 4
+  const count = 800
   const size = ceil(sqrt(count))
 
   const { gpu, posVar, velVar } = useGpu(count)
@@ -113,18 +128,124 @@ function Swords() {
     uTexVel: new THREE.Uniform(gpu.getCurrentRenderTarget(velVar).texture), // 飞剑速度,也用来设置方向
   }
 
+  const factor = [0, 30]
+  const radius = [0, 10]
+
+  useControls({
+    uSeparationR: {
+      value: velVar.material.uniforms.uSeparationR.value,
+      min: radius[0],
+      max: radius[1],
+      onChange(val) {
+        velVar.material.uniforms.uSeparationR.value = val;
+      },
+      label: '分离半径'
+    },
+    uSeparationFactor: {
+      value: velVar.material.uniforms.uSeparationFactor.value,
+      min: factor[0],
+      max: factor[1],
+      onChange(val) {
+        velVar.material.uniforms.uSeparationFactor.value = val;
+      },
+      label: '分离系数'
+    },
+    uAlignmentR: {
+      value: velVar.material.uniforms.uAlignmentR.value,
+      min: radius[0],
+      max: radius[1],
+      onChange(val) {
+        velVar.material.uniforms.uAlignmentR.value = val;
+      },
+      label: '对齐半径'
+    },
+    uAlignmentFactor: {
+      value: velVar.material.uniforms.uAlignmentFactor.value,
+      min: factor[0],
+      max: factor[1],
+      onChange(val) {
+        velVar.material.uniforms.uAlignmentFactor.value = val;
+      },
+      label: '对齐系数'
+    },
+    uCohesionR: {
+      value: velVar.material.uniforms.uCohesionR.value,
+      min: radius[0],
+      max: radius[1],
+      onChange(val) {
+        velVar.material.uniforms.uCohesionR.value = val;
+      },
+      label: '聚集半径'
+    },
+    uCohesionFactor: {
+      value: velVar.material.uniforms.uCohesionFactor.value,
+      min: factor[0],
+      max: factor[1],
+      onChange(val) {
+        velVar.material.uniforms.uCohesionFactor.value = val;
+      },
+      label:'聚集系数'
+    },
+    uCenterFactor: {
+      value: velVar.material.uniforms.uCenterFactor.value,
+      min: factor[0],
+      max: factor[1],
+      onChange(val) {
+        velVar.material.uniforms.uCenterFactor.value = val;
+      },
+      label:'中心引力系数'
+    },
+    uCenterRange: {
+      value: [
+        velVar.material.uniforms.uCenterMin.value,
+        velVar.material.uniforms.uCenterMax.value
+      ],
+      min: 1, 
+      max: 50,
+      onChange([v1, v2]) {
+        velVar.material.uniforms.uCenterMin.value=v1
+        velVar.material.uniforms.uCenterMax.value=v2
+      },
+      label: '中心引力范围'
+    },
+    uMaxSpeed: {
+      value: velVar.material.uniforms.uMaxSpeed.value,
+      min: 0.,
+      max: 200.,
+      onChange(val) {
+        velVar.material.uniforms.uMaxSpeed.value = val;
+      },
+      label:'最大速度'
+    },
+  })
+
   const helperMatRef = useRef<THREE.MeshBasicMaterial>(null!)
   useFrame(() => {
     gpu.compute()
     uniforms.uTexPos.value = gpu.getCurrentRenderTarget(posVar).texture
     uniforms.uTexVel.value = gpu.getCurrentRenderTarget(velVar).texture
-    helperMatRef.current.map = gpu.getCurrentRenderTarget(posVar).texture
+    helperMatRef.current.map = gpu.getCurrentRenderTarget(velVar).texture
   })
+
+  const data = useMemo(() => {
+    return Array.from({ length: count }).map((item, i) => {
+      const instanceId = i
+      let y = floor(i / size)
+      let x = (i - y * size + 0.5) / size
+      y = (y + 0.5) / size
+      const texCoord: [number, number] = [x, y]
+
+      return {
+        instanceId,
+        texCoord,
+      }
+    })
+  }, [count, size])
 
 
   return (
     <>
-      <mesh scale={3}>
+      <mesh scale={3} visible={false}>
         <planeGeometry />
         <meshBasicMaterial side={THREE.DoubleSide} ref={helperMatRef} />
       </mesh>
@@ -144,22 +265,17 @@ function Swords() {
         <InstancedAttribute name='instanceId' defaultValue={0} />
         <InstancedAttribute
           name='texCoord'
-          defaultValue={new THREE.Vector2(1, 1)}
+          // defaultValue={new THREE.Vector2(0, 0)}   // fuck!!!
+          defaultValue={[0, 0]}
         />
-        {Array.from({ length: count }).map((item, i) => {
-          const instanceId = i
-          let y = floor(i / size)
-          let x = (i - y * size + 0.5) / size
-          y = (y + 0.5) / size
-          const texCoord = new THREE.Vector2(x, y)
-          console.log(i, texCoord)
-
+        {data.map((item) => {
           return (
             <Sword
-              key={i}
+              // position-x={item.instanceId}
+              key={item.instanceId}
               scale={0.2}
-              instanceId={instanceId}
-              texCoord={texCoord}
+              instanceId={item.instanceId}
+              texCoord={item.texCoord}
             />
           )
         })}
@@ -169,18 +285,20 @@ function Swords() {
 }
 
 export default function () {
+
+  
   return (
     <div className='h-screen'>
       <Canvas>
-        <Perf position='top-left' />
-        <axesHelper args={[10]} />
+        {/* <Perf position='top-left' /> */}
+        {/* <axesHelper args={[10]} /> */}
         <ambientLight />
-        <OrbitControls makeDefault />
+        <OrbitControls />
         <Swords />
         {/* <Model /> */}
-        {/* <EffectComposer>
+        <EffectComposer>
           <Bloom />
-        </EffectComposer> */}
+        </EffectComposer>
       </Canvas>
     </div>
   )

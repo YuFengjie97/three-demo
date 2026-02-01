@@ -9,5 +9,5 @@ void main(){
   // float d = length(vUv);
   // d = .1/d;
 
-  csm_DiffuseColor.rgb = col;
+  csm_DiffuseColor.rgb = col*1.2;
 }

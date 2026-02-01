@@ -59,7 +59,7 @@ void main(){
   // pos = mat3(modelMatrix) * pos;
 
   // 速度向量
-  vec3 vel = texture(uTexVel, texCoord).rgb;
+  vec3 vel = normalize(texture(uTexVel, texCoord).rgb);
 
 
   float the = acos(vel.y);
@@ -68,10 +68,14 @@ void main(){
 
 
   // 所有顶点位置都按照gpu粒子位置进行偏移来更新模型位置
-  pos += texture(uTexPos, texCoord).rgb;
+  vec3 instance_pos = texture(uTexPos, texCoord).xyz;
+
+  pos += instance_pos;
+
 
   vUv = uv;
   vPos = pos;
-  vCol = sin(vec3(3,2,1) + id*1.3)*.5+.5;
+  float glow = dot(cos(vec3(3,2,1) + id), vec3(.1)) * 2. + 1.;
+  vCol = glow * (sin(vec3(3,2,1) + instance_pos * .1)*.5+.5);
   csm_Position = pos;
 }

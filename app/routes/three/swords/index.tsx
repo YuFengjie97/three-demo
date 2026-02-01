@@ -1,8 +1,6 @@
 import {
   createInstances,
-  Instance,
   InstancedAttribute,
-  Instances,
   OrbitControls,
 } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -20,6 +18,7 @@ import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import gpuPos from './gpuPos.glsl'
 import gpuVel from './gpuVel.glsl'
 import { useControls } from 'leva'
+import gsap from 'gsap'
 
 const { random, sqrt, ceil, sin, cos, PI, floor } = Math
 
@@ -80,19 +79,26 @@ function useGpu(count: number) {
       uAlignmentFactor: new THREE.Uniform(1),
       uCohesionFactor: new THREE.Uniform(1),
 
-      uSeparationR: new THREE.Uniform(20),
-      uAlignmentR: new THREE.Uniform(15),
-      uCohesionR: new THREE.Uniform(30),
+      uSeparationR: new THREE.Uniform(5),
+      uAlignmentR: new THREE.Uniform(10),
+      uCohesionR: new THREE.Uniform(15),
 
-      uCenterMin: new THREE.Uniform(20), // 中心引力范围
-      uCenterMax: new THREE.Uniform(30), // 中心引力范围
-      uCenterFactor: new THREE.Uniform(2),
+      uCenterMin: new THREE.Uniform(10), // 中心引力范围
+      uCenterMax: new THREE.Uniform(20), // 中心引力范围
+      uCenterFactor: new THREE.Uniform(10),
       uMinSpeed: new THREE.Uniform(60),
       uMaxSpeed: new THREE.Uniform(80),
     }
     gpu.setVariableDependencies(posVar, [posVar, velVar])
     gpu.setVariableDependencies(velVar, [posVar, velVar])
     gpu.init()
+
+    gsap.to(velVar.material.uniforms.uSeparationR, 
+      {
+        value:velVar.material.uniforms.uAlignmentR.value + 10,
+        duration: 3,
+        yoyo: true
+    })
 
     return {
       gpu,

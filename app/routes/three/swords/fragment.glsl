@@ -9,5 +9,6 @@ void main(){
   // float d = length(vUv);
   // d = .1/d;
 
-  csm_DiffuseColor.rgb = col*1.2;
+  vec3 rgb = csm_DiffuseColor.rgb;
+  csm_DiffuseColor.rgb = mix(rgb, col, .5);
 }

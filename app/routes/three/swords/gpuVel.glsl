@@ -10,8 +10,11 @@ uniform float uAlignmentR;
 uniform float uAlignmentFactor;
 uniform float uCohesionR;
 uniform float uCohesionFactor;
-uniform float uCenterFactor;
+
 uniform float uMaxSpeed;
+uniform float uMinSpeed;
+
+uniform float uCenterFactor;
 uniform float uCenterMin;
 uniform float uCenterMax;
 
@@ -62,15 +65,15 @@ void main(){
       if(dist < separation_r) {
         vec3 to_nei = vec3(pos - nei_pos);
         vec3 separation_force = normalize(to_nei);
-        float strength = 1. / max(0.01, length(to_nei));
+        float strength = separation_r / max(0.01, dist);
         separation_vel += separation_force * strength;
         separation_count++;
       }
-      if(dist < alignment_r){
+      else if(dist < alignment_r){
         alignment_vel += nei_vel;
         alignment_count++;
       }
-      if(dist < cohesion_r) {
+      else if(dist < cohesion_r) {
         cohesion_center += nei_pos;
         cohesion_count++;
       }
@@ -107,10 +110,9 @@ void main(){
 
 
   vec3 vel = texture(texVel, uv).xyz;
-  vel += acc;
+  vel = mix(vel, acc, .4);
 
-  float max_speed = uMaxSpeed;
-  float speed = min(length(vel), max_speed);
+  float speed = max(min(length(vel), uMaxSpeed), uMinSpeed);
   vel = normalize(vel) * speed;
 
   // vec3 acc = vec3(

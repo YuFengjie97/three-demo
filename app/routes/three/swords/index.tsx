@@ -34,9 +34,9 @@ function fillPosTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
   for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    const x = (random() - 0.5) * 2 * 80
-    const y = (random() - 0.5) * 2 * 80
-    const z = (random() - 0.5) * 2 * 80
+    const x = (random() - 0.5) * 2 * 10
+    const y = (random() - 0.5) * 2 * 10
+    const z = (random() - 0.5) * 2 * 10
     arr[i4 + 0] = x
     arr[i4 + 1] = y
     arr[i4 + 2] = z
@@ -44,13 +44,13 @@ function fillPosTex(tex: THREE.DataTexture) {
     arr[i4 + 3] = i
   }
 }
-function fillVelTex(tex: THREE.DataTexture){
+function fillVelTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
   for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    arr[i4 + 0] = (random()-.5)*2.
-    arr[i4 + 1] = (random()-.5)*2.
-    arr[i4 + 2] = (random()-.5)*2.
+    arr[i4 + 0] = (random() - 0.5) * 10
+    arr[i4 + 1] = (random() - 0.5) * 10
+    arr[i4 + 2] = (random() - 0.5) * 10
 
     arr[i4 + 3] = i
   }
@@ -76,18 +76,19 @@ function useGpu(count: number) {
     velVar.material.uniforms = {
       ...uniformTime,
       uSize: new THREE.Uniform(size),
-      uSeparationFactor: new THREE.Uniform(16.),
-      uAlignmentFactor: new THREE.Uniform(.7),
-      uCohesionFactor: new THREE.Uniform(4.),
+      uSeparationFactor: new THREE.Uniform(1),
+      uAlignmentFactor: new THREE.Uniform(1),
+      uCohesionFactor: new THREE.Uniform(1),
 
-      uSeparationR: new THREE.Uniform(10.),
-      uAlignmentR: new THREE.Uniform(4.),
-      uCohesionR: new THREE.Uniform(4.),
+      uSeparationR: new THREE.Uniform(20),
+      uAlignmentR: new THREE.Uniform(15),
+      uCohesionR: new THREE.Uniform(30),
 
-      uCenterMin: new THREE.Uniform(4.),  // 中心引力范围
-      uCenterMax: new THREE.Uniform(20.), // 中心引力范围
-      uCenterFactor: new THREE.Uniform(2.),
-      uMaxSpeed: new THREE.Uniform(40.),
+      uCenterMin: new THREE.Uniform(20), // 中心引力范围
+      uCenterMax: new THREE.Uniform(30), // 中心引力范围
+      uCenterFactor: new THREE.Uniform(2),
+      uMinSpeed: new THREE.Uniform(60),
+      uMaxSpeed: new THREE.Uniform(80),
     }
     gpu.setVariableDependencies(posVar, [posVar, velVar])
     gpu.setVariableDependencies(velVar, [posVar, velVar])
@@ -129,7 +130,7 @@ function Swords() {
   }
 
   const factor = [0, 30]
-  const radius = [0, 10]
+  const radius = [0, 50]
 
   useControls({
     uSeparationR: {
@@ -137,85 +138,89 @@ function Swords() {
       min: radius[0],
       max: radius[1],
       onChange(val) {
-        velVar.material.uniforms.uSeparationR.value = val;
+        velVar.material.uniforms.uSeparationR.value = val
       },
-      label: '分离半径'
+      label: '分离半径',
     },
     uSeparationFactor: {
       value: velVar.material.uniforms.uSeparationFactor.value,
       min: factor[0],
       max: factor[1],
       onChange(val) {
-        velVar.material.uniforms.uSeparationFactor.value = val;
+        velVar.material.uniforms.uSeparationFactor.value = val
       },
-      label: '分离系数'
+      label: '分离系数',
     },
     uAlignmentR: {
       value: velVar.material.uniforms.uAlignmentR.value,
       min: radius[0],
       max: radius[1],
       onChange(val) {
-        velVar.material.uniforms.uAlignmentR.value = val;
+        velVar.material.uniforms.uAlignmentR.value = val
       },
-      label: '对齐半径'
+      label: '对齐半径',
     },
     uAlignmentFactor: {
       value: velVar.material.uniforms.uAlignmentFactor.value,
       min: factor[0],
       max: factor[1],
       onChange(val) {
-        velVar.material.uniforms.uAlignmentFactor.value = val;
+        velVar.material.uniforms.uAlignmentFactor.value = val
       },
-      label: '对齐系数'
+      label: '对齐系数',
     },
     uCohesionR: {
       value: velVar.material.uniforms.uCohesionR.value,
       min: radius[0],
       max: radius[1],
       onChange(val) {
-        velVar.material.uniforms.uCohesionR.value = val;
+        velVar.material.uniforms.uCohesionR.value = val
       },
-      label: '聚集半径'
+      label: '聚集半径',
     },
     uCohesionFactor: {
       value: velVar.material.uniforms.uCohesionFactor.value,
       min: factor[0],
       max: factor[1],
       onChange(val) {
-        velVar.material.uniforms.uCohesionFactor.value = val;
+        velVar.material.uniforms.uCohesionFactor.value = val
       },
-      label:'聚集系数'
+      label: '聚集系数',
     },
     uCenterFactor: {
       value: velVar.material.uniforms.uCenterFactor.value,
       min: factor[0],
       max: factor[1],
       onChange(val) {
-        velVar.material.uniforms.uCenterFactor.value = val;
+        velVar.material.uniforms.uCenterFactor.value = val
       },
-      label:'中心引力系数'
+      label: '中心引力系数',
     },
     uCenterRange: {
       value: [
         velVar.material.uniforms.uCenterMin.value,
-        velVar.material.uniforms.uCenterMax.value
+        velVar.material.uniforms.uCenterMax.value,
       ],
-      min: 1, 
+      min: 1,
       max: 50,
       onChange([v1, v2]) {
-        velVar.material.uniforms.uCenterMin.value=v1
-        velVar.material.uniforms.uCenterMax.value=v2
+        velVar.material.uniforms.uCenterMin.value = v1
+        velVar.material.uniforms.uCenterMax.value = v2
       },
-      label: '中心引力范围'
+      label: '中心引力范围',
     },
-    uMaxSpeed: {
-      value: velVar.material.uniforms.uMaxSpeed.value,
-      min: 0.,
-      max: 200.,
-      onChange(val) {
-        velVar.material.uniforms.uMaxSpeed.value = val;
+    uSpeed: {
+      value: [
+        velVar.material.uniforms.uMinSpeed.value,
+        velVar.material.uniforms.uMaxSpeed.value,
+      ],
+      min: 0,
+      max: 100,
+      onChange([v1, v2]) {
+        velVar.material.uniforms.uMinSpeed.value = v1
+        velVar.material.uniforms.uMaxSpeed.value = v2
       },
-      label:'最大速度'
+      label: '速度',
     },
   })
 
@@ -242,6 +247,8 @@ function Swords() {
     })
   }, [count, size])
 
+  console.log(materials['Freedom-Sworn']);
+  
 
   return (
     <>
@@ -258,6 +265,7 @@ function Swords() {
       >
         <CustomShaderMaterial
           baseMaterial={THREE.MeshBasicMaterial}
+          map={materials['Freedom-Sworn'].map}
           uniforms={uniforms}
           vertexShader={vertex}
           fragmentShader={fragment}
@@ -285,8 +293,6 @@ function Swords() {
 }
 
 export default function () {
-
-  
   return (
     <div className='h-screen'>
       <Canvas>

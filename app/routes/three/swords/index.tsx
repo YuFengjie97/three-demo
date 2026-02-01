@@ -247,8 +247,6 @@ function Swords() {
     })
   }, [count, size])
 
-  console.log(materials['Freedom-Sworn']);
-  
 
   return (
     <>

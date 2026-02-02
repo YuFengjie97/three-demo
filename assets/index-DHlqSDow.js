@@ -1,4 +1,4 @@
-import{w as r,o as e,r as c}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as n,O as i,b as x,J as a}from"./OrbitControls-wRqzCdd_.js";import{j as v}from"./three-custom-shader-material.es-00gjT4E9.js";import{u as p}from"./useUniformTime-BN-1ekZ-.js";import{P as m}from"./Perf-BYAwScHX.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-WfkYmuit.js";import"./index-n5PR1bfd.js";import"./client-EdRjCdko.js";const l=`#define GLSLIFY 1
+import{w as r,o as e,r as c}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as n,O as i,b as x,J as a}from"./OrbitControls-wRqzCdd_.js";import{j as v}from"./three-custom-shader-material.es-00gjT4E9.js";import{u as p}from"./useUniformTime-iwv4e6ER.js";import{P as m}from"./Perf-BYAwScHX.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-WfkYmuit.js";import"./index-n5PR1bfd.js";import"./client-EdRjCdko.js";const l=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.

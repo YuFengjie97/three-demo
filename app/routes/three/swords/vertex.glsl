@@ -75,7 +75,7 @@ void main(){
 
   vUv = uv;
   vPos = pos;
-  float glow = dot(cos(vec3(3,2,1) + id), vec3(.1)) * 3. + .5;
-  vCol = glow * (sin(vec3(3,2,1) + instance_pos * .1)*.5+.5);
+  float glow = dot(sin(vec3(3,2,1) + id), vec3(1.)) + .5;
+  vCol = glow * (sin(vec3(3,2,1) + id * 2.1)*.5+.5);
   csm_Position = pos;
 }

@@ -10,5 +10,5 @@ void main(){
   // d = .1/d;
 
   vec3 rgb = csm_DiffuseColor.rgb;
-  csm_DiffuseColor.rgb = mix(rgb, col, .5);
+  csm_DiffuseColor.rgb += col;
 }

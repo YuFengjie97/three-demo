@@ -33,9 +33,9 @@ function fillPosTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
   for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    const x = (random() - 0.5) * 2 * 10
-    const y = (random() - 0.5) * 2 * 10
-    const z = (random() - 0.5) * 2 * 10
+    const x = (random() - 0.5) * 2 * 50
+    const y = (random() - 0.5) * 2 * 50
+    const z = (random() - 0.5) * 2 * 50
     arr[i4 + 0] = x
     arr[i4 + 1] = y
     arr[i4 + 2] = z
@@ -47,9 +47,9 @@ function fillVelTex(tex: THREE.DataTexture) {
   const arr = tex.image.data!
   for (let i = 0; i < arr?.length; i++) {
     const i4 = i * 4
-    arr[i4 + 0] = (random() - 0.5) * 10
-    arr[i4 + 1] = (random() - 0.5) * 10
-    arr[i4 + 2] = (random() - 0.5) * 10
+    arr[i4 + 0] = (random() - 0.5) * 2
+    arr[i4 + 1] = (random() - 0.5) * 2
+    arr[i4 + 2] = (random() - 0.5) * 2
 
     arr[i4 + 3] = i
   }
@@ -75,31 +75,27 @@ function useGpu(count: number) {
     velVar.material.uniforms = {
       ...uniformTime,
       uSize: new THREE.Uniform(size),
-      uSeparationFactor: new THREE.Uniform(1),
-      uAlignmentFactor: new THREE.Uniform(1),
-      uCohesionFactor: new THREE.Uniform(1),
 
       uSeparationR: new THREE.Uniform(5),
-      uAlignmentR: new THREE.Uniform(10),
-      uCohesionR: new THREE.Uniform(15),
+      uAlignmentR:  new THREE.Uniform(10),
+      uCohesionR:   new THREE.Uniform(10),
 
-      uCenterMin: new THREE.Uniform(10), // 中心引力范围
-      uCenterMax: new THREE.Uniform(20), // 中心引力范围
-      uCenterFactor: new THREE.Uniform(10),
-      uMinSpeed: new THREE.Uniform(60),
-      uMaxSpeed: new THREE.Uniform(80),
+      uCenterEdge:   new THREE.Uniform(120),
+
+      uMinSpeed: new THREE.Uniform(20),
+      uMaxSpeed: new THREE.Uniform(40),
     }
     gpu.setVariableDependencies(posVar, [posVar, velVar])
     gpu.setVariableDependencies(velVar, [posVar, velVar])
     gpu.init()
 
-    gsap.to(velVar.material.uniforms.uSeparationR, 
-      {
-        value: velVar.material.uniforms.uAlignmentR.value + 5,
-        duration: 5,
-        yoyo: true,
-        repeat: -1,
-    })
+    // gsap.to(velVar.material.uniforms.uSeparationR, 
+    //   {
+    //     value: velVar.material.uniforms.uAlignmentR.value + 5,
+    //     duration: 5,
+    //     yoyo: true,
+    //     repeat: -1,
+    // })
 
     return {
       gpu,
@@ -140,23 +136,14 @@ function Swords() {
   const radius = [0, 50]
 
   useControls({
-    // uSeparationR: {
-    //   value: velVar.material.uniforms.uSeparationR.value,
-    //   min: radius[0],
-    //   max: radius[1],
-    //   onChange(val) {
-    //     velVar.material.uniforms.uSeparationR.value = val
-    //   },
-    //   label: '分离半径',
-    // },
-    uSeparationFactor: {
-      value: velVar.material.uniforms.uSeparationFactor.value,
-      min: factor[0],
-      max: factor[1],
+    uSeparationR: {
+      value: velVar.material.uniforms.uSeparationR.value,
+      min: radius[0],
+      max: radius[1],
       onChange(val) {
-        velVar.material.uniforms.uSeparationFactor.value = val
+        velVar.material.uniforms.uSeparationR.value = val
       },
-      label: '分离系数',
+      label: '分离半径',
     },
     uAlignmentR: {
       value: velVar.material.uniforms.uAlignmentR.value,
@@ -167,15 +154,6 @@ function Swords() {
       },
       label: '对齐半径',
     },
-    uAlignmentFactor: {
-      value: velVar.material.uniforms.uAlignmentFactor.value,
-      min: factor[0],
-      max: factor[1],
-      onChange(val) {
-        velVar.material.uniforms.uAlignmentFactor.value = val
-      },
-      label: '对齐系数',
-    },
     uCohesionR: {
       value: velVar.material.uniforms.uCohesionR.value,
       min: radius[0],
@@ -185,34 +163,12 @@ function Swords() {
       },
       label: '聚集半径',
     },
-    uCohesionFactor: {
-      value: velVar.material.uniforms.uCohesionFactor.value,
-      min: factor[0],
-      max: factor[1],
+    uCenterEdge: {
+      value: velVar.material.uniforms.uCenterEdge.value,
+      min: 0.,
+      max: 200.,
       onChange(val) {
-        velVar.material.uniforms.uCohesionFactor.value = val
-      },
-      label: '聚集系数',
-    },
-    uCenterFactor: {
-      value: velVar.material.uniforms.uCenterFactor.value,
-      min: factor[0],
-      max: factor[1],
-      onChange(val) {
-        velVar.material.uniforms.uCenterFactor.value = val
-      },
-      label: '中心引力系数',
-    },
-    uCenterRange: {
-      value: [
-        velVar.material.uniforms.uCenterMin.value,
-        velVar.material.uniforms.uCenterMax.value,
-      ],
-      min: 1,
-      max: 50,
-      onChange([v1, v2]) {
-        velVar.material.uniforms.uCenterMin.value = v1
-        velVar.material.uniforms.uCenterMax.value = v2
+        velVar.material.uniforms.uCenterEdge.value = val
       },
       label: '中心引力范围',
     },
@@ -221,8 +177,8 @@ function Swords() {
         velVar.material.uniforms.uMinSpeed.value,
         velVar.material.uniforms.uMaxSpeed.value,
       ],
-      min: 0,
-      max: 100,
+      min: 1,
+      max: 400,
       onChange([v1, v2]) {
         velVar.material.uniforms.uMinSpeed.value = v1
         velVar.material.uniforms.uMaxSpeed.value = v2

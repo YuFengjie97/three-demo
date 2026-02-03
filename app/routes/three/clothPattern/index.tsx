@@ -13,7 +13,7 @@ import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import { asset } from '~/utils/asset'
 import CustomShaderMaterial from 'three-custom-shader-material'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { button, useControls } from 'leva'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Perf } from 'r3f-perf'
@@ -153,7 +153,10 @@ export default function () {
         <ambientLight />
         <directionalLight position={[2, 0, 2]} intensity={intensity} />
 
-        <Cloth />
+        <Suspense fallback={null}>
+          <Cloth />
+        </Suspense>
+
         <ContactShadows
           position={[0, -1, 0]}
           opacity={1}

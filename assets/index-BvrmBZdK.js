@@ -1,4 +1,4 @@
-import{w as a,o as e}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as c,O as v,A as m,d,e as p,U as l,n as u}from"./OrbitControls-eiKvL4JR.js";import{a as y}from"./asset-BvcpElq9.js";import{j as f}from"./three-custom-shader-material.es-Cha1eVdq.js";import{u as h}from"./useUniformTime-DkytjeC9.js";import{d as z,w as g}from"./index-Bt7jwiX8.js";import{L as j}from"./Loader-dsNry5om.js";import{u as b}from"./Texture-B2bj3WAc.js";import{c as w,b as C}from"./Instances-4zQFoRnP.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-DCTJ61Ca.js";const T=`#define GLSLIFY 1
+import{w as j,o as e,r as b}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as T,O as C,d as D,e as L,U as s,n as A}from"./OrbitControls-eiKvL4JR.js";import{a as r}from"./asset-BvcpElq9.js";import{j as P}from"./three-custom-shader-material.es-Cha1eVdq.js";import{u as S}from"./useUniformTime-DkytjeC9.js";import{d as _,w as I}from"./index-Bt7jwiX8.js";import{L as N}from"./Loader-dsNry5om.js";import{u as n}from"./Texture-B2bj3WAc.js";import{c as U,b as M}from"./Instances-4zQFoRnP.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-DCTJ61Ca.js";const E=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -109,6 +109,17 @@ attribute float ndx;
 
 varying vec2 vUv;
 varying float vNdx;
+varying vec3 vPos;
+
+// https://www.shadertoy.com/view/lsKcDD
+mat3 lookAt( in vec3 ro, in vec3 ta, float cr )
+{
+	vec3 cw = normalize(ta-ro);            // 相机前
+	vec3 cp = vec3(sin(cr), cos(cr),0.0);  // 滚角
+	vec3 cu = normalize( cross(cw,cp) );   // 相机右
+	vec3 cv = normalize( cross(cu,cw) );   // 相机上
+  return mat3( cu, cv, cw );
+}
 
 void main(){
   float t = uTime;
@@ -116,22 +127,43 @@ void main(){
   vNdx = ndx;
 
   vec3 p = csm_Position;
+
+  p = lookAt(p, cameraPosition, 0.) * p;
+
   p.z += snoise(vec3(p.xy*2., ndx + t)) * .1 ;
+
+  p.y += sin(t + ndx*.1) * .2;
+
   csm_Position = p;
-}`,D=`#define GLSLIFY 1
+  vPos = csm_Position;
+}`,F=`#define GLSLIFY 1
 uniform float uTime;
 uniform float uDelta;
-uniform sampler2D uTex;
+uniform sampler2D uTex1;
+uniform sampler2D uTex2;
+uniform sampler2D uTex3;
 
 varying vec2 vUv;
 varying float vNdx;
+varying vec3 vPos;
 
 void main(){
   float t = uTime;
-  float d = texture(uTex, vUv).b;
 
-  vec3 col = sin(vec3(3,2,1) + vNdx * 10. + t*1.)*.5+.5;
+  float i = floor(mod(vNdx, 3.));
+  float d = 0.;
+  if(i==0.){
+    d = texture(uTex1, vUv).b;
+  }
+  else if(i==1.){
+    d = texture(uTex2, vUv).b;
+  }
+  else if(i==2.){
+    d = texture(uTex3, vUv).b;
+  }
 
-  csm_FragColor = vec4(col*2., d);
+  vec3 col = sin(vec3(3,2,1) + vNdx * 10. + vPos + t*1.)*.5+.5;
+
+  csm_FragColor = vec4(col * col.r * 2., d);
 }
-`,{random:t}=Math;function L(){const s=b(y("/img/texture/fulu.jpg")),r={...h(),uTex:new l(s)},[x,n]=w();return e.jsxs(x,{children:[e.jsx("planeGeometry",{args:[1,1,10,10],scale:2}),e.jsx(f,{uniforms:r,baseMaterial:p,side:d,vertexShader:T,fragmentShader:D,transparent:!0,alphaTest:.01,blending:m,depthWrite:!1}),e.jsx(C,{name:"ndx",defaultValue:0}),Array.from({length:200}).map((_,o)=>{const i=new u((t()-.5)*10,(t()-.5)*10,(t()-.5)*10);return e.jsx(n,{ndx:o,position:i},o)})]})}const B=a(function(){return e.jsxs("div",{className:"h-screen",children:[e.jsxs(c,{children:[e.jsx("axesHelper",{args:[10]}),e.jsx(v,{}),e.jsx("ambientLight",{}),e.jsx(L,{}),e.jsx(z,{children:e.jsx(g,{})})]}),e.jsx(j,{})]})});export{B as default};
+`,{random:c,PI:v,cos:m,sin:i}=Math;function G(){const u=n(r("/img/texture/fulu/1.jpg")),l=n(r("/img/texture/fulu/2.jpg")),p=n(r("/img/texture/fulu/3.jpg")),d={...S(),uTex1:new s(u),uTex2:new s(l),uTex3:new s(p)},[f,y]=U();return e.jsxs(f,{children:[e.jsx("planeGeometry",{args:[1,1,10,10],scale:2}),e.jsx(P,{uniforms:d,baseMaterial:L,side:D,vertexShader:E,fragmentShader:F,transparent:!0,alphaTest:.01,depthWrite:!1}),e.jsx(M,{name:"ndx",defaultValue:0}),Array.from({length:1e3}).map((O,x)=>{const o=c()*v,a=c()*v*2,t=c()*5+3,h=t*i(o)*m(a),z=t*i(o)*i(a),w=t*m(o),g=new A(h,z,w);return e.jsx(y,{ndx:x,position:g},x)})]})}const $=j(function(){return e.jsxs("div",{className:"h-screen",children:[e.jsxs(T,{camera:{position:[1,1,1]},children:[e.jsx("axesHelper",{args:[10]}),e.jsx(C,{}),e.jsx("ambientLight",{}),e.jsx(b.Suspense,{fallback:null,children:e.jsx(G,{})}),e.jsx(_,{children:e.jsx(I,{})})]}),e.jsx(N,{})]})});export{$ as default};

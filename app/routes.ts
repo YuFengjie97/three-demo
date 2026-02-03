@@ -16,6 +16,7 @@ export default [
   route('/three/hexagon-vertex-offset', 'routes/three/hexagonVS/index.tsx'),
   route('/three/boxframes', 'routes/three/boxFrame/index.tsx'),
   route('/three/swords', 'routes/three/swords/index.tsx'),
+  route('/three/fulu', 'routes/three/fulu/index.tsx'),
 
 
 

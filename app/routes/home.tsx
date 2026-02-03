@@ -31,6 +31,7 @@ export default function Home() {
       <Link to='/three/hexagon-vertex-offset'>蜂巢顶点偏移</Link>
       <Link to='/three/boxframes'>boxFrames</Link>
       <Link to='/three/swords'>飞剑 instances gpu</Link>
+      <Link to='/three/fulu'>符箓</Link>
 
       <h1 className="text-5xl my-10">Music Visual</h1>
       <Link to='/three/mv1'>music visual 1</Link>

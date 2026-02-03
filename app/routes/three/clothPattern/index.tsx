@@ -2,6 +2,7 @@ import {
   ContactShadows,
   Environment,
   Float,
+  Loader,
   OrbitControls,
   useGLTF,
   useTexture,
@@ -166,6 +167,7 @@ export default function () {
         <Env />
 
       </Canvas>
+      <Loader />
     </div>
   )
 }

@@ -18,6 +18,7 @@ export default [
   route('/three/swords', 'routes/three/swords/index.tsx'),
   route('/three/fulu', 'routes/three/fulu/index.tsx'),
 
+  route('/three/line', 'routes/three/line/index.tsx'),
 
 
 

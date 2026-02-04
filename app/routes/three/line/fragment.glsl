@@ -1,0 +1,18 @@
+
+varying vec3 vCenter;
+
+void main(){
+
+  // float d = vCenter.x;
+  // float d = min(min(vCenter.x, vCenter.y),vCenter.z);
+  // float d = vCenter.x * vCenter.y * vCenter.z;
+  // d = smoothstep(.1,0.,d);
+  // csm_FragColor = vec4(vec3(d), 1.);
+
+  float thickness = 20.;
+  vec3 afwidth = fwidth(vCenter.xyz);
+  vec3 edge3 = smoothstep((thickness-1.)*afwidth, thickness*afwidth, vCenter);
+  float edge = 1.-min(min(edge3.x,edge3.y),edge3.z);
+
+  csm_FragColor = vec4(vec3(edge), edge);
+}

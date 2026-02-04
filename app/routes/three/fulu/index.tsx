@@ -77,7 +77,11 @@ export default function(){
     <div className="h-screen">
       <Canvas camera={{position: [1,1,1]}}>
         <axesHelper args={[10]}/>
-        <OrbitControls />
+        <OrbitControls
+          makeDefault 
+          minPolarAngle={.5}
+          maxPolarAngle={Math.PI-.5}
+        />
         <ambientLight />
 
         <Suspense fallback={null}>

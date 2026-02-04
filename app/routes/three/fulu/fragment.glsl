@@ -1,3 +1,6 @@
+#pragma glslify: snoise = require('glsl-noise/simplex/3d')
+
+
 uniform float uTime;
 uniform float uDelta;
 uniform sampler2D uTex1;
@@ -25,7 +28,7 @@ void main(){
     d = texture(uTex3, vUv).b;
   }
 
-  vec3 col = sin(vec3(3,2,1) + vNdx * 10. + vPos + t*1.)*.5+.5;
+  vec3 col = sin(vec3(3,2,1) + vNdx + vPos + t*1.)*.5+.5;
 
-  csm_FragColor = vec4(col * col.r * 2., d);
+  csm_FragColor = vec4(col*2.1, d);
 }

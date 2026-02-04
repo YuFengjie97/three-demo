@@ -76,7 +76,7 @@ export default function(){
   return (
     <div className="h-screen">
       <Canvas camera={{position: [1,1,1]}}>
-        <axesHelper args={[10]}/>
+        {/* <axesHelper args={[10]}/> */}
         <OrbitControls
           makeDefault 
           minPolarAngle={.5}

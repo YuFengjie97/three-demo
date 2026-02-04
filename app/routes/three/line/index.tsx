@@ -1,45 +1,82 @@
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useMemo } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
+import { asset } from '~/utils/asset'
+import { useControls } from 'leva'
 
-const { random, floor } = Math
+const { random, floor, PI } = Math
 
 function Demo() {
-  const { geo } = useMemo(() => {
-    const count = 30
-    const position = new Float32Array(count * 3)
-    const centers = new Float32Array(count * 3)
-    const vectors = [
-      new THREE.Vector3( 1, 0, 0 ),
-      new THREE.Vector3( 0, 1, 0 ),
-      new THREE.Vector3( 0, 0, 1 )
-    ]
+  const { nodes, materials } = useGLTF(asset('/model/skull-transformed.glb'))
+  // 使用 useMemo 防止每次渲染都重新计算
+  const processedGeo = useMemo(() => {
+    // 1. 获取原始几何体
+    // @ts-ignore
+    let geo = nodes.Object_2.geometry
 
+    // 2. 【关键步骤】转换为非索引几何体
+    // 这会将共享顶点拆分，使三角形独立 (Vertex count 会变大)
+    geo = geo.toNonIndexed()
+
+    const count = geo.attributes.position.count
+    const centers = new Float32Array(count * 3)
+
+    // 3. 计算重心坐标 (现在的逻辑就是安全的了)
     for (let i = 0; i < count; i++) {
-      const i3 = i*3
-      position[i3+0] = (random() - 0.5) * 10
-      position[i3+1] = (random() - 0.5) * 10
-      position[i3+2] = (random() - 0.5) * 10
-    
-      centers[i3+0] = vectors[i%3].x
-      centers[i3+1] = vectors[i%3].y
-      centers[i3+2] = vectors[i%3].z
+      // 0, 1, 2 -> (1,0,0), (0,1,0), (0,0,1)
+      // 3, 4, 5 -> (1,0,0), (0,1,0), (0,0,1)
+      // ...
+      const vectorIndex = i % 3
+
+      const i3 = i * 3
+      if (vectorIndex === 0) {
+        // (1, 0, 0)
+        centers[i3] = 1
+        centers[i3 + 1] = 0
+        centers[i3 + 2] = 0
+      } else if (vectorIndex === 1) {
+        // (0, 1, 0)
+        centers[i3] = 0
+        centers[i3 + 1] = 1
+        centers[i3 + 2] = 0
+      } else {
+        // (0, 0, 1)
+        centers[i3] = 0
+        centers[i3 + 1] = 0
+        centers[i3 + 2] = 1
+      }
     }
-    
-    const geo = new THREE.BufferGeometry()
-    geo.setAttribute('position', new THREE.BufferAttribute(position, 3))
+
     geo.setAttribute('aCenter', new THREE.BufferAttribute(centers, 3))
-    return { geo }
-  }, [])
+
+    return geo
+  }, [nodes])
+
+  const uniforms = {
+    uThickness: new THREE.Uniform(4.)
+  }
+
+  useControls({
+    thickness: {
+      value: uniforms.uThickness.value,
+      min:1,
+      max: 10,
+      step: 1.,
+      onChange(val) {
+        uniforms.uThickness.value = val
+      }
+    }
+  })
 
   return (
-    <mesh geometry={geo}>
+    <mesh geometry={processedGeo} rotation-x={-PI / 2} scale={2}>
       <CustomShaderMaterial
         baseMaterial={THREE.MeshBasicMaterial}
+        uniforms={uniforms}
         vertexShader={vertex}
         fragmentShader={fragment}
         side={THREE.DoubleSide}

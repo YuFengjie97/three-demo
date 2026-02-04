@@ -54,9 +54,9 @@ function FuLu(){
           const the = random() * PI
           const phi = random() * PI * 2.
           const r = random() * 5 + 3
-          const x = r * sin(the) * cos(phi)
-          const y = r * sin(the) * sin(phi)
-          const z = r * cos(the)
+          const z = r * sin(the) * cos(phi)
+          const x = r * sin(the) * sin(phi)
+          const y = r * cos(the)
 
           const pos = new THREE.Vector3(
             x,

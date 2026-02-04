@@ -57,7 +57,7 @@ function Demo() {
   }, [nodes])
 
   const uniforms = {
-    uThickness: new THREE.Uniform(4.)
+    uThickness: new THREE.Uniform(1.)
   }
 
   useControls({
@@ -65,12 +65,13 @@ function Demo() {
       value: uniforms.uThickness.value,
       min:1,
       max: 10,
-      step: 1.,
       onChange(val) {
         uniforms.uThickness.value = val
       }
     }
   })
+  console.log(uniforms);
+
 
   return (
     <mesh geometry={processedGeo} rotation-x={-PI / 2} scale={2}>

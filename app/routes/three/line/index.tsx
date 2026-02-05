@@ -57,20 +57,21 @@ function Demo() {
   }, [nodes])
 
   const uniforms = {
-    uThickness: new THREE.Uniform(1.)
+    uThickness: new THREE.Uniform(2.)
   }
 
-  useControls({
+  const {thickness} = useControls({
     thickness: {
       value: uniforms.uThickness.value,
-      min:1,
+      min:.1,
       max: 10,
-      onChange(val) {
-        uniforms.uThickness.value = val
-      }
+      // onChange(val) {
+      //   uniforms.uThickness.value = val
+      // }
     }
   })
-  console.log(uniforms);
+  uniforms.uThickness.value = thickness
+
 
 
   return (
@@ -90,7 +91,7 @@ function Demo() {
 export default function () {
   return (
     <div className='h-screen'>
-      <Canvas>
+      <Canvas camera={{position: [0,0,0.1]}}>
         <ambientLight />
         <axesHelper args={[10]} />
         <OrbitControls />

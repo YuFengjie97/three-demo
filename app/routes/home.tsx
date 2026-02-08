@@ -30,8 +30,8 @@ export default function Home() {
       <Link to='/three/boxframes'>boxFrames</Link>
       <Link to='/three/swords'>飞剑 instances gpu</Link>
       <Link to='/three/fulu'>符箓</Link>
-
       <Link to='/three/line'>线</Link>
+      <Link to='/three/zuowangdao'>坐忘道</Link>
 
       <h1 className="text-5xl my-10">Music Visual</h1>
       <Link to='/three/mv1'>music visual 1</Link>

@@ -15,6 +15,7 @@ export default [
   route('/three/boxframes', 'routes/three/boxFrame/index.tsx'),
   route('/three/swords', 'routes/three/swords/index.tsx'),
   route('/three/fulu', 'routes/three/fulu/index.tsx'),
+  route('/three/zuowangdao', 'routes/three/zuoWangDao/index.tsx'),
 
   route('/three/line', 'routes/three/line/index.tsx'),
 

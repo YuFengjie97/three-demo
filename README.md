@@ -4,3 +4,6 @@
 ```
 npx gltfjsx model.glb --transform
 ```
+
+## 字体子集提取
+> https://transfonter.org/

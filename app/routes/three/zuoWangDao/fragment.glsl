@@ -1,4 +1,5 @@
 #pragma glslify: snoise = require('glsl-noise/simplex/2d')
+#define s1(v) (sin(v)*.5+.5)
 
 uniform float uTime;
 
@@ -6,6 +7,7 @@ uniform float uTime;
 varying vec3 vCol;
 varying vec2 vUv;
 varying float vTextId;
+varying float vLife;
 
 float fbm(vec2 p){
   float n = 0.;
@@ -23,9 +25,10 @@ void main(){
   float n = fbm(vUv*4.) + sin(t+vTextId*.2);
   float burn = -n;
   n = smoothstep(0.,0.1,n);
-  float glow = pow(.1/(burn), 2.);
+  float glow = pow(.1/(burn), 4.);
 
 
   csm_FragColor.rgb += glow*vec3(1.,.1,.0);
-  csm_FragColor.a = n;
+  float transparent = 1.-abs(vLife-.5)*2.;
+  csm_FragColor.a = n * transparent;
 }

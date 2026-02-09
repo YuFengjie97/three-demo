@@ -10,6 +10,7 @@ attribute float aTextId;
 varying vec3 vCol;
 varying vec2 vUv;
 varying float vTextId;
+varying float vLife;
 
 // https://www.shadertoy.com/view/lsKcDD
 mat3 lookAt( in vec3 ro, in vec3 ta, float cr )
@@ -28,7 +29,10 @@ void main(){
 
   pos.z += snoise(vec3(pos.xy*2., aTextId+t))*.3;
 
-  pos.z += (sin(aTextId*.1 + t * (.1+s1(aTextId)*.2)))*20.;
+  float lifeSpeed = (.1+s1(aTextId)*.2);
+  float life = fract(t*lifeSpeed);
+  float offsetRange = 15.;
+  pos.z += life * offsetRange;
   
   csm_Position = pos;
 
@@ -37,4 +41,5 @@ void main(){
 
   vUv = uv;
   vTextId = aTextId;
+  vLife = life;
 }

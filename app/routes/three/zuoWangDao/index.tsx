@@ -33,9 +33,9 @@ function Base() {
   const data = useMemo(() => {
     return Array.from({ length: count }, (item, index) => {
       const str = strs[floor(random()*strs.length)]
-      const x = (random() - 0.5) * 40
+      const x = (random() - 0.5) * 20
       const y = (random() - 0.5) * 30
-      const z = (random() - 0.5) * 20
+      const z = (-random()) * 15
       const pos = [x, y, z] as [number, number, number]
       return {
         str,
@@ -56,7 +56,9 @@ function Base() {
       fragmentShader: fragment,
       side: THREE.DoubleSide,
       transparent: true,
-      alphaTest: .1
+      alphaTest: .1,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
     })
     return mat
   }, [])

@@ -34,7 +34,7 @@ function Base() {
     return Array.from({ length: count }, (item, index) => {
       const str = strs[floor(random()*strs.length)]
       const x = (random() - 0.5) * 20
-      const y = (random() - 0.5) * 30
+      const y = (random() - 0.5) * 15
       const z = (-random()) * 15
       const pos = [x, y, z] as [number, number, number]
       return {
@@ -96,9 +96,9 @@ export default function () {
         <fog attach={'fog'} args={['#000000', 10, 20]} />
 
         {/* <Perf position='top-left' /> */}
-        <axesHelper args={[10]} />
+        {/* <axesHelper args={[10]} /> */}
         <directionalLight position={[0,5,10]} />
-        <OrbitControls />
+        {/* <OrbitControls /> */}
 
         <Base />
 

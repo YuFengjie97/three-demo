@@ -18,6 +18,7 @@ export default [
   route('/three/zuowangdao', 'routes/three/zuoWangDao/index.tsx'),
 
   route('/three/line', 'routes/three/line/index.tsx'),
+  route('/three/particle1', 'routes/three/particle1/index.tsx'),
 
 
 

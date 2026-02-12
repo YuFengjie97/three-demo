@@ -35,6 +35,9 @@ export default function Home() {
       <Link to='/three/particle2'>particle 2</Link>
       <Link to='/three/particle3'>particle 3</Link>
 
+      <Link to='/three/model-vertex-col'>模型顶点色</Link>
+
+
       <h1 className="text-5xl my-10">Music Visual</h1>
       <Link to='/three/mv1'>music visual 1</Link>
     </div>

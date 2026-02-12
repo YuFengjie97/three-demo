@@ -32,10 +32,10 @@ function Base() {
       <CustomShaderMaterial
         baseMaterial={THREE.PointsMaterial}
         uniforms={uniforms}
-        vertexColors={true}
-        // vertexShader={vertex}
-        // fragmentShader={fragment}
-        size={.01}
+        // vertexColors={true}
+        vertexShader={vertex}
+        fragmentShader={fragment}
+        size={.02}
         transparent={true}
         // alphaTest={.1}
         // depthWrite={false}

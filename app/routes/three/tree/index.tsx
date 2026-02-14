@@ -117,6 +117,7 @@ function Leaf({ ...props }: { props: any }) {
         depthWrite={false}
         // alphaTest={.01}
         blending={THREE.AdditiveBlending}
+        toneMapped={false}
       />
     </points>
   )
@@ -132,15 +133,15 @@ function Trunk({ ...props }: { props: any }) {
       <mesh {...props}>
         <CustomShaderMaterial
           uniforms={uniforms}
-          baseMaterial={THREE.MeshPhysicalMaterial}
+          baseMaterial={THREE.MeshNormalMaterial}
           vertexShader={trunkVertex}
           fragmentShader={trunkFragment}
-          transparent={true}
-          opacity={0.6}
-          transmission={.7}
-          metalness={0.}
-          roughness={1.5}
-          ior={2.1}
+          // transparent={true}
+          // opacity={0.6}
+          // transmission={.7}
+          // metalness={0.}
+          // roughness={1.5}
+          // ior={2.1}
           toneMapped={true}
         />
       </mesh>

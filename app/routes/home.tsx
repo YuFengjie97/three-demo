@@ -34,6 +34,7 @@ export default function Home() {
       <Link to='/three/particle1'>particle 1</Link>
       <Link to='/three/particle2'>particle 2</Link>
       <Link to='/three/particle3'>particle 3</Link>
+      <Link to='/three/tree'>tree</Link>
 
       <Link to='/three/model-vertex-col'>模型顶点色</Link>
 

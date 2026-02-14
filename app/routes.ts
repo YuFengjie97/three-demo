@@ -22,6 +22,10 @@ export default [
   route('/three/particle2', 'routes/three/particle2/index.tsx'),
   route('/three/particle3', 'routes/three/particle3/index.tsx'),
 
+
+  route('/three/tree', 'routes/three/tree/index.tsx'),
+
+
   route('/three/model-vertex-col', 'routes/three/modelVertexCol/index.tsx'),
 
 

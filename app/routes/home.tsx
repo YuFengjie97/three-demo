@@ -32,7 +32,7 @@ export default function Home() {
       <Link to='/three/line'>线</Link>
       <Link to='/three/zuowangdao'>坐忘道</Link>
       <Link to='/three/particle1'>particle 1</Link>
-      <Link to='/three/particle2'>particle 2</Link>
+      <Link to='/three/particle2'>particle 2 - curlNoise</Link>
       <Link to='/three/particle3'>particle 3</Link>
       <Link to='/three/tree'>tree</Link>
 

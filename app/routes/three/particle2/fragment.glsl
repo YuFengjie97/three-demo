@@ -1,11 +1,17 @@
+uniform sampler2D uParticleTex;
+
+
 varying float vLife;
 varying vec3 vCol;
 
 void main(){
-  vec2 uv = gl_PointCoord-.5;
-  float d = length(uv);
+  vec2 uv = gl_PointCoord;
+  float d = length(uv-.5);
   // d = pow(.1/d,2.);
-  d = smoothstep(.1,0.,d);
+  d = smoothstep(.2,0.,d);
+
+
+  // float d = texture(uParticleTex, uv).r;
 
   vec3 col = vCol * d;
 

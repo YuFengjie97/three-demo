@@ -1,4 +1,4 @@
-import { OrbitControls, Points } from '@react-three/drei'
+import { OrbitControls, Points, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import * as THREE from 'three'
@@ -9,6 +9,8 @@ import { useMemo } from 'react'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { Perf } from 'r3f-perf'
+import { asset } from '~/utils/asset'
 
 const { ceil, sqrt, random } = Math
 
@@ -49,11 +51,13 @@ function Base() {
     }
   }, [count, size])
 
+  const tex = useTexture(asset('/img/texture/particle/star_09.png'))
   const uniforms = {
     ...uniformTime,
     uTexPos: new THREE.Uniform(
       gpuCompute.getCurrentRenderTarget(posVar).texture,
     ),
+    uParticleTex: new THREE.Uniform(tex)
   }
 
   useFrame(() => {
@@ -98,14 +102,14 @@ function Base() {
       <CustomShaderMaterial
         uniforms={uniforms}
         baseMaterial={THREE.PointsMaterial}
-        size={.4}
+        size={.2}
         sizeAttenuation={true}
         vertexShader={vertex}
         fragmentShader={fragment}
         transparent={true}
-        alphaTest={.001}
+        // alphaTest={.001}
         depthWrite={false}
-        toneMapped={true}
+        toneMapped={false}
         blending={THREE.AdditiveBlending}
       />
     </points>
@@ -116,7 +120,8 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas camera={{position: [0,0.,5]}}>
-        <OrbitControls />
+        <Perf position='top-left'/>
+        <OrbitControls target={[0,2,0]}/>
         <ambientLight />
         <axesHelper args={[10]} />
         <Base />

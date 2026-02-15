@@ -5,7 +5,7 @@
 
 uniform float uTime;
 uniform float uDelta;
-
+uniform float uNoiseType;
 
 //  3 out, 1 in...
 vec3 hash31(float p)
@@ -81,23 +81,37 @@ void main(){
     pos = vec3(0);
     vel = (hash33(vec3(uv, t))-.5)*10.;
   }else{
-    // const vec3 offset1 = vec3(12.34, 56.78, 90.12);
-    // const vec3 offset2 = vec3(54.32, 98.76, 21.09);
-    // const vec3 offset3 = vec3(43.21, 87.65, 10.98);
+    
+    // curlNoise
+    if(uNoiseType==0.){
+      vel = curlNoise(pos*1.+vec3(0.,-t,0.));
+    }
+    // snoise3d X 3
+    else if(uNoiseType==1.){
+      const vec3 offset1 = vec3(12.34, 56.78, 90.12);
+      const vec3 offset2 = vec3(54.32, 98.76, 21.09);
+      const vec3 offset3 = vec3(43.21, 87.65, 10.98);
 
-    // vel = vec3(
-    //   snoise3(pos * vec3(1.) + offset1 + t), // X轴噪音
-    //   snoise3(pos * vec3(1.) + offset2 + 0.), // Y轴噪音
-    //   snoise3(pos * vec3(1.) + offset3 + 0.)  // Z轴噪音
-    // );
+      vel = vec3(
+        snoise3(pos * vec3(1.) + offset1 + t), // X轴噪音
+        snoise3(pos * vec3(1.) + offset2 + 0.), // Y轴噪音
+        snoise3(pos * vec3(1.) + offset3 + 0.)  // Z轴噪音
+      );
+    }
+    // xor 湍流
+    else if(uNoiseType==2.){
+      vel =  sin(pos.zxy*1.*2.+vec3(0.,-t,0.));
+      vel += sin(pos.zxy*2.*2.+vec3(12.15,44.33,55.14))*.5;
+      vel += sin(pos.zxy*4.*2.+vec3(34.22,98.67,56.21))*.25;
+      vel += sin(pos.zxy*8.*2.+vec3(87.21,56.29,93.67))*.125;
+    }
 
-    vel = curlNoise(pos*1.+vec3(0.,-t,0.));
-
+    
     vec3 toYAxes = normalize(vec3(0., pos.y, 0.) - pos);
     vec3 up = vec3(0, 1, 0);
     vec3 rot = cross(up, toYAxes);
-    float atten = smoothstep(5.,0.,pos.y);
-    vel = normalize(vel + (rot + up));
+    // float atten = smoothstep(5.,0.,pos.y);
+    vel = normalize(normalize(vel) + (rot + up));
   }
 
   pos += vel*uDelta*2.;

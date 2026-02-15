@@ -5,23 +5,24 @@ import * as THREE from 'three'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import gpuPos from './gpuPos.glsl'
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 import { asset } from '~/utils/asset'
+import { useControls } from 'leva'
 
 const { ceil, sqrt, random } = Math
 
-function fillPosTex(tex: THREE.DataTexture, count: number){
+function fillPosTex(tex: THREE.DataTexture, count: number) {
   const data = tex.image.data!
-  for(let i=0;i<count;i++){
-    const i4 = i*4
-    data[i4+0] = (random()-.5)*10.
-    data[i4+1] = (random()-.5)*10.
-    data[i4+2] = (random()-.5)*10.
-    data[i4+3] = random()
+  for (let i = 0; i < count; i++) {
+    const i4 = i * 4
+    data[i4 + 0] = (random() - 0.5) * 10
+    data[i4 + 1] = (random() - 0.5) * 10
+    data[i4 + 2] = (random() - 0.5) * 10
+    data[i4 + 3] = random()
   }
 }
 
@@ -40,6 +41,7 @@ function Base() {
 
     posVar.material.uniforms = {
       ...uniformTime,
+      uNoiseType: new THREE.Uniform(0),
     }
 
     gpuCompute.setVariableDependencies(posVar, [posVar])
@@ -57,8 +59,22 @@ function Base() {
     uTexPos: new THREE.Uniform(
       gpuCompute.getCurrentRenderTarget(posVar).texture,
     ),
-    uParticleTex: new THREE.Uniform(tex)
+    uParticleTex: new THREE.Uniform(tex),
   }
+
+  useControls({
+    noiseType: {
+      value: 0.,
+      options: {
+        curlNoise: 0.,
+        snoiseX3: 1.,
+        turbulence: 2.,
+      },
+      onChange(val){
+        posVar.material.uniforms.uNoiseType.value = val
+      }
+    }
+  })
 
   useFrame(() => {
     gpuCompute.compute()
@@ -74,7 +90,7 @@ function Base() {
     geo.setAttribute('position', new THREE.BufferAttribute(position, 3))
 
     const id = new Float32Array(count)
-    for(let i=0.;i<count;i++){
+    for (let i = 0; i < count; i++) {
       id[i] = i
     }
     geo.setAttribute('id', new THREE.BufferAttribute(id, 1))
@@ -96,13 +112,12 @@ function Base() {
     return { geo }
   }, [count, size])
 
-
   return (
-    <points geometry={geo} position={[0,-1,0]}>
+    <points geometry={geo} position={[0, -1, 0]}>
       <CustomShaderMaterial
         uniforms={uniforms}
         baseMaterial={THREE.PointsMaterial}
-        size={.2}
+        size={0.2}
         sizeAttenuation={true}
         vertexShader={vertex}
         fragmentShader={fragment}
@@ -119,15 +134,15 @@ function Base() {
 export default function () {
   return (
     <div className='h-screen'>
-      <Canvas camera={{position: [0,0.,5]}}>
-        <Perf position='top-left'/>
-        <OrbitControls target={[0,2,0]}/>
+      <Canvas camera={{ position: [0, 0, 5] }}>
+        <Perf position='top-left' />
+        <OrbitControls target={[0, 2, 0]} />
         <ambientLight />
         <axesHelper args={[10]} />
         <Base />
 
         <EffectComposer>
-          <Bloom/>
+          <Bloom />
         </EffectComposer>
       </Canvas>
     </div>

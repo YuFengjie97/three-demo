@@ -13,6 +13,7 @@ import { useUniformTime } from '~/hook/useUniformTime'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { Perf } from 'r3f-perf'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { useNoise3DTexture } from '~/hook/useNoise3DTexture'
 
 const { random, sqrt, ceil } = Math
 
@@ -47,6 +48,9 @@ function Leaf({ ...props }: { props: any }) {
   const { gl } = useThree()
 
   const uniformTime = useUniformTime()
+  const noise3DTexture = useNoise3DTexture()
+  
+
 
   const { gpuCompute, posVar } = useMemo(() => {
     const gpuCompute = new GPUComputationRenderer(size, size, gl)
@@ -54,9 +58,11 @@ function Leaf({ ...props }: { props: any }) {
     fillPosTex(posTex, position.array)
     const posVar = gpuCompute.addVariable('texPos', gpuPos, posTex)
 
+
     posVar.material.uniforms = {
       ...uniformTime,
       uDefaultPosTex: new THREE.Uniform(posTex), // 初始位置作为默认位置
+      uNoise3DTex: new THREE.Uniform(noise3DTexture)
     }
 
     gpuCompute.setVariableDependencies(posVar, [posVar])

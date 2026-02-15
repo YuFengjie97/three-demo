@@ -4,6 +4,7 @@
 uniform float uTime;
 uniform float uDelta;
 uniform sampler2D uDefaultPosTex;
+uniform sampler3D uNoise3DTex;
 
 void main(){
   float t = uTime;
@@ -24,6 +25,7 @@ void main(){
     snoise3(pos*.4+vec3(0.,1.,t)),
     snoise3(pos*.4+vec3(0.,0.,1.))
   );
+  // vec3 vel = texture(uNoise3DTex, pos*.4+vec3(0.,t,0.)).rgb;
 
   float strength = snoise3(pos+vec3(0,t,0));
   strength = smoothstep(.1,0.,strength);

@@ -37,6 +37,9 @@ export default defineConfig(({ mode }) => {
       //   ],
       // }),
     ],
+    server:{
+      port: 8000
+    }
     // build: {
     //   // outDir: 'build/client/three-demo',  // 不知道是不是react-router.config配置覆盖了,没用
     //   emptyOutDir: true,

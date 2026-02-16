@@ -30,6 +30,7 @@ export default function Home() {
       <Link to='/three/swords'>飞剑 instances gpu</Link>
       <Link to='/three/fulu'>符箓</Link>
       <Link to='/three/line'>线</Link>
+      <Link to='/three/line2'>线2</Link>
       <Link to='/three/zuowangdao'>坐忘道</Link>
       <Link to='/three/particle1'>particle 1</Link>
       <Link to='/three/particle2'>particle 2 - curlNoise</Link>

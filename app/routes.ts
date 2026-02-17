@@ -25,6 +25,7 @@ export default [
 
 
   route('/three/tree', 'routes/three/tree/index.tsx'),
+  route('/three/growTree', 'routes/three/growTree/index.tsx'),
 
 
   route('/three/model-vertex-col', 'routes/three/modelVertexCol/index.tsx'),

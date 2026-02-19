@@ -56,7 +56,7 @@ function Part1({ color }: { color: string }) {
 function Part2({ color }: { color: string }) {
   const geo = useMemo(() => {
     const geo = new THREE.WireframeGeometry(
-      new THREE.IcosahedronGeometry(2.4, 20),
+      new THREE.IcosahedronGeometry(2.4, 24),
     )
     return geo
   }, [])

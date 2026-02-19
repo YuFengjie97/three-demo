@@ -19,10 +19,10 @@ void main(){
   p += nor * strength*.06;
 
   vCol = uColor;
-  vAlpha = snoise4(vec4(cos(p*.5)/.5, t*.5));
+  vAlpha = snoise4(vec4((p*.2), t*.2));
 
   vec3 rd = normalize(p - cameraPosition);
-  vFresnel = pow(1.-max(0.,dot(rd, normalize(p))), 3.)*1.3;
+  vFresnel = pow(1.-max(0.,dot(-rd, normalize(p))), 3.)*1.3;
   vAlpha *= vFresnel;
 
   csm_Position = p;

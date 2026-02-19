@@ -1,5 +1,5 @@
 import { OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { useMemo } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
@@ -83,6 +83,7 @@ function Part2({ color }: { color: string }) {
   )
 }
 
+// 内部点云
 function Part3({color}:{color: string}){
   const geo = useMemo(() => {
     const geo = new THREE.IcosahedronGeometry(1, 30)
@@ -128,7 +129,7 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas>
-        <Perf position='top-left'/>
+        {/* <Perf position='top-left'/> */}
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
         <Base />

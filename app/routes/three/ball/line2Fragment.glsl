@@ -7,5 +7,5 @@ void main(){
   // }
 
 
-  csm_FragColor = vec4(vCol * vAlpha, vAlpha);
+  csm_FragColor = vec4(vCol * vAlpha*1.5, vAlpha);
 }

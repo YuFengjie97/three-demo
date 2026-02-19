@@ -6,7 +6,7 @@ uniform float uDelta;
 uniform vec3 uColor;
 
 varying vec3 vCol;
-
+varying float vAlpha;
 
 void main(){
   float t = uTime;
@@ -18,7 +18,13 @@ void main(){
   // p += cos(p.zxy*3.*2.+t)*.1;
   // p += cos(p.zxy*3.*4.+t)*.05;
 
-  p += normal * snoise4(vec4(p*1.4,t))*.4;
+  p += normal * snoise4(vec4(p*.8,t))*.4;
+
+  // float life = fract(t*.5);
+  // vAlpha = tanh(sin(life*PI)*4.)*1.;
+  // vAlpha = 1.-abs(life-.5)*2.;
+  // p += normal * life * .2;
+  vAlpha = 1.;
 
   vCol = uColor;
 

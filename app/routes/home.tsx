@@ -31,7 +31,7 @@ export default function Home() {
       <Link to='/three/fulu'>符箓</Link>
       <Link to='/three/line'>线</Link>
       <Link to='/three/line2'>线2</Link>
-      <Link to='/three/tube-line'>tubeLine</Link>
+      <Link to='/three/tube-line'>tubeLine + mesh轨迹</Link>
 
       '
       <Link to='/three/zuowangdao'>坐忘道</Link>

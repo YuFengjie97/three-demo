@@ -20,6 +20,7 @@ export default [
   route('/three/line', 'routes/three/line/index.tsx'),
   route('/three/line2', 'routes/three/line2/index.tsx'),
   route('/three/tube-line', 'routes/three/tubeLine/index.tsx'),
+  route('/three/tube-line2', 'routes/three/tubeLine2/index.tsx'),
 
 
   route('/three/particle1', 'routes/three/particle1/index.tsx'),

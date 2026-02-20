@@ -32,6 +32,7 @@ export default function Home() {
       <Link to='/three/line'>线</Link>
       <Link to='/three/line2'>线2</Link>
       <Link to='/three/tube-line'>tubeLine + mesh轨迹</Link>
+      <Link to='/three/tube-line2'>tubeLine + 点云轨迹</Link>
 
       '
       <Link to='/three/zuowangdao'>坐忘道</Link>

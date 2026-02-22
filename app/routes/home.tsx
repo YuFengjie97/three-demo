@@ -40,6 +40,7 @@ export default function Home() {
       <Link to='/three/particle1'>particle 1</Link>
       <Link to='/three/particle2'>particle 2 - curlNoise</Link>
       <Link to='/three/particle3'>particle 3</Link>
+      <Link to='/three/particle4-universe'>particle 4 银河</Link>
       
 
       <Link to='/three/ball'>ball-科技风</Link>

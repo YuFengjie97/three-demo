@@ -181,7 +181,7 @@ export default function main() {
       <div className='h-screen'>
         <Canvas camera={{ position: [0, 2, 2] }}>
           <OrbitControls />
-          <axesHelper args={[20]} />
+          {/* <axesHelper args={[20]} /> */}
           <ambientLight intensity={0.4} />
           <Light />
           <Planet />

@@ -85,10 +85,10 @@ export default function main() {
     <>
       <div className='h-screen'>
         <Canvas camera={{ position: [0, 2, 4] }}>
-          <Perf position='top-left' />
+          {/* <Perf position='top-left' /> */}
           <ambientLight />
           <Light />
-          <axesHelper args={[20]} />
+          {/* <axesHelper args={[20]} /> */}
           <OrbitControls />
           <CSM />
         </Canvas>

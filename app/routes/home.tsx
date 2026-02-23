@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import Link from '~/components/Link'
+import LinkImg from '~/components/LinkImg'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,44 +17,36 @@ export default function Home() {
       <Link to='/three/some-test'>test</Link>
 
       <h1 className="text-7xl mb-10">THREE.js</h1>
-      <Link to='/three/csm'>custom shader material</Link>
-      <Link to='/three/sea'>海洋</Link>
-      <Link to='/three/points'>点云与线</Link>
-      <Link to='/three/planet'>行星</Link>
-      <Link to='/three/real-earth'>地球</Link>
-      <Link to='/three/trail'>尾迹</Link>
-      <Link to='/three/cloth-pattern'>自定义衣服图案</Link>
-      <Link to='/three/china-3d'>中国3D</Link>
-      <Link to='/three/flow-point-line'>flow point line</Link>
-      <Link to='/three/hexagon-vertex-offset'>蜂巢顶点偏移</Link>
-      <Link to='/three/boxframes'>boxFrames</Link>
-      <Link to='/three/swords'>飞剑 instances gpu</Link>
-      <Link to='/three/fulu'>符箓</Link>
-      <Link to='/three/line'>线</Link>
-      <Link to='/three/line2'>线2</Link>
-      <Link to='/three/tube-line'>tubeLine + mesh轨迹</Link>
-      <Link to='/three/tube-line2'>tubeLine + 点云轨迹</Link>
+      {/* <Link to=''>custom shader material</Link> */}
+      <LinkImg to='/three/csm' img='/img/preview/1.png'/>
 
-      '
-      <Link to='/three/zuowangdao'>坐忘道</Link>
-      
-      <Link to='/three/particle1'>particle 1</Link>
-      <Link to='/three/particle2'>particle 2 - curlNoise</Link>
-      <Link to='/three/particle3'>particle 3</Link>
-      <Link to='/three/particle4-universe'>particle 4 银河</Link>
-      
-
-      <Link to='/three/ball'>ball-科技风</Link>
-      
-
-      <Link to='/three/tree'>树+叶子点云</Link>
-      <Link to='/three/growTree'>粒子生长树</Link>
-
-      <Link to='/three/model-vertex-col'>模型顶点色</Link>
-
-
+      <LinkImg to='/three/sea' img='/img/preview/2.png' />
+      <LinkImg to='/three/points' img='/img/preview/3.png' />
+      <LinkImg to='/three/planet' img='/img/preview/4.png' />
+      <LinkImg to='/three/real-earth' img='/img/preview/5.png'/>
+      <LinkImg to='/three/trail'img='/img/preview/6.png'/>
+      <LinkImg to='/three/cloth-pattern'img='/img/preview/7.png' />
+      <LinkImg to='/three/china-3d'img='/img/preview/8.png' />
+      <LinkImg to='/three/flow-point-line'img='/img/preview/9.png'/>
+      <LinkImg to='/three/hexagon-vertex-offset'img='/img/preview/10.png'/>
+      <LinkImg to='/three/boxframes'img='/img/preview/11.png'/>
+      <LinkImg to='/three/swords'img='/img/preview/12.png' />
+      <LinkImg to='/three/fulu'img='/img/preview/13.png'/>
+      <LinkImg to='/three/line'img='/img/preview/14.png'/>
+      <LinkImg to='/three/line2'img='/img/preview/15.png'/>
+      <LinkImg to='/three/tube-line'img='/img/preview/16.png'/>
+      <LinkImg to='/three/tube-line2'img='/img/preview/17.png'/>
+      <LinkImg to='/three/zuowangdao'img='/img/preview/18.png'/>
+      <LinkImg to='/three/particle1'img='/img/preview/19.png'/>
+      <LinkImg to='/three/particle2'img='/img/preview/20.png'/>
+      <LinkImg to='/three/particle4-universe'img='/img/preview/21.png'/>
+      {/* <LinkImg to='/three/curve'img='/img/preview/23.png'/> */}
+      <LinkImg to='/three/ball'img='/img/preview/22.png'/>
+      <LinkImg to='/three/tree'img='/img/preview/23.png'/>
+      <LinkImg to='/three/growTree'img='/img/preview/24.png'/>
+      <LinkImg to='/three/model-vertex-col'img='/img/preview/25.png'/>
       <h1 className="text-5xl my-10">Music Visual</h1>
-      <Link to='/three/mv1'>music visual 1</Link>
+      <LinkImg to='/three/mv1'img='/img/preview/26.png'/>
     </div>
     </>
   )

@@ -135,10 +135,10 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas camera={{ position: [0, 0, 5] }}>
-        <Perf position='top-left' />
+        {/* <Perf position='top-left' /> */}
         <OrbitControls target={[0, 2, 0]} />
         <ambientLight />
-        <axesHelper args={[10]} />
+        {/* <axesHelper args={[10]} /> */}
         <Base />
 
         <EffectComposer>

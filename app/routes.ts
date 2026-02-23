@@ -21,11 +21,12 @@ export default [
   route('/three/line2', 'routes/three/line2/index.tsx'),
   route('/three/tube-line', 'routes/three/tubeLine/index.tsx'),
   route('/three/tube-line2', 'routes/three/tubeLine2/index.tsx'),
+  route('/three/curve', 'routes/three/curve1/index.tsx'),
+
 
 
   route('/three/particle1', 'routes/three/particle1/index.tsx'),
   route('/three/particle2', 'routes/three/particle2/index.tsx'),
-  route('/three/particle3', 'routes/three/particle3/index.tsx'),
   route('/three/particle4-universe', 'routes/three/particle4Universe/index.tsx'),
 
   route('/three/ball', 'routes/three/ball/index.tsx'),

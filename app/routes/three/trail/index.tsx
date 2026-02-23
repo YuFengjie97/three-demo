@@ -78,7 +78,7 @@ export default function main() {
   return (
     <div className='h-screen'>
       <Canvas>
-        <Perf position='top-left' />
+        {/* <Perf position='top-left' /> */}
         <OrbitControls makeDefault />
         <ambientLight />
         <pointLight />

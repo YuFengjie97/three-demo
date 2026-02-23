@@ -144,10 +144,10 @@ export default function main() {
             far: 10,
           }}
         >
-          <Perf position='top-left' showGraph />
+          {/* <Perf position='top-left' showGraph /> */}
           <OrbitControls />
           <ambientLight />
-          <axesHelper args={[10]} />
+          {/* <axesHelper args={[10]} /> */}
 
           <Earth />
         </Canvas>

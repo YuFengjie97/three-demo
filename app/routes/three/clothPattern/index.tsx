@@ -147,7 +147,7 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas camera={{ position: [0, 0, 2] }}>
-        <Perf position='top-left' />
+        {/* <Perf position='top-left' /> */}
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls makeDefault />
         <ambientLight />

@@ -49,7 +49,7 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas>
-        <axesHelper args={[10]} />
+        {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
 
         <Base />

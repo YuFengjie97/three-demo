@@ -51,8 +51,8 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas>
-        <Perf position='top-left'/>
-        <axesHelper args={[10]} />
+        {/* <Perf position='top-left'/> */}
+        {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
         <ambientLight />
 

@@ -142,7 +142,7 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas>
-        <axesHelper args={[10]} />
+        {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
         <ambientLight />
         <pointLight intensity={40} position={[0, 4, 0]} />

@@ -204,7 +204,7 @@ export default function () {
       <Canvas>
         <color attach={'background'} args={['#191920']} />
         <fog attach={'fog'} args={['#191920', 0.1, 20]} />
-        <Perf position='top-left' />
+        {/* <Perf position='top-left' /> */}
         {/* <axesHelper /> */}
         <OrbitControls />
         <ambientLight />

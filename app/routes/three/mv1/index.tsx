@@ -195,11 +195,11 @@ export default function () {
       <Canvas camera={{ position: [-2, 1, 3] }}>
         <color attach={'background'} args={['#000']} />
         <fog attach={'fog'} args={['#000', 0.1, 10]} />
-        <Perf position='top-left' />
+        {/* <Perf position='top-left' /> */}
         <ambientLight />
         <directionalLight position={[0, 10, 0]} intensity={20} />
 
-        <axesHelper args={[10]} />
+        {/* <axesHelper args={[10]} /> */}
         <OrbitControls makeDefault />
         <Wrap />
         {/* <MirrorPlane /> */}

@@ -40,7 +40,9 @@ export default function Home() {
       <LinkImg to='/three/particle1'img='/img/preview/19.png'/>
       <LinkImg to='/three/particle2'img='/img/preview/20.png'/>
       <LinkImg to='/three/particle4-universe'img='/img/preview/21.png'/>
-      {/* <LinkImg to='/three/curve'img='/img/preview/23.png'/> */}
+
+      <LinkImg to='/three/curve'img='/img/preview/27.png'/>
+
       <LinkImg to='/three/ball'img='/img/preview/22.png'/>
       <LinkImg to='/three/tree'img='/img/preview/23.png'/>
       <LinkImg to='/three/growTree'img='/img/preview/24.png'/>

@@ -170,6 +170,10 @@ function Base() {
     pointSpeed: { value: 0.1, min: 0.01, max: 2, step: 0.01 },
   })
 
+  /**
+   * 点云粒子会把自己的geo按照ndx分发给thread
+   * thread会更新geo position中对应它的点云位置
+   */
   const { pointsGeo } = useMemo(() => {
     const geo = new THREE.BufferGeometry()
     const position = new Float32Array(count * 3)

@@ -14,7 +14,7 @@ import { useUniformTime } from '~/hook/useUniformTime'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 
 const noise = createNoise4D()
-const { sin, random } = Math
+const { sin, random, PI } = Math
 
 interface ThreadProp {
   ndx: number
@@ -109,7 +109,7 @@ function Thread({
 
   useFrame((_, delta) => {
     const lifeAttr = pointsGeo.getAttribute('life')
-    const life = (lifeAttr.array[ndx] + delta * pointSpeed) % 1
+    const life = (lifeAttr.array[ndx] + delta * (pointSpeed+sin(ndx*.2)*.1+.1)) % 1
     lifeAttr.array[ndx] = life
 
     const p = curve.getPointAt(life)
@@ -137,7 +137,7 @@ function Thread({
 
 function Base() {
   const { count, gap } = useControls({
-    count: { value: 50, min: 5, max: 200, step: 1 },
+    count: { value: 100, min: 5, max: 200, step: 1 },
     gap: { value: 0.1, min: 0.01, max: 2, step: 0.01 },
   })
 
@@ -239,7 +239,7 @@ export default function () {
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
 
-        <group rotation={[.5,-.4,-.6]}>
+        <group rotation={[.4,-.3,-.0]}>
           <Center>
             <Base />
           </Center>

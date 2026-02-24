@@ -1,4 +1,4 @@
-import{r as E,w as se,o as n}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{aA as ne,R as ie,aB as J,C as ce,aC as ae,e as xe,U as N,h as le,u as ve,A as me,g as ue}from"./extends-D4P9RtWV.js";import{j as ee}from"./three-custom-shader-material.es-CZEjquAF.js";import{a as te}from"./asset-BvcpElq9.js";import{u as oe}from"./useUniformTime-CJanb7xe.js";import{d as pe,w as fe}from"./index-jtwq2L8m.js";import{O as ye}from"./OrbitControls-B0FQFszE.js";import{L as de}from"./Loader-C5B-FrZC.js";import{u as ge}from"./Gltf-DOWYLoBM.js";import{u as ze}from"./Texture-DuyHYiDQ.js";import{G as he}from"./GPUComputationRenderer-D_JtaFqY.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-B7Ao4tUH.js";import"./constants-czf0ebvd.js";const Ce=`#define GLSLIFY 1
+import{r as g,w as j,o as t}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{aA as L,R as P,aB as z,C as A,aC as S,e as F,U as d,h as M,u as I,A as G,g as N}from"./extends-D4P9RtWV.js";import{j as w}from"./three-custom-shader-material.es-CZEjquAF.js";import{a as D}from"./asset-BvcpElq9.js";import{u as T}from"./useUniformTime-CJanb7xe.js";import{d as k,w as q}from"./index-jtwq2L8m.js";import{a as E}from"./simplex-noise-BUqOQ44_.js";import{O as R}from"./OrbitControls-B0FQFszE.js";import{L as V}from"./Loader-C5B-FrZC.js";import{u as B}from"./Gltf-DOWYLoBM.js";import{u as U}from"./Texture-DuyHYiDQ.js";import{G as Y}from"./GPUComputationRenderer-D_JtaFqY.js";import"./index-7OC5HNn7.js";import"./three-custom-shader-material.es-B7Ao4tUH.js";import"./constants-czf0ebvd.js";const O=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -130,7 +130,7 @@ void main(){
 
   csm_Position = p;
 }
-`,we=`#define GLSLIFY 1
+`,W=`#define GLSLIFY 1
 uniform float uTime;
 uniform float uDelta;
 
@@ -141,7 +141,7 @@ void main(){
 
   // csm_DiffuseColor = vec4(vCol,1);
 }
-`,De=`#define GLSLIFY 1
+`,H=`#define GLSLIFY 1
 uniform float uTime;
 uniform float uDelta;
 uniform sampler2D uPosTex;
@@ -161,7 +161,7 @@ void main(){
   csm_Position = pos;
   vCol = sin(vec3(3,2,1)+pos+dot(aParticleCoord,vec2(.1)))*.5+.5;
 }
-`,be=`#define GLSLIFY 1
+`,K=`#define GLSLIFY 1
 uniform sampler2D uParticleTex;
 
 varying vec3 vCol;
@@ -177,7 +177,7 @@ void main(){
   vec2 uv = gl_PointCoord;
   float d = texture(uParticleTex, uv).r;
   csm_FragColor = vec4(vCol*d, d*vLife);
-}`,Te=`#define GLSLIFY 1
+}`,X=`#define GLSLIFY 1
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -312,4 +312,4 @@ void main(){
 
   pos += vel * strength * uDelta * 4.;
   gl_FragColor = vec4(pos, life);
-}`,je=1/3,d=1/6,Q=i=>Math.floor(i)|0,$=new Float64Array([1,1,0,-1,1,0,1,-1,0,-1,-1,0,1,0,1,-1,0,1,1,0,-1,-1,0,-1,0,1,1,0,-1,1,0,1,-1,0,-1,-1]);function _e(i=Math.random){const t=Le(i),r=new Float64Array(t).map(s=>$[s%12*3]),e=new Float64Array(t).map(s=>$[s%12*3+1]),o=new Float64Array(t).map(s=>$[s%12*3+2]);return function(l,v,c){let u,f,_,h;const a=(l+v+c)*je,p=Q(l+a),m=Q(v+a),M=Q(c+a),L=(p+m+M)*d,R=p-L,U=m-L,re=M-L,g=l-R,z=v-U,y=c-re;let C,w,D,b,T,j;g>=z?z>=y?(C=1,w=0,D=0,b=1,T=1,j=0):g>=y?(C=1,w=0,D=0,b=1,T=0,j=1):(C=0,w=0,D=1,b=1,T=0,j=1):z<y?(C=0,w=0,D=1,b=0,T=1,j=1):g<y?(C=0,w=1,D=0,b=0,T=1,j=1):(C=0,w=1,D=0,b=1,T=1,j=0);const V=g-C+d,Y=z-w+d,B=y-D+d,O=g-b+2*d,W=z-T+2*d,X=y-j+2*d,H=g-1+3*d,K=z-1+3*d,Z=y-1+3*d,G=p&255,I=m&255,k=M&255;let P=.6-g*g-z*z-y*y;if(P<0)u=0;else{const x=G+t[I+t[k]];P*=P,u=P*P*(r[x]*g+e[x]*z+o[x]*y)}let A=.6-V*V-Y*Y-B*B;if(A<0)f=0;else{const x=G+C+t[I+w+t[k+D]];A*=A,f=A*A*(r[x]*V+e[x]*Y+o[x]*B)}let S=.6-O*O-W*W-X*X;if(S<0)_=0;else{const x=G+b+t[I+T+t[k+j]];S*=S,_=S*S*(r[x]*O+e[x]*W+o[x]*X)}let F=.6-H*H-K*K-Z*Z;if(F<0)h=0;else{const x=G+1+t[I+1+t[k+1]];F*=F,h=F*F*(r[x]*H+e[x]*K+o[x]*Z)}return 32*(u+f+_+h)}}function Le(i){const r=new Uint8Array(512);for(let e=0;e<512/2;e++)r[e]=e;for(let e=0;e<512/2-1;e++){const o=e+~~(i()*(256-e)),s=r[e];r[e]=r[o],r[o]=s}for(let e=256;e<512;e++)r[e]=r[e-256];return r}function Pe(i=32,t=.1){return E.useMemo(()=>{const o=new Float32Array(131072),s=_e();let l=0;for(let c=0;c<32;c++)for(let u=0;u<32;u++)for(let f=0;f<32;f++){const _=s(f*t,u*t,c*t);o[l]=_;const h=s(f*t+100,u*t,c*t);o[l+1]=h;const a=s(f*t,u*t+100,c*t);o[l+2]=a,o[l+3]=1,l+=4}const v=new ne(o,32,32,32);return v.format=ie,v.wrapS=J,v.wrapT=J,v.wrapR=J,v.needsUpdate=!0,v},[])}const{random:q,sqrt:Ae,ceil:Se}=Math;function Fe(i,t){const r=i.image.data;for(let e=0;e<r.length/4;e++){const o=e*4,s=e*3,l=t[s+0],v=t[s+1],c=t[s+2];r[o+0]=l??(q()-.5)*10,r[o+1]=v??(q()-.5)*10,r[o+2]=c??(q()-.5)*10,r[o+3]=q()}}function Me({...i}){const t=i.geometry;console.log(t);const r=t.getAttribute("position"),e=r.count,o=Se(Ae(e));console.log({count:e,size:o});const{gl:s}=xe(),l=oe(),v=Pe(),{gpuCompute:c,posVar:u}=E.useMemo(()=>{const a=new he(o,o,s),p=a.createTexture();Fe(p,r.array);const m=a.addVariable("texPos",Te,p);return m.material.uniforms={...l,uDefaultPosTex:new N(p),uNoise3DTex:new N(v)},a.setVariableDependencies(m,[m]),a.init(),{gpuCompute:a,posVar:m}},[s,o]),{particleCoord:f}=E.useMemo(()=>{const a=new Float32Array(e*2);for(let p=0;p<o;p++)for(let m=0;m<o;m++){const L=(m*o+p)*2,R=(p+.5)/o,U=(m+.5)/o;a[L+0]=R,a[L+1]=U}return{particleCoord:a}},[e,o]);t.setAttribute("aParticleCoord",new le(f,2));const _=ze(te("/img/texture/particle/star_09.png")),h={...l,uPosTex:new N(c.getCurrentRenderTarget(u).texture),uParticleTex:new N(_)};return ve(()=>{c.compute(),h.uPosTex.value=c.getCurrentRenderTarget(u).texture}),n.jsx("points",{...i,children:n.jsx(ee,{uniforms:h,baseMaterial:ue,vertexShader:De,fragmentShader:be,size:.07,transparent:!0,depthWrite:!1,blending:me,toneMapped:!1})})}function Ge({...i}){const r={...oe()};return n.jsx(n.Fragment,{children:n.jsx("mesh",{...i,children:n.jsx(ee,{uniforms:r,baseMaterial:ae,vertexShader:Ce,fragmentShader:we,toneMapped:!0})})})}function Ie(){const{nodes:i,materials:t}=ge(te("/model/tree-transformed.glb")),r=i.Oak_Bark_2_SHD_trunk_0.geometry,e=i.olqeejih_2K_rsSprite1_0.geometry;return console.log({trunkGeo:r,leafGeo:e}),n.jsxs(n.Fragment,{children:[n.jsx(Ge,{geometry:r,scale:.3}),n.jsx(Me,{geometry:e,scale:.3})]})}const Ze=se(function(){return n.jsxs("div",{className:"h-screen",children:[n.jsxs(ce,{camera:{position:[0,0,5]},children:[n.jsx(ye,{target:[0,3,0]}),n.jsx("ambientLight",{intensity:10}),n.jsx(E.Suspense,{fallback:null,children:n.jsx(Ie,{})}),n.jsx(pe,{children:n.jsx(fe,{})})]}),n.jsx(de,{})]})});export{Ze as default};
+}`;function J(c=32,o=.1){return g.useMemo(()=>{const e=new Float32Array(131072),a=E();let x=0;for(let i=0;i<32;i++)for(let m=0;m<32;m++)for(let p=0;p<32;p++){const h=a(p*o,m*o,i*o);e[x]=h;const f=a(p*o+100,m*o,i*o);e[x+1]=f;const n=a(p*o,m*o+100,i*o);e[x+2]=n,e[x+3]=1,x+=4}const v=new L(e,32,32,32);return v.format=P,v.wrapS=z,v.wrapT=z,v.wrapR=z,v.needsUpdate=!0,v},[])}const{random:y,sqrt:Q,ceil:Z}=Math;function $(c,o){const r=c.image.data;for(let s=0;s<r.length/4;s++){const e=s*4,a=s*3,x=o[a+0],v=o[a+1],i=o[a+2];r[e+0]=x??(y()-.5)*10,r[e+1]=v??(y()-.5)*10,r[e+2]=i??(y()-.5)*10,r[e+3]=y()}}function ee({...c}){const o=c.geometry;console.log(o);const r=o.getAttribute("position"),s=r.count,e=Z(Q(s));console.log({count:s,size:e});const{gl:a}=F(),x=T(),v=J(),{gpuCompute:i,posVar:m}=g.useMemo(()=>{const n=new Y(e,e,a),u=n.createTexture();$(u,r.array);const l=n.addVariable("texPos",X,u);return l.material.uniforms={...x,uDefaultPosTex:new d(u),uNoise3DTex:new d(v)},n.setVariableDependencies(l,[l]),n.init(),{gpuCompute:n,posVar:l}},[a,e]),{particleCoord:p}=g.useMemo(()=>{const n=new Float32Array(s*2);for(let u=0;u<e;u++)for(let l=0;l<e;l++){const C=(l*e+u)*2,b=(u+.5)/e,_=(l+.5)/e;n[C+0]=b,n[C+1]=_}return{particleCoord:n}},[s,e]);o.setAttribute("aParticleCoord",new M(p,2));const h=U(D("/img/texture/particle/star_09.png")),f={...x,uPosTex:new d(i.getCurrentRenderTarget(m).texture),uParticleTex:new d(h)};return I(()=>{i.compute(),f.uPosTex.value=i.getCurrentRenderTarget(m).texture}),t.jsx("points",{...c,children:t.jsx(w,{uniforms:f,baseMaterial:N,vertexShader:H,fragmentShader:K,size:.07,transparent:!0,depthWrite:!1,blending:G,toneMapped:!1})})}function oe({...c}){const r={...T()};return t.jsx(t.Fragment,{children:t.jsx("mesh",{...c,children:t.jsx(w,{uniforms:r,baseMaterial:S,vertexShader:O,fragmentShader:W,toneMapped:!0})})})}function te(){const{nodes:c,materials:o}=B(D("/model/tree-transformed.glb")),r=c.Oak_Bark_2_SHD_trunk_0.geometry,s=c.olqeejih_2K_rsSprite1_0.geometry;return console.log({trunkGeo:r,leafGeo:s}),t.jsxs(t.Fragment,{children:[t.jsx(oe,{geometry:r,scale:.3}),t.jsx(ee,{geometry:s,scale:.3})]})}const he=j(function(){return t.jsxs("div",{className:"h-screen",children:[t.jsxs(A,{camera:{position:[0,0,5]},children:[t.jsx(R,{target:[0,3,0]}),t.jsx("ambientLight",{intensity:10}),t.jsx(g.Suspense,{fallback:null,children:t.jsx(te,{})}),t.jsx(k,{children:t.jsx(q,{})})]}),t.jsx(V,{})]})});export{he as default};

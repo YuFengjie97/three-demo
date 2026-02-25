@@ -22,6 +22,7 @@ export default [
   route('/three/tube-line', 'routes/three/tubeLine/index.tsx'),
   route('/three/tube-line2', 'routes/three/tubeLine2/index.tsx'),
   route('/three/curve', 'routes/three/curve1/index.tsx'),
+  route('/three/model-line', 'routes/three/modelLine/index.tsx'),
 
 
 

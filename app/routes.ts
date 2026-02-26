@@ -30,6 +30,7 @@ export default [
   route('/three/particle1', 'routes/three/particle1/index.tsx'),
   route('/three/particle2', 'routes/three/particle2/index.tsx'),
   route('/three/particle4-universe', 'routes/three/particle4Universe/index.tsx'),
+  route('/three/particle5-storm', 'routes/three/particle5Storm/index.tsx'),
 
   route('/three/ball', 'routes/three/ball/index.tsx'),
 

@@ -40,6 +40,7 @@ export default function Home() {
       <LinkImg to='/three/particle1'img='/img/preview/19.png'/>
       <LinkImg to='/three/particle2'img='/img/preview/20.png'/>
       <LinkImg to='/three/particle4-universe'img='/img/preview/21.png'/>
+      <LinkImg to='/three/particle5-storm'img='/img/preview/29.png'/>
 
 
       <LinkImg to='/three/ball'img='/img/preview/22.png'/>

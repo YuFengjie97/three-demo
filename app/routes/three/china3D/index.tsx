@@ -9,6 +9,7 @@ import CustomShaderMaterial from 'three-custom-shader-material'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
+import { Bloom, EffectComposer } from '@react-three/postprocessing'
 // import chinaJson from '../../../publi/data/china.json'
 
 type Coord = [number, number]
@@ -62,6 +63,7 @@ function PolygonMesh({
       bevelSize: 0,
       bevelThickness: 0,
       bevelSegments: 0,
+      depth: 4
     })
     geometry.computeVertexNormals()
     return geometry
@@ -71,14 +73,14 @@ function PolygonMesh({
   return (
     <mesh geometry={geometry}>
       <CustomShaderMaterial
-        baseMaterial={THREE.MeshPhysicalMaterial}
+        baseMaterial={THREE.MeshBasicMaterial}
         uniforms={uniforms}
         side={THREE.DoubleSide}
         vertexShader={vertex}
         fragmentShader={fragment}
         depthWrite={false}
         transparent={true}
-        alphaTest={0.01}
+        // blending={THREE.AdditiveBlending}
       />
       {children}
     </mesh>
@@ -215,6 +217,10 @@ export default function () {
             <China />
           </Center>
         </Suspense>
+
+        <EffectComposer>
+          <Bloom/>
+        </EffectComposer>
 
       </Canvas>
       <Loader/>

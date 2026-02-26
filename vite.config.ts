@@ -2,8 +2,8 @@ import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import glsl from 'vite-plugin-glsl'
-// import glslify from "vite-plugin-glslify";
+// import glsl from 'vite-plugin-glsl'
+import glslify from "vite-plugin-glslify";
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 
@@ -26,8 +26,8 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       reactRouter(),
       tsconfigPaths(),
-      glsl(),
-      // glslify(),
+      // glsl(),
+      glslify(),  // 可以在glsl中导入npm包
       // 将public下所有资源复制到three-demo目录下
       // viteStaticCopy({
       //   targets: [

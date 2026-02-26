@@ -16,7 +16,7 @@ export default function Home() {
       <Link to='/reactTest'>test</Link>
       <Link to='/three/some-test'>test</Link>
 
-      <h1 className="text-7xl mb-10">THREE.js</h1>
+      <h1 className="text-7xl mb-10 text-amber-50">THREE.js</h1>
       {/* <Link to=''>custom shader material</Link> */}
       <LinkImg to='/three/csm' img='/img/preview/1.png'/>
 
@@ -53,7 +53,7 @@ export default function Home() {
       <LinkImg to='/three/model-line'img='/img/preview/0.png'/>
 
 
-      <h1 className="text-5xl my-10">Music Visual</h1>
+      <h1 className="text-5xl my-10 text-amber-50">Music Visual</h1>
       <LinkImg to='/three/mv1'img='/img/preview/26.png'/>
 
 

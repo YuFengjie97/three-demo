@@ -1,0 +1,1 @@
+import{r as a}from"./chunk-EPOLDU6W-ZrNLe__p.js";import{U as m,u as o}from"./extends-jxZVK5OE.js";function s(){const e=a.useMemo(()=>({uTime:new m(0),uDelta:new m(0)}),[]);return o(({clock:r},u)=>{e.uTime.value=r.getElapsedTime(),e.uDelta.value=Math.min(1,u)}),e}export{s as u};

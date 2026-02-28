@@ -38,12 +38,10 @@ function fillPosTex(tex: THREE.DataTexture, position: THREE.TypedArray) {
 function Leaf({ ...props }: { props: any }) {
   // @ts-ignore
   const geometry = props.geometry as THREE.BufferGeometry
-  console.log(geometry)
 
   const position = geometry.getAttribute('position')
   const count = position.count
   const size = ceil(sqrt(count))
-  console.log({ count, size })
 
   const { gl } = useThree()
 
@@ -156,12 +154,12 @@ function Trunk({ ...props }: { props: any }) {
 }
 
 function Base() {
-  const { nodes, materials } = useGLTF(asset('/model/tree-transformed.glb'))
+  // const { nodes, materials } = useGLTF(asset('/model/tree-transformed.glb'))
+  const { nodes, materials } = useGLTF(asset('/model/tree-compressed.glb'))
   // @ts-ignore
-  const trunkGeo = nodes.Oak_Bark_2_SHD_trunk_0.geometry
+  const trunkGeo = nodes.trunk.geometry
   // @ts-ignore
-  const leafGeo = nodes.olqeejih_2K_rsSprite1_0.geometry
-  console.log({ trunkGeo, leafGeo })
+  const leafGeo = nodes.leaf.geometry
 
   return (
     <>

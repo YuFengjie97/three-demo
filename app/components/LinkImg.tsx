@@ -25,6 +25,7 @@ export default function main({ to, img }: { to: string; img: string }) {
       <NavLink
         className='inline-block relative w-full h-full  mr-4 mb-2'
         to={to}
+        target='_blank'
       >
         {isLoading && (
           <div className='absolute inset-0 bg-white flex items-center justify-center text-gray-500 z-10'>

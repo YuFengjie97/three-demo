@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
-import { useEffect, useMemo, useRef } from 'react'
-import { OrbitControls, useHelper, Environment } from '@react-three/drei'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
+import { OrbitControls, useHelper, Environment, Loader } from '@react-three/drei'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
@@ -177,21 +177,26 @@ export default function main() {
             enabled: true,
           }}
         >
-          {/* <Environment preset="forest" background backgroundBlurriness={0.5} /> */}
-          <Environment files={envHdrPath} background />
-          {/* <perspectiveCamera /> */}
-          <OrbitControls />
 
-          <ambientLight intensity={1} />
-          <DirectionLight />
+          <Suspense fallback={null}>
+            {/* <Environment preset="forest" background backgroundBlurriness={0.5} /> */}
+            <Environment files={envHdrPath} background />
+            {/* <perspectiveCamera /> */}
+            <OrbitControls />
 
-          <axesHelper args={[20]} />
+            <ambientLight intensity={1} />
+            <DirectionLight />
 
-          <RotateCube castShadow={true} />
-          <Plane />
+            <axesHelper args={[20]} />
 
-          <CSM />
+            <RotateCube castShadow={true} />
+            <Plane />
+
+            <CSM />
+          </Suspense>
+
         </Canvas>
+        <Loader/>
       </div>
     </>
   )

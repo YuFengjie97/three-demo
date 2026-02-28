@@ -1,10 +1,10 @@
-import { OrbitControls, useHelper } from '@react-three/drei'
+import { Loader, OrbitControls, useHelper } from '@react-three/drei'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
 import * as THREE from 'three'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { useControls } from 'leva'
 
 import atomVertex from './atomVertex.glsl'
@@ -149,8 +149,12 @@ export default function main() {
           <ambientLight />
           {/* <axesHelper args={[10]} /> */}
 
-          <Earth />
+          <Suspense fallback={null}>
+            <Earth />
+          </Suspense>
+
         </Canvas>
+        <Loader/>
       </div>
     </>
   )

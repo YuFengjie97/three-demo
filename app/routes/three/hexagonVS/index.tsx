@@ -2,10 +2,10 @@ import * as THREE from 'three'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { Loader, OrbitControls } from '@react-three/drei'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import { useUniformTime } from '~/hook/useUniformTime'
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 
 function Plane() {
@@ -45,9 +45,13 @@ export default function () {
         {/* <axesHelper args={[20]} /> */}
         <OrbitControls />
         <ambientLight />
-        <pointLight position={[0,6,0]}  intensity={10}/>
-        <Plane />
+        <Suspense fallback={null}>
+          <pointLight position={[0,6,0]}  intensity={10}/>
+          <Plane />
+        </Suspense>
+
       </Canvas>
+      <Loader/>
     </div>
   )
 }

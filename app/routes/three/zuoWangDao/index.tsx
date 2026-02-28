@@ -1,9 +1,9 @@
-import { Billboard, OrbitControls, Text, Text3D, useGLTF } from '@react-three/drei'
+import { Billboard, Loader, OrbitControls, Text, Text3D, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Bloom, EffectComposer, Glitch, GodRays } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { Perf } from 'r3f-perf'
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { asset } from '~/utils/asset'
 import { useUniformTime } from '~/hook/useUniformTime'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
@@ -100,7 +100,9 @@ export default function () {
         <directionalLight position={[0,5,10]} />
         {/* <OrbitControls /> */}
 
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
         {/* <Skull ref={lightSource} /> */}
 
@@ -115,6 +117,7 @@ export default function () {
           {/* <GodRays sun={lightSource} /> */}
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

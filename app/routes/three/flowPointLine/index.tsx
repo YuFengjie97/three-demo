@@ -1,6 +1,6 @@
-import { OrbitControls, useTexture } from '@react-three/drei'
+import { Loader, OrbitControls, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
@@ -238,18 +238,22 @@ export default function () {
         <OrbitControls />
         {/* <axesHelper args={[10]} /> */}
 
-        <Particle />
+        <Suspense fallback={null}>
 
-        <mesh ref={lightSource}>
-          <icosahedronGeometry args={[.4, 0]}/>
-          <meshNormalMaterial />
-        </mesh>
+          <Particle />
+        </Suspense>
+
+          <mesh ref={lightSource}>
+            <icosahedronGeometry args={[.4, 0]}/>
+            <meshNormalMaterial />
+          </mesh>
 
         <EffectComposer>
           <Bloom />
           <GodRays sun={lightSource}/>
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

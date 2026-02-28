@@ -1,11 +1,11 @@
-import { OrbitControls, Points, useTexture } from '@react-three/drei'
+import { Loader, OrbitControls, Points, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import * as THREE from 'three'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import gpuPos from './gpuPos.glsl'
-import { useContext, useMemo } from 'react'
+import { Suspense, useContext, useMemo } from 'react'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
@@ -139,12 +139,15 @@ export default function () {
         <OrbitControls target={[0, 2, 0]} />
         <ambientLight />
         {/* <axesHelper args={[10]} /> */}
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
         <EffectComposer>
           <Bloom />
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

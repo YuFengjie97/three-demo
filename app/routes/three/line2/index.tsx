@@ -1,9 +1,9 @@
-import { OrbitControls } from '@react-three/drei'
+import { Loader, OrbitControls } from '@react-three/drei'
 import { Canvas, extend } from '@react-three/fiber'
 import { Line2, LineGeometry, LineMaterial } from 'three/examples/jsm/Addons.js'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 
 extend({ Line2 })
 
@@ -37,9 +37,12 @@ export default function () {
       <Canvas>
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
-        <Base />
       </Canvas>
+      <Loader/>
     </div>
   )
 }

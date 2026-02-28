@@ -1,12 +1,13 @@
 import {
   createInstances,
   InstancedAttribute,
+  Loader,
   OrbitControls,
 } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { asset } from '~/utils/asset'
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import vertex from './vertex.glsl'
@@ -261,12 +262,16 @@ export default function () {
         {/* <axesHelper args={[10]} /> */}
         <ambientLight />
         <OrbitControls />
-        <Swords />
+        <Suspense fallback={null}>
+          <Swords />
+        </Suspense>
+
         {/* <Model /> */}
         <EffectComposer>
           <Bloom />
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

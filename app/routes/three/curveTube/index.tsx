@@ -1,7 +1,7 @@
-import { OrbitControls } from "@react-three/drei";
+import { Loader, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Perf } from "r3f-perf";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import * as THREE from 'three'
 import CustomShaderMaterial from "three-custom-shader-material";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
@@ -71,13 +71,16 @@ export default function(){
         {/* <Perf position="top-left"/> */}
         {/* <ambientLight intensity={10}/> */}
 
-        <Base/>
+        <Suspense fallback={null}>
+          <Base/>
+        </Suspense>
 
 
         <EffectComposer>
           <Bloom/>
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

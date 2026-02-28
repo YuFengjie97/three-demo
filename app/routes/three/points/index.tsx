@@ -1,6 +1,6 @@
-import { OrbitControls, Line } from '@react-three/drei'
+import { OrbitControls, Line, Loader } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import CustomShaderMaterialVanilla from 'three-custom-shader-material/vanilla'
@@ -93,8 +93,12 @@ export default function main() {
           {/* <axesHelper args={[20]} /> */}
           <ambientLight />
 
-          <MyPoints />
+          <Suspense fallback={null}>
+            <MyPoints />
+          </Suspense>
+
         </Canvas>
+        <Loader/>
       </div>
     </>
   )

@@ -1,7 +1,7 @@
-import { OrbitControls, PivotControls, Trail } from '@react-three/drei'
+import { Loader, OrbitControls, PivotControls, Trail } from '@react-three/drei'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
-import { useEffect, useMemo, useRef, type RefObject } from 'react'
+import { Suspense, useEffect, useMemo, useRef, type RefObject } from 'react'
 import * as THREE from 'three'
 import { asset } from '~/utils/asset'
 
@@ -82,8 +82,12 @@ export default function main() {
         <OrbitControls makeDefault />
         <ambientLight />
         <pointLight />
-        <Trails />
+        <Suspense fallback={null}>
+          <Trails />
+        </Suspense>
+
       </Canvas>
+      <Loader/>
     </div>
   )
 }

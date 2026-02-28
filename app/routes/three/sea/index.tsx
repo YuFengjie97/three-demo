@@ -1,12 +1,12 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Leva, useControls } from 'leva'
 import CustomShaderMaterial from 'three-custom-shader-material'
-import { OrbitControls, useHelper } from '@react-three/drei'
+import { Loader, OrbitControls, useHelper } from '@react-three/drei'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 
 import * as THREE from 'three'
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Perf } from 'r3f-perf'
@@ -90,8 +90,12 @@ export default function main() {
           <Light />
           {/* <axesHelper args={[20]} /> */}
           <OrbitControls />
-          <CSM />
+          <Suspense fallback={null}>
+            <CSM />
+          </Suspense>
+
         </Canvas>
+        <Loader/>
       </div>
     </>
   )

@@ -1,6 +1,6 @@
-import { OrbitControls } from '@react-three/drei'
+import { Loader, OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import line1Vertex from './line1Vertex.glsl'
@@ -132,12 +132,16 @@ export default function () {
         {/* <Perf position='top-left'/> */}
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
         <EffectComposer>
           <Bloom />
         </EffectComposer>
       </Canvas>
+
+      <Loader />
     </div>
   )
 }

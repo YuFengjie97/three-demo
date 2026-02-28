@@ -1,4 +1,4 @@
-import { OrbitControls, PointMaterial, useHelper } from '@react-three/drei'
+import { Loader, OrbitControls, PointMaterial, useHelper } from '@react-three/drei'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import * as THREE from 'three'
@@ -7,7 +7,7 @@ import fragment from './fragment.glsl'
 import starsVertex from './startsVertex.glsl'
 import starsFragment from './starsFragment.glsl'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { useControls } from 'leva'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { asset } from '~/utils/asset'
@@ -184,9 +184,13 @@ export default function main() {
           {/* <axesHelper args={[20]} /> */}
           <ambientLight intensity={0.4} />
           <Light />
-          <Planet />
-          <Stars />
+          <Suspense fallback={null}>
+            <Planet />
+            <Stars />
+          </Suspense>
+
         </Canvas>
+        <Loader/>
       </div>
     </>
   )

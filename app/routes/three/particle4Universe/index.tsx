@@ -1,11 +1,12 @@
 import {
+  Loader,
   OrbitControls,
   PointMaterial,
   useGLTF,
   useMask,
 } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import ringVertex from './ring.vertex.glsl'
 import ringFragment from './ring.fragment.glsl'
@@ -54,7 +55,7 @@ function useGpu(geo: THREE.BufferGeometry) {
       ...uniformTime,
       defPos: new THREE.Uniform(posTex),
       lifeSpeed: new THREE.Uniform(1),
-      particleVel: new THREE.Uniform(1.5),
+      particleVel: new THREE.Uniform(2.5),
     }
     gpu.init()
 
@@ -72,7 +73,7 @@ function useGpu(geo: THREE.BufferGeometry) {
       },
     },
     particleVel: {
-      value: 1.5,
+      value: 2.5,
       min: 0.1,
       max: 10,
       step: 0.01,
@@ -246,12 +247,16 @@ export default function () {
         {/* <Perf position='top-left' /> */}
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls target={[0, 1, 0]} />
-        <Base />
+
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
         <EffectComposer>
           <Bloom />
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

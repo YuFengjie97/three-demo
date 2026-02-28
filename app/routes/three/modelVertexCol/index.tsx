@@ -1,4 +1,4 @@
-import { OrbitControls, useGLTF, useTexture } from '@react-three/drei'
+import { Loader, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { asset } from '~/utils/asset'
 import * as THREE from 'three'
@@ -6,6 +6,7 @@ import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { Suspense } from 'react'
 
 function Base() {
   // const { nodes, materials, animations } = useGLTF('/model/guangzhuzi.glb')
@@ -52,8 +53,13 @@ export default function () {
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
 
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
+
       </Canvas>
+
+      <Loader/>
     </div>
   )
 }

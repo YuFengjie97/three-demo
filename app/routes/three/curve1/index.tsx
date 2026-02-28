@@ -1,8 +1,8 @@
-import { Center, OrbitControls } from '@react-three/drei'
+import { Center, Loader, OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
-import { useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import { createNoise4D } from 'simplex-noise'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
@@ -239,16 +239,19 @@ export default function () {
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
 
-        <group rotation={[.4,-.3,-.0]}>
-          <Center>
-            <Base />
-          </Center>
-        </group>
+        <Suspense fallback={null}>
+          <group rotation={[.4,-.3,-.0]}>
+            <Center>
+              <Base />
+            </Center>
+          </group>
+        </Suspense>
 
         <EffectComposer>
           <Bloom />
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

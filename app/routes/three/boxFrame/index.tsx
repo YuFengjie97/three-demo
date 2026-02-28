@@ -1,8 +1,8 @@
-import { Instance, Instances, OrbitControls, useGLTF } from '@react-three/drei'
+import { Instance, Instances, Loader, OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { asset } from '~/utils/asset'
 import * as THREE from 'three'
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
@@ -57,11 +57,15 @@ export default function () {
         {/* <axesHelper /> */}
         <OrbitControls makeDefault />
         <ambientLight />
-        <BoxFrames />
+        <Suspense fallback={null}>
+          <BoxFrames />
+        </Suspense>
+
         <EffectComposer>
           <Bloom/>
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

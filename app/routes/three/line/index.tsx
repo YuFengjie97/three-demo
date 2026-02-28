@@ -1,6 +1,6 @@
-import { OrbitControls, useGLTF } from '@react-three/drei'
+import { Loader, OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import vertex from './vertex.glsl'
@@ -95,9 +95,12 @@ export default function () {
         <ambientLight />
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
+        <Suspense fallback={null}>
+          <Demo />
+        </Suspense>
 
-        <Demo />
       </Canvas>
+      <Loader/>
     </div>
   )
 }

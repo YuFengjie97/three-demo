@@ -1,4 +1,4 @@
-import { OrbitControls, Point, Points, useGLTF } from '@react-three/drei'
+import { Loader, OrbitControls, Point, Points, useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 import vertex from './vertex.glsl'
@@ -6,7 +6,7 @@ import fragment from './fragment.glsl'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { Perf } from 'r3f-perf'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { asset } from '~/utils/asset'
 
 const {random, PI} = Math
@@ -56,8 +56,13 @@ export default function () {
         <OrbitControls />
         <ambientLight />
 
-        <Base />
+        <Suspense fallback={null}>
+
+          <Base />
+        </Suspense>
+
       </Canvas>
+      <Loader/>
     </div>
   )
 }

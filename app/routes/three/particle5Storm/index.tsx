@@ -1,11 +1,12 @@
 import {
+  Loader,
   OrbitControls,
   PointMaterial,
   useGLTF,
   useMask,
 } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import ringVertex from './ring.vertex.glsl'
 import ringFragment from './ring.fragment.glsl'
@@ -163,12 +164,15 @@ export default function () {
         {/* <Perf position='top-left' /> */}
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls target={[0, 0, 0]} />
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
         <EffectComposer>
           <Bloom />
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

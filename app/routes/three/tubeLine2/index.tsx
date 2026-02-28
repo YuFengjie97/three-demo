@@ -1,6 +1,6 @@
-import { OrbitControls, useTexture } from '@react-three/drei'
+import { Loader, OrbitControls, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import pointsVertex from './points.vertex.glsl'
 import pointsFragment from './points.fragment.glsl'
@@ -184,11 +184,15 @@ export default function () {
         <OrbitControls />
         <ambientLight />
         <pointLight intensity={40} position={[0, 4, 0]} />
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
+
         <EffectComposer>
           <Bloom/>
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

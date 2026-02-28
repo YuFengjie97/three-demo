@@ -1,6 +1,6 @@
-import { OrbitControls } from '@react-three/drei'
+import { Loader, OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 
 const { random, ceil, floor, sin } = Math
@@ -146,8 +146,12 @@ export default function () {
         <OrbitControls />
         <ambientLight />
         <pointLight intensity={40} position={[0, 4, 0]} />
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
+
       </Canvas>
+      <Loader/>
     </div>
   )
 }

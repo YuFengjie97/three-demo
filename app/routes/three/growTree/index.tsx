@@ -1,10 +1,10 @@
-import { OrbitControls, Tube, useGLTF, useTexture } from '@react-three/drei'
+import { Loader, OrbitControls, Tube, useGLTF, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import vertex from './vertex.glsl'
 import fragment from './fragment.glsl'
 import gpuPos from './gpuPos.glsl'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { asset } from '~/utils/asset'
@@ -143,8 +143,12 @@ export default function () {
         {/* <axesHelper args={[10]} /> */}
         <OrbitControls target={[0,2,0]}/>
 
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
+
       </Canvas>
+      <Loader/>
     </div>
   )
 }

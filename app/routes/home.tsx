@@ -54,6 +54,7 @@ export default function Home() {
           <LinkImg to='/three/model-vertex-col' img='/img/preview/25.png' />
 
           <LinkImg to='/three/curve' img='/img/preview/27.png' />
+          <LinkImg to='/three/curve2' img='/img/preview/30.png' />
           <LinkImg to='/three/curve-tube' img='/img/preview/28.png' />
           {/* <LinkImg to='/three/model-line' img='/img/preview/0.png' /> */}
         </div>

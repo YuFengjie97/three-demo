@@ -57,6 +57,9 @@ export default function Home() {
           <LinkImg to='/three/curve2' img='/img/preview/30.png' />
           <LinkImg to='/three/curve-tube' img='/img/preview/28.png' />
           {/* <LinkImg to='/three/model-line' img='/img/preview/0.png' /> */}
+
+          <LinkImg to='/three/thomas-attractor' img='/img/preview/28.png' />
+
         </div>
 
         <h1 className='text-5xl my-10 text-amber-50'>Music Visual</h1>

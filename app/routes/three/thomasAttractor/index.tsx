@@ -1,15 +1,16 @@
-import { OrbitControls } from '@react-three/drei'
+import { Loader, OrbitControls, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import CustomShaderMaterial from 'three-custom-shader-material'
 import * as THREE from 'three'
 import particleVS from './particle.vs.glsl'
 import particleFS from './particle.fs.glsl'
 import particleGPU from './particle.gpu.glsl'
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, Suspense, useContext, useMemo } from 'react'
 import { GPUComputationRenderer } from 'three/examples/jsm/Addons.js'
 import { useUniformTime } from '~/hook/useUniformTime'
 import { useControls } from 'leva'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
+import { asset } from '~/utils/asset'
 
 interface BaseContext {
   count: number
@@ -29,7 +30,7 @@ function fillPosTex(dataTex: THREE.DataTexture, size: number) {
     data[i4 + 0] = (random() - 0.5) * 10
     data[i4 + 1] = (random() - 0.5) * 10
     data[i4 + 2] = (random() - 0.5) * 10
-    data[i4 + 3] = random()
+    data[i4 + 3] = random() * .3 + .001
   }
 }
 
@@ -101,10 +102,14 @@ function Particles() {
   const { posVar, gpu } = useGPU()
 
   const uniformTime = useUniformTime()
+  const tex = useTexture(asset('/img/texture/particle/star_09.png'))
+
   const uniforms = {
     ...uniformTime,
     posTex: new THREE.Uniform(gpu.getCurrentRenderTarget(posVar).texture),
+    tex: new THREE.Uniform(tex)
   }
+
   useFrame(() => {
     gpu.compute()
   })
@@ -119,7 +124,7 @@ function Particles() {
         transparent={true}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
-        size={.1}
+        size={.2}
       />
     </points>
   )
@@ -140,14 +145,17 @@ export default function () {
   return (
     <div className='h-screen'>
       <Canvas>
-        <axesHelper args={[10]} />
+        {/* <axesHelper args={[10]} /> */}
         <OrbitControls />
-        <Base />
+        <Suspense fallback={null}>
+          <Base />
+        </Suspense>
 
         <EffectComposer>
           <Bloom/>
         </EffectComposer>
       </Canvas>
+      <Loader/>
     </div>
   )
 }

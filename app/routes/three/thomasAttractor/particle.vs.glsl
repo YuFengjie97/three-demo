@@ -10,7 +10,7 @@ void main(){
   vec3 pos = particle.xyz;
   float seed = particle.w;
 
-  vCol = sin(vec3(3,2,1) + seed + pos+uTime)*.5+.5;
+  vCol = sin(vec3(3,2,1) + seed + pos*.5+uTime)*.5+.5;
 
   csm_Position = pos;
 }

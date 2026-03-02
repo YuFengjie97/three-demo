@@ -45,6 +45,7 @@ export default [
 
 
   route('/three/thomas-attractor', 'routes/three/thomasAttractor/index.tsx'),
+  route('/three/thomas-attractor2', 'routes/three/thomasAttractor2/index.tsx'),
 
   route('/three/mv1', 'routes/three/mv1/index.tsx'),
 

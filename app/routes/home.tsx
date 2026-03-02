@@ -59,6 +59,7 @@ export default function Home() {
           {/* <LinkImg to='/three/model-line' img='/img/preview/0.png' /> */}
 
           <LinkImg to='/three/thomas-attractor' img='/img/preview/31.png' />
+          <LinkImg to='/three/thomas-attractor2' img='/img/preview/32.png' />
 
         </div>
 

@@ -33,5 +33,5 @@ void main(){
     col += c * d1;
   }
 
-  csm_FragColor = vec4(col*2., d);
+  csm_FragColor = vec4(col*3., d);
 }

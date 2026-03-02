@@ -59,10 +59,8 @@ function Base() {
       const p1 = getPointBySample(p, bFactor)
       points.push(p1)
     }
-    // points = [new THREE.Vector3(0,0,0), new THREE.Vector3(1,1,0), new THREE.Vector3(2,0,0)]
     const curve = new THREE.CatmullRomCurve3(points)
     const tubeGeo = new THREE.TubeGeometry(curve, 3000, .05, 8,)
-    // console.log(points, tubeGeo);
 
     return { points, curve, tubeGeo }
   }, [sampleCount, bFactor])
@@ -127,7 +125,10 @@ export default function () {
         <Base />
 
         <EffectComposer>
-          <Bloom/>
+          <Bloom 
+            intensity={4.}
+            radius={.2}
+          />
         </EffectComposer>
       </Canvas>
     </div>

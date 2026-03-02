@@ -31,7 +31,7 @@ function Base() {
   const sampleCount = 300
   // const bFactor = .19
 
-  const {bFactor, count, speed} = useControls({
+  const {bFactor, count, speed, tailLen} = useControls({
     bFactor: {
       value: .19,
       min: 0.01,
@@ -49,11 +49,17 @@ function Base() {
       min:0.,
       max: .5,
       step: .01,
+    },
+    tailLen: {
+      value: .6,
+      min: .1,
+      max: 1.,
+      step: .1
     }
   })
 
   const { points, curve, tubeGeo } = useMemo(() => {
-    let points: THREE.Vector3[] = [new THREE.Vector3(1, 0, 0)]
+    let points: THREE.Vector3[] = [new THREE.Vector3(.1, 0, 0)]
     for (let i = 0; i < sampleCount; i++) {
       const p = points[points.length - 1].clone()
       const p1 = getPointBySample(p, bFactor)
@@ -69,7 +75,8 @@ function Base() {
   const uniforms = {
     ...uniformTime,
     count: new THREE.Uniform(count),
-    speed: new THREE.Uniform(speed)
+    speed: new THREE.Uniform(speed),
+    tailLen: new THREE.Uniform(tailLen)
     // count: new THREE.Uniform(30),
     // speed: new THREE.Uniform(.04)
   }
@@ -95,6 +102,7 @@ function Base() {
   //     }
   //   }
   // })
+  
 
   return (
     <mesh geometry={tubeGeo}>

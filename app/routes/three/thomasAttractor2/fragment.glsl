@@ -2,6 +2,7 @@ uniform float uTime;
 uniform float uDelta;
 uniform float count;
 uniform float speed;
+uniform float tailLen;
 
 
 varying vec2 vUv;
@@ -20,14 +21,14 @@ void main(){
 
   vec3 col = vec3(0);
   float d = 0.;
-  float tailLen = 1./count * .6;
+  float tail = 1./count * tailLen;
 
   for(float i=0.;i<count;i++){
     float life = i/count;
     vec3 c = sin(vec3(3,2,1) + i + vPos*.1)*.5+.5;
 
     float d1 = fract(vUv.x + life + uTime * speed);
-    d1 = smoothstep(tailLen, 0., d1);
+    d1 = smoothstep(tail, 0., d1);
 
     d += d1;
     col += c * d1;

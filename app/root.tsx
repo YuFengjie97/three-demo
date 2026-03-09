@@ -52,7 +52,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className='bg-gray-950 min-h-screen'>
+    <div className='h-dvh bg-gray-950'>
       <Outlet />
     </div>
   )

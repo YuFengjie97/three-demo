@@ -17,22 +17,30 @@ export default function main({ to, img }: { to: string; img: string }) {
   }, [])
 
   return (
-    <div className='inline-block w-40 h-30 transition-all duration-300
+    <div
+      className='inline-blocktransition-all duration-300
       m-2
+      h-30
+      min-h-40
+      md:w-full
       rounded-md overflow-hidden
       hover:shadow-lg hover:shadow-emerald-100
       hover:translate-y-1
-    '>
+      ring
+      ring-amber-50
+    '
+    >
       <NavLink
-        className='inline-block relative w-full h-full  mr-4 mb-2'
+        className='inline-block relative w-full h-full'
         to={to}
         target='_blank'
       >
         {isLoading && (
-          <div className={`absolute
+          <div
+            className={`absolute
             ${styles['preview-null']}
-          `}>
-          </div>
+          `}
+          ></div>
         )}
         <img
           className={`

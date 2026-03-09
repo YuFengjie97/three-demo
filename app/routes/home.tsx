@@ -12,7 +12,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <div className='py-20 px-10'>
+      <div className='py-20 px-10 bg-amber-900 min-h-full'>
         {/* <div className='flex flex-wrap gap-4'>
           <Link to='/reactTest'>test</Link>
           <Link to='/three/some-test'>test</Link>
@@ -20,7 +20,10 @@ export default function Home() {
 
         <h1 className='text-7xl mb-10 text-amber-50'>THREE.js</h1>
         {/* <Link to=''>custom shader material</Link> */}
-        <div className='flex flex-wrap gap-4'>
+        <div
+          className='grid grid-cols-1  gap-4 
+            md:grid-cols-4'
+        >
           <LinkImg to='/three/csm' img='/img/preview/1.png' />
 
           <LinkImg to='/three/sea' img='/img/preview/2.png' />
@@ -60,11 +63,11 @@ export default function Home() {
 
           <LinkImg to='/three/thomas-attractor' img='/img/preview/31.png' />
           <LinkImg to='/three/thomas-attractor2' img='/img/preview/32.png' />
-
         </div>
 
         <h1 className='text-5xl my-10 text-amber-50'>Music Visual</h1>
-        <div className='flex flex-wrap gap-4'>
+        <div className='grid grid-cols-1  gap-4 
+            md:grid-cols-4'>
           <LinkImg to='/three/mv1' img='/img/preview/26.png' />
         </div>
       </div>

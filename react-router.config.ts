@@ -3,7 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { getENV } from "vite.config";
 import routes from './app/routes'
-
+import { rm, access } from 'fs/promises';
+import { resolve } from 'path';
 
 function getAllPath(): string[]{
   const paths = routes.map(item=>item?.path ?? '/') as string[]
@@ -13,6 +14,32 @@ function getAllPath(): string[]{
 getAllPath()
 
 const { VITE_BASE } = getENV()
+
+
+
+async function deleteFolder(dirPath: string) {
+  // 使用 resolve 确保是绝对路径，避免路径歧义
+  const absolutePath = resolve(dirPath);
+
+  try {
+    console.log(`正在删除文件夹: ${absolutePath} ...`);
+
+    await rm(absolutePath, {
+      recursive: true, // 递归删除内容
+      force: true,     // 如果不存在也不报错
+      maxRetries: 3,   // 可选：如果文件被占用，重试次数
+      retryDelay: 500  // 可选：重试间隔 (ms)
+    });
+
+    console.log(`✅ 文件夹删除成功: ${absolutePath}`);
+  } catch (error) {
+    // 由于使用了 force: true，通常不会进到这里，除非是权限问题
+    console.error(`❌ 删除文件夹失败:`, error);
+    throw error; // 抛出错误让调用者知道失败了
+  }
+}
+
+
 
 export default {
   basename: VITE_BASE,
@@ -41,6 +68,7 @@ export default {
 
       fs.mkdirSync(dest, { recursive: true });
       fs.cpSync(src, dest, { recursive: true });
+      await deleteFolder(src)
     }
   },
 } satisfies Config;

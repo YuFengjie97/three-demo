@@ -12,7 +12,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <div className='py-20 px-10'>
+      <div className='py-20 px-10 bg-gray-900'>
         {/* <Link to=''>custom shader material</Link> */}
         <div className='grid grid-cols-1 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4'>
           <h1 className='text-7xl col-span-full mb-10 text-amber-50'>

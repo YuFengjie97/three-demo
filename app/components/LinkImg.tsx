@@ -26,7 +26,7 @@ export default function main({ to, img }: { to: string; img: string }) {
     '
     >
       <NavLink
-        className='inline-block relative w-full h-full  mr-4 mb-2'
+        className='inline-block relative w-full h-full'
         to={to}
         target='_blank'
       >

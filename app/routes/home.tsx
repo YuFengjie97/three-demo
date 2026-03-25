@@ -12,9 +12,9 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
-      <div className='py-20 px-10 bg-gray-900'>
+      <div className='py-20 px-10 '>
         {/* <Link to=''>custom shader material</Link> */}
-        <div className='grid grid-cols-1 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4'>
+        <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-4 sm:gap-x-2'>
           <h1 className='text-7xl col-span-full mb-10 text-amber-50'>
             THREE.js
           </h1>

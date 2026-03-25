@@ -52,7 +52,7 @@ export default function App() {
   }, [])
 
   return (
-    <div >
+    <div className='bg-gray-900'>
       <Outlet />
     </div>
   )

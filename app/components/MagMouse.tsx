@@ -49,6 +49,14 @@ export default function main() {
       ease: 'power2.out',
     })
 
+    const rotationAnimation = gsap.to(magRef.current, {
+      rotation: 360,      // 旋转 360 度
+      duration: 2,        // 转一圈需要 2 秒
+      ease: 'bounce.in',       // 匀速旋转（不要用 power2 这种有缓动的，否则会有卡顿感）
+      repeat: -1,         // -1 代表无限循环
+      transformOrigin: "center center" // 确保绕中心旋转
+    });
+
     const handleMouseMove = (event: MouseEvent) => {
       // reset
       const { x, y } = event
@@ -58,6 +66,7 @@ export default function main() {
       hTo(magBaseSize)
       wCornorTo(cornorBaseSize)
       hCornorTo(cornorBaseSize)
+      rotationAnimation.resume()
 
       const tar = event.target
       if (!tar) return
@@ -76,6 +85,7 @@ export default function main() {
         const cornorSize = Math.min(cornorMaxSize, Math.min(width,height)*.5)
         wCornorTo(cornorSize)
         hCornorTo(cornorSize)
+        rotationAnimation.progress(0).pause()
       }
     }
 

@@ -21,7 +21,7 @@ export default function main({ to, img }: { to: string; img: string }) {
       className='inline-block border-2 border-amber-800 w-full max-h-50 transition-all duration-300
       rounded-md overflow-hidden
       hover:shadow-md hover:shadow-lime-300
-      hover:translate-y-1
+      hover:scale-90
       hover:border-amber-50
     '
     >
@@ -38,6 +38,7 @@ export default function main({ to, img }: { to: string; img: string }) {
           ></div>
         )}
         <img
+          data-type='mag'
           className={`
             block w-full h-full object-cover object-center transition-opacity duration-300
             ${isLoading ? 'opacity-0' : 'opacity-100'}

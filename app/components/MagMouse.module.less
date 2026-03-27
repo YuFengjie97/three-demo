@@ -1,0 +1,45 @@
+.mag-con {
+  width: 30px;
+  height: 30px;
+  position: fixed;
+  will-change: transform;
+  z-index: 10;
+  pointer-events: none;
+
+
+  .mag {
+    position: absolute;
+  }
+  .lt {
+    top: 0;
+    left: 0;
+    border-left: var(--border-w) solid var(--border-col);
+    border-top: var(--border-w) solid var(--border-col);
+    // filter: drop-shadow(var(--border-col) -10px 10px 20px);
+
+  }
+  .rt {
+    right: 0;
+    top: 0;
+    border-right: var(--border-w) solid var(--border-col);
+    border-top: var(--border-w) solid var(--border-col);
+    // filter: drop-shadow(var(--border-col) 10px 10px 20px);
+
+  }
+  .lb {
+    left: 0;
+    bottom: 0;
+    border-left: var(--border-w) solid var(--border-col);
+    border-bottom: var(--border-w) solid var(--border-col);
+    // filter: drop-shadow(var(--border-col) -10px -10px 20px);
+
+  }
+  .rb {
+    right: 0;
+    bottom: 0;
+    border-right: var(--border-w) solid var(--border-col);
+    border-bottom: var(--border-w) solid var(--border-col);
+    // filter: drop-shadow(var(--border-col) 10px -10px 20px);
+
+  }
+}

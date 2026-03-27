@@ -1,6 +1,6 @@
 import type { Route } from './+types/home'
-import Link from '~/components/Link'
 import LinkImg from '~/components/LinkImg'
+import MagMouse from '~/components/MagMouse'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,10 +12,11 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <>
+      <MagMouse />
       <div className='py-20 px-10 '>
         {/* <Link to=''>custom shader material</Link> */}
-        <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-4 sm:gap-x-2'>
-          <h1 className='text-7xl col-span-full mb-10 text-amber-50'>
+        <div className='grid relative grid-cols-1 gap-y-8 sm:grid-cols-4 sm:gap-x-8'>
+          <h1 className='text-7xl col-span-full w-fit mb-10 text-amber-50'>
             THREE.js
           </h1>
           <LinkImg to='/three/csm' img='/img/preview/1.png' />
@@ -58,7 +59,9 @@ export default function Home() {
           <LinkImg to='/three/thomas-attractor' img='/img/preview/31.png' />
           <LinkImg to='/three/thomas-attractor2' img='/img/preview/32.png' />
 
-          <h1 className='text-5xl my-10 col-span-full text-amber-50'>Music Visual</h1>
+          <h1 className='text-5xl my-10 col-span-full text-amber-50'>
+            Music Visual
+          </h1>
           <LinkImg to='/three/mv1' img='/img/preview/26.png' />
         </div>
       </div>

@@ -20,7 +20,6 @@ export default function main({ to, img }: { to: string; img: string }) {
     <div
       className='inline-block border-2 border-amber-800 w-full max-h-50 transition-all duration-300
       rounded-md overflow-hidden
-      hover:shadow-md hover:shadow-lime-300
       hover:scale-90
       hover:border-amber-50
     '

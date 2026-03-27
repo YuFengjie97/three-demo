@@ -1,3 +1,9 @@
+/**
+ * 磁力鼠标指针
+ * 只需要将目标元素设置data-type='mag'即可
+ */
+
+
 import { createStyleWrap } from '~/utils/sty'
 import styles from './MagMouse.module.less'
 import { useEffect, useRef, useState } from 'react'

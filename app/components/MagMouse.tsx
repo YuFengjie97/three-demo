@@ -67,8 +67,9 @@ export default function main() {
         yTo(y - cornorStrokeWidth*1.5)
         wTo(width + gap)
         hTo(height + gap)
-        wCornorTo(cornorMaxSize)
-        hCornorTo(cornorMaxSize)
+        const cornorSize = Math.min(cornorMaxSize, Math.min(width,height)*.5)
+        wCornorTo(cornorSize)
+        hCornorTo(cornorSize)
       }
     }
 

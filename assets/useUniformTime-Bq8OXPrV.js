@@ -1,0 +1,1 @@
+import{r as u}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{u as t}from"./extends-ByQGUdkz.js";import{U as m}from"./three.module-BdJJ7N0x.js";function n(){const e=u.useMemo(()=>({uTime:new m(0),uDelta:new m(0)}),[]);return t(({clock:r},o)=>{e.uTime.value=r.getElapsedTime(),e.uDelta.value=Math.min(1,o)}),e}export{n as u};

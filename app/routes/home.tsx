@@ -37,7 +37,7 @@ export default function Home() {
           <LinkImg to='/three/swords' img='/img/preview/12.png' />
           <LinkImg to='/three/fulu' img='/img/preview/13.png' />
           <LinkImg to='/three/line' img='/img/preview/14.png' />
-          <LinkImg to='/three/line2' img='/img/preview/15.png' />
+          {/* <LinkImg to='/three/line2' img='/img/preview/15.png' /> */}
           <LinkImg to='/three/tube-line' img='/img/preview/16.png' />
           <LinkImg to='/three/tube-line2' img='/img/preview/17.png' />
           <LinkImg to='/three/zuowangdao' img='/img/preview/18.png' />

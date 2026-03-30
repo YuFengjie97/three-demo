@@ -9,9 +9,21 @@ export function useUniformTime() {
     uDelta: new THREE.Uniform(0),
   }), [])
 
+  const timer = useMemo(() => {
+    const timer = new THREE.Timer()
+    if(typeof document !== undefined){
+      timer.connect(document)
+    }
+    return timer
+  }, [])
+
   useFrame(({ clock }, delta) => {
-    uniforms.uTime.value = clock.getElapsedTime()
-    uniforms.uDelta.value = Math.min(1., delta)
+    // uniforms.uTime.value = clock.getElapsedTime()
+    // uniforms.uDelta.value = Math.min(1., delta)
+
+    timer.update()
+    uniforms.uTime.value = timer.getElapsed()
+    uniforms.uDelta.value = timer.getDelta()
   })
 
   return uniforms

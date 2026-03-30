@@ -405,7 +405,7 @@ export default function () {
       backgroundMaterial.roughness = 0.4
       backgroundMaterial.metalness = 0.9
       backgroundMaterial.flatShading = true
-      backgroundMaterial.colorNode = color(0x0)
+      backgroundMaterial.colorNode = color(0x440000)
 
       const backgroundMesh = new THREE.Mesh(backgroundGeom, backgroundMaterial)
       scene.add(backgroundMesh)
@@ -418,10 +418,6 @@ export default function () {
 
 
       renderPipeline = new THREE.RenderPipeline(renderer)
-      console.log(111111, renderPipeline);
-      
-
-      
 
       const scenePass = pass(scene, camera)
       const scenePassColor = scenePass.getTextureNode('output')

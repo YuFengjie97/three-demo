@@ -66,11 +66,14 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       three:
-        specifier: ^0.183.2
+        specifier: ^0.183.1
         version: 0.183.2
       three-custom-shader-material:
         specifier: ^6.4.0
         version: 6.4.0(@react-three/fiber@9.5.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.183.2))(react@19.2.3)(three@0.183.2)
+      tsl-textures:
+        specifier: ^3.0.1
+        version: 3.0.1
     devDependencies:
       '@react-router/dev':
         specifier: 7.12.0
@@ -2532,6 +2535,9 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  tsl-textures@3.0.1:
+    resolution: {integrity: sha512-m+icznk3mpJdf7QL5N0Iy9IFshtJbCLJx2A0kW9E9g4yuiwXlozb3q9GaBaJdH/6UbM2B5AaIBbpWxsfiFTa9Q==}
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -5098,6 +5104,8 @@ snapshots:
   tsconfck@3.1.6(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
+
+  tsl-textures@3.0.1: {}
 
   tslib@2.8.1: {}
 

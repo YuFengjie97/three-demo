@@ -1,21 +1,42 @@
 import * as THREE from 'three/webgpu'
-import { Fn, sin, length, mul, add, div, pow, float, abs, time, positionLocal, vec3,vec4, smoothstep, uniform } from 'three/tsl'
+import {
+  Fn,
+  sin,
+  length,
+  mul,
+  add,
+  div,
+  pow,
+  float,
+  abs,
+  time,
+  positionLocal,
+  vec3,
+  vec4,
+  smoothstep,
+  uniform,
+  oneMinus,
+  If,
+  uv,
+  lessThan,
+  mix,
+  vec2,
+} from 'three/tsl'
 import { Canvas, extend, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, useTexture } from '@react-three/drei'
 import { useEffect, useMemo } from 'react'
 import { asset } from '~/utils/asset'
 import { useControls } from 'leva'
+import { caveArt } from 'tsl-textures'
 
 extend(THREE as any)
 
 function Base() {
   const tex = useTexture(asset('/img/texture/fulu/1.jpg'))
 
-  const {col} = useControls({
-    col: '#ff0000'
+  const { col } = useControls({
+    col: '#ff0000',
   })
-  
-  
 
   const { mat, geo, mesh } = useMemo(() => {
     const colUniform = uniform(new THREE.Color(col))
@@ -25,7 +46,17 @@ function Base() {
       let d = sin(length(p).mul(10).add(time.mul(-1))).div(10)
       d.assign(pow(float(0.05).div(abs(d)), 2)) // d = pow(.05/abs(d), 2)
 
-      return vec4(colUniform, d);
+      return vec4(colUniform, d)
+    })
+    const fsMain2 = Fn(() => {
+      return caveArt({
+        scale: 2,
+        thinness: 2,
+        noise: 0.3,
+        color: new THREE.Color(13845829),
+        background: new THREE.Color(16775408),
+        seed: time,
+      })
     })
 
     // const geo = new THREE.PlaneGeometry(1, 1)
@@ -33,11 +64,19 @@ function Base() {
     const mat = new THREE.NodeMaterial()
     mat.side = THREE.DoubleSide
     mat.transparent = true
-    mat.alphaTest = .1;
+    mat.alphaTest = 0.1
     // mat.fragmentNode = TSL.color('crimson')
     // mat.fragmentNode = TSL.texture(tex).mul(TSL.color('red'))
     // mat.fragmentNode = TSL.positionLocal
-    mat.fragmentNode = fsMain()
+    // mat.fragmentNode = fsMain()
+
+
+    mat.fragmentNode = Fn(() => {
+      const uvX = uv().x.sub(.5)
+      const uvY = uv().y.sub(.5)
+
+      return mix(fsMain(), fsMain2(), length(vec2(uvX, uvY)))
+    })()
 
     const mesh = new THREE.Mesh(geo, mat)
 
@@ -57,20 +96,13 @@ function Base() {
   }, [])
 
   return <primitive object={mesh} />
-
-  // return (
-  //   <mesh>
-  //     <primitive object={geo}/>
-  //     <primitive object={mat} />
-  //   </mesh>
-  // )
 }
 
 export default function () {
   return (
     <div className='h-screen'>
       <Canvas
-        camera={{ position: [0, 0, 10] }}
+        camera={{ position: [0, 0, 6] }}
         gl={async (props) => {
           const renderer = new THREE.WebGPURenderer(props as any)
           await renderer.init()

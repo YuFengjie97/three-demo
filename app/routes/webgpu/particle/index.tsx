@@ -31,7 +31,6 @@ import { Loader, OrbitControls, useTexture } from '@react-three/drei'
 import { asset } from '~/utils/asset'
 
 import { type ThreeToJSXElements } from '@react-three/fiber'
-import { Perf } from 'r3f-perf'
 
 declare module '@react-three/fiber' {
   interface ThreeElements extends ThreeToJSXElements<typeof THREE> {}
@@ -43,7 +42,7 @@ function Base() {
   const tex = useTexture(asset('/img/texture/particle/star_09.png'))
 
   const { mesh, computeInit, computeUpdate } = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(.4, .4, 1, 1)
+    const geo = new THREE.PlaneGeometry(0.4, 0.4, 1, 1)
     const count = 1000
 
     const positionBuffer = instancedArray(count, 'vec3')
@@ -66,7 +65,7 @@ function Base() {
       const vx = sin(pos.z.mul(0.5))
       const vy = sin(pos.x.mul(0.5))
       const vz = sin(pos.y.mul(0.5))
-      return vec3(vx,vy,vz)
+      return vec3(vx, vy, vz)
     })
 
     const computeInit = Fn(() => {
@@ -92,7 +91,7 @@ function Base() {
 
       // 更新life
       const life = lifeBuffer.element(idx)
-      life.addAssign(deltaTime.mul(.5))
+      life.addAssign(deltaTime.mul(0.5))
       lifeBuffer.element(idx).assign(life)
 
       // 用时间种子重新更新粒子位置
@@ -132,23 +131,14 @@ function Base() {
 
   const renderer = useThree().gl as unknown as THREE.WebGPURenderer
   renderer.compute(computeInit)
-  // useEffect(() => {
-  //   renderer.compute(computeInit)
-  // }, [])
 
-  let initialized = false
   useFrame(() => {
-    // if(!initialized) {
-    //   renderer.compute(computeInit)
-    //   initialized = true
-    // }else{
-    // }
-      renderer.compute(computeUpdate)
-
+    renderer.compute(computeUpdate)
   })
 
   return <primitive object={mesh} />
 }
+
 
 export default function () {
   return (

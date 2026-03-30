@@ -8,7 +8,6 @@ import { resolve } from 'path';
 
 function getAllPath(): string[]{
   const paths = routes.map(item=>item?.path ?? '/') as string[]
-  console.log(paths);
   return paths
 }
 getAllPath()

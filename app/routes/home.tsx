@@ -58,6 +58,7 @@ export default function Home() {
 
           <LinkImg to='/three/thomas-attractor' img='/img/preview/31.png' />
           <LinkImg to='/three/thomas-attractor2' img='/img/preview/32.png' />
+          <LinkImg to='/three/tornado' img='/img/preview/33.png' />
 
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             Music Visual

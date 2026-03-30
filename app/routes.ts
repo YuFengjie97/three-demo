@@ -48,7 +48,12 @@ export default [
   route('/three/thomas-attractor2', 'routes/three/thomasAttractor2/index.tsx'),
 
   route('/three/mv1', 'routes/three/mv1/index.tsx'),
+
+  route('/three/tornado', 'routes/three/tornado/index.tsx'),
+
+
   route('/three/link-particle', 'routes/three/linkParticle/index.tsx'),
+  route('/webgpu/1', 'routes/webgpu/01/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

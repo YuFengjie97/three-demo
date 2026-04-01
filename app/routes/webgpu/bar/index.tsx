@@ -167,12 +167,12 @@ function Base() {
   return (
     <instancedMesh args={[undefined, undefined, count]}>
       <boxGeometry args={[cellSize, cellSize, cellSize]} />
-      <meshStandardNodeMaterial
+      <meshPhongNodeMaterial
         vertexNode={vertexNode()}
         // positionNode={positionBuffer.toAttribute()}
         colorNode={getColor()}
-        metalnessNode={uniforms.uMetalness}
-        roughnessNode={uniforms.uRoughness}
+        // metalnessNode={uniforms.uMetalness}
+        // roughnessNode={uniforms.uRoughness}
       />
     </instancedMesh>
   )

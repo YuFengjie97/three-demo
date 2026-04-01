@@ -16,6 +16,7 @@ import {
   positionGeometry,
   cameraProjectionMatrix,
   modelViewMatrix,
+  float,
 } from 'three/tsl'
 import { useControls } from 'leva'
 
@@ -57,9 +58,9 @@ function Base() {
       },
     },
     uColScale: {
-      value: 2,
+      value: .1,
       min: 0.01,
-      max: 5,
+      max: 2,
       step: 0.01,
       onChange: (v) => {
         uniforms.uColScale.value = v
@@ -121,15 +122,15 @@ function Base() {
         heightBuffer.element(idx).assign(h)
       })().compute(count)
 
-      const sin3 = Fn(([v3]) => vec3(sin(v3.x), sin(v3.y), sin(v3.z)))
 
       const getColor = Fn(() => {
+
         const pos = positionBuffer.element(instanceIndex)
-        const col = sin3(
-          vec3(3, 2, 1).add(dot(sin3(pos), vec3(uniforms.uColScale))),
-        )
-          .mul(0.5)
-          .add(0.5)
+        const height = heightBuffer.element(instanceIndex)
+        const col = (mx_noise_vec3(pos.add(height).mul(uniforms.uColScale)).mul(10))
+        col.x.assign(sin(col.x).mul(.5).add(.5))
+        col.y.assign(sin(col.y).mul(.5).add(.5))
+        col.z.assign(sin(col.z).mul(.5).add(.5))
         return col
       })
 

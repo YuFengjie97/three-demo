@@ -65,24 +65,24 @@ function Base() {
         uniforms.uColScale.value = v
       },
     },
-    uMetalness: {
-      value: 0.5,
-      min: 0.01,
-      max: 1,
-      step: 0.01,
-      onChange: (v) => {
-        uniforms.uMetalness.value = v
-      },
-    },
-    uRoughness: {
-      value: 0.5,
-      min: 0.01,
-      max: 1,
-      step: 0.01,
-      onChange: (v) => {
-        uniforms.uRoughness.value = v
-      },
-    },
+    // uMetalness: {
+    //   value: 0.5,
+    //   min: 0.01,
+    //   max: 1,
+    //   step: 0.01,
+    //   onChange: (v) => {
+    //     uniforms.uMetalness.value = v
+    //   },
+    // },
+    // uRoughness: {
+    //   value: 0.5,
+    //   min: 0.01,
+    //   max: 1,
+    //   step: 0.01,
+    //   onChange: (v) => {
+    //     uniforms.uRoughness.value = v
+    //   },
+    // },
   })
 
   const renderer = useThree().gl as unknown as THREE.WebGPURenderer

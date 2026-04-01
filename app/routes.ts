@@ -57,6 +57,7 @@ export default [
   route('/webgpu/cube', 'routes/webgpu/cube/index.tsx'),
   route('/webgpu/particle', 'routes/webgpu/particle/index.tsx'),
   route('/webgpu/bar', 'routes/webgpu/bar/index.tsx'),
+  route('/webgpu/turbulence', 'routes/webgpu/turbulence/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

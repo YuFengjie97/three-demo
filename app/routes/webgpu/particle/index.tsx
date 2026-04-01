@@ -146,10 +146,11 @@ function Base() {
     const updataVel = Fn(([pos]) => {
       const p = pos.mul(uniforms.uVelNoiseScale)
 
-      const vx = mx_noise_vec3(p.add(vec3(1, 0, 0).mul(time)))
-      const vy = mx_noise_vec3(p.add(vec3(0, 1, 0).mul(time)))
-      const vz = mx_noise_vec3(p.add(vec3(0, 0, 1).mul(time)))
-      return vec3(vx, vy, vz).normalize()
+      // const vx = mx_noise_vec3(p.add(vec3(1, 0, 0).mul(time)))
+      // const vy = mx_noise_vec3(p.add(vec3(0, 1, 0).mul(time)))
+      // const vz = mx_noise_vec3(p.add(vec3(0, 0, 1).mul(time)))
+      // return vec3(vx, vy, vz).normalize()
+      return mx_noise_vec3(p.add(vec3(0,time,0)))
     })
 
     const computeUpdate = Fn(() => {

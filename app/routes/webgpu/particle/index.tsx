@@ -50,12 +50,12 @@ extend(THREE as any)
 function Base() {
   const rt = useMemo(() => new ResourceTracker(), [])
 
-  // const tex = useTexture(asset('/img/texture/particle/star_09.png'))
-  const tex = useMemo(() => {
-    const loader = new THREE.TextureLoader();
-    const tex =  loader.load( asset('/img/texture/particle/star_09.png') );
-    return tex
-  }, [])
+  const tex = useTexture(asset('/img/texture/particle/star_09.png')) as unknown as THREE.Texture<HTMLImageElement>
+  // const tex = useMemo(() => {
+  //   const loader = new THREE.TextureLoader();
+  //   const tex =  loader.load( asset('/img/texture/particle/star_09.png') );
+  //   return tex
+  // }, [])
   
   rt.track(tex)
 

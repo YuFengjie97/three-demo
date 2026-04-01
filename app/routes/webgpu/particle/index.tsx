@@ -30,6 +30,8 @@ import {
   hue,
   color,
   dot,
+  uv,
+  varying,
 } from 'three/tsl'
 import { Suspense, useEffect, useMemo } from 'react'
 import { Loader, OrbitControls, useTexture } from '@react-three/drei'
@@ -37,6 +39,7 @@ import { asset } from '~/utils/asset'
 
 import { type ThreeToJSXElements } from '@react-three/fiber'
 import { useControls } from 'leva'
+import { ResourceTracker } from '~/utils/resourceTracker'
 
 declare module '@react-three/fiber' {
   interface ThreeElements extends ThreeToJSXElements<typeof THREE> {}
@@ -45,62 +48,39 @@ declare module '@react-three/fiber' {
 extend(THREE as any)
 
 function Base() {
-  const tex = useTexture(asset('/img/texture/particle/star_09.png'))
+  const rt = useMemo(() => new ResourceTracker(), [])
 
-  const uLifeSpeed = uniform(0.1)
-  const uSpeed = uniform(5)
-  const uCol = uniform(new THREE.Color(0xff0000))
-  const uVelNoiseScale = uniform(0.1)
-  const uHueOffsetScale = uniform(.5)
+  // const tex = useTexture(asset('/img/texture/particle/star_09.png'))
+  const tex = useMemo(() => {
+    const loader = new THREE.TextureLoader();
+    const tex =  loader.load( asset('/img/texture/particle/star_09.png') );
+    return tex
+  }, [])
+  
+  rt.track(tex)
+
+  const uniforms = useMemo(() => ({
+    uLifeSpeed: uniform(0.1),
+    uSpeed: uniform(5),
+    uCol: uniform(color(new THREE.Color(0xff0000))),
+    uVelNoiseScale: uniform(0.1),
+    uHueOffsetScale: uniform(0.5),
+    uTex: (tex)
+  }), [])
+
   useControls({
-    lifeSpeed: {
-      value: uLifeSpeed.value,
-      min: 0,
-      max: 2,
-      step: 0.1,
-      onChange: (v) => {
-        uLifeSpeed.value = v
-      },
-    },
-    speed: {
-      value: uSpeed.value,
-      min: 0,
-      max: 15,
-      step: 0.1,
-      onChange: (v) => {
-        uSpeed.value = v
-      },
-    },
-    col: {
-      value: new THREE.Color(uCol.value).getStyle(),
-      onChange(v) {
-        const c = new THREE.Color(v)
-        uCol.value = c
-      },
-    },
-    velNoiseScale: {
-      value: uVelNoiseScale.value,
-      min: 0,
-      max: .5,
-      step: 0.01,
-      onChange: (v) => {
-        uVelNoiseScale.value = v
-      },
-    },
-    uHueOffsetScale: {
-      value: uHueOffsetScale.value,
-      min:0,
-      max: 1.,
-      step: .01,
-      onChange: (v) => {
-        uHueOffsetScale.value = v
-      },
-    }
+    lifeSpeed: { value: 0.1, min: 0, max: 2, step: 0.1, onChange: (v) => { uniforms.uLifeSpeed.value = v } },
+    speed: { value: 5, min: 0, max: 15, step: 0.1, onChange: (v) => { uniforms.uSpeed.value = v } },
+    col: { value: '#ff0000', onChange: (v) => { uniforms.uCol.value.set(v) } },
+    velNoiseScale: { value: 0.1, min: 0, max: 0.5, step: 0.01, onChange: (v) => { uniforms.uVelNoiseScale.value = v } },
+    uHueOffsetScale: { value: 0.5, min: 0, max: 1, step: 0.01, onChange: (v) => { uniforms.uHueOffsetScale.value = v } }
   })
+
 
   const { mesh, computeInit, computeUpdate } = useMemo(() => {
 
     const geo = new THREE.PlaneGeometry(0.4, 0.4, 1, 1)
+    rt.track(geo)
     const count = 60000
 
     const positionBuffer = instancedArray(count, 'vec3')
@@ -120,20 +100,11 @@ function Base() {
     })
 
     const updataVel = Fn(([pos]) => {
-      // const vx = sin(pos.z.mul(0.5))
-      // const vy = sin(pos.x.mul(0.5))
-      // const vz = sin(pos.y.mul(0.5))
-      // return vec3(vx, vy, vz)
-
-      const p = pos.mul(uVelNoiseScale)
-
+      const p = pos.mul(uniforms.uVelNoiseScale)
 
       const vx = mx_noise_vec3(p.add(vec3(1, 0, 0).mul(time)))
       const vy = mx_noise_vec3(p.add(vec3(0, 1, 0).mul(time)))
       const vz = mx_noise_vec3(p.add(vec3(0, 0, 1).mul(time)))
-      // const vx = mx_noise_vec4(p.xyz, time)
-      // const vy = mx_noise_vec4(p.xyz, time.add(1))
-      // const vz = mx_noise_vec4(p.xyz, time.add(2))
       return vec3(vx, vy, vz).normalize()
     })
 
@@ -141,9 +112,7 @@ function Base() {
       const idx = instanceIndex
       const posInit = initPos()
       positionBuffer.element(idx).assign(posInit)
-
       velBuffer.element(idx).assign(vec3(0, 0, 0))
-
       lifeBuffer.element(idx).assign(hash(idx.add(5)))
     })().compute(count)
 
@@ -155,12 +124,12 @@ function Base() {
       velBuffer.element(idx).assign(vel)
 
       // 更新位置
-      pos.addAssign(vel.mul(deltaTime).mul(uSpeed))
+      pos.addAssign(vel.mul(deltaTime).mul(uniforms.uSpeed))
       positionBuffer.element(idx).assign(pos)
 
       // 更新life
       const life = lifeBuffer.element(idx)
-      life.addAssign(deltaTime.mul(uLifeSpeed))
+      life.addAssign(deltaTime.mul(uniforms.uLifeSpeed))
       lifeBuffer.element(idx).assign(life)
 
       // 用时间种子重新更新粒子位置
@@ -173,40 +142,45 @@ function Base() {
     const getColor = Fn(() => {
       const idx = instanceIndex
       const pos = positionBuffer.element(idx)
-      const hueOffset = dot(pos, vec3(0.1, 0.2, 0.3)).mul(uHueOffsetScale)
-      return hue(color(uCol), hueOffset)
+      const life = lifeBuffer.element(idx)
+
+      const d = texture(tex).r
+      const hueOffset = dot(pos, vec3(0.1, 0.2, 0.3)).mul(uniforms.uHueOffsetScale)
+      const col = hue(color(uniforms.uCol), hueOffset).mul(d)
+
+      const fadeByLife = sin(life.mul(PI))
+      const alpha = d.mul(fadeByLife)
+
+      return vec4(col, alpha)
     })
 
-    const fs = Fn(([lifeBuffer]) => {
-      const idx = instanceIndex
-      const life = lifeBuffer.element(idx)
-      const d = texture(tex).r
-      // const col = vec3(3, 2, 1).add(idx)
-      // col.assign(vec3(sin(col.x), sin(col.y), sin(col.z)))
-      const col = getColor()
-      const fadeByLife = sin(life.mul(PI))
-      return vec4(col.mul(d), d.mul(fadeByLife))
-    })
 
     const mat = new THREE.SpriteNodeMaterial()
     // const mat = new THREE.NodeMaterial()
+    rt.track(mat)
 
     const posAttr = positionBuffer.toAttribute()
     mat.positionNode = posAttr
 
     mat.transparent = true
     mat.depthWrite = false
-    mat.alphaTest = 0.5
-    mat.side = THREE.DoubleSide
+    // mat.alphaTest = 0.1
     mat.blending = THREE.AdditiveBlending
-    mat.fragmentNode = fs(lifeBuffer)
+    mat.colorNode = getColor()
 
     const mesh = new THREE.InstancedMesh(geo, mat, count)
+    rt.track(mesh)
     return { mesh, computeInit, computeUpdate }
   }, [])
 
   const renderer = useThree().gl as unknown as THREE.WebGPURenderer
-  renderer.compute(computeInit)
+
+  useEffect(() => {
+    renderer.compute(computeInit)
+    return () => {
+      rt.dispose()
+    }
+  }, [])
 
   useFrame(() => {
     renderer.compute(computeUpdate)

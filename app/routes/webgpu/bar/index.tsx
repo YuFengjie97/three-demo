@@ -102,7 +102,7 @@ function Base() {
     return { positionArray, count }
   }, [])
 
-  const { positionBuffer, computeInit, computeUpdate, getColor, vertexNode } =
+  const { positionBuffer, computeInit, computeUpdate, getColor, positionNode } =
     useMemo(() => {
       const positionBuffer = instancedArray(positionArray, 'vec3')
       const heightBuffer = instancedArray(count, 'float')
@@ -134,7 +134,7 @@ function Base() {
         return col
       })
 
-      const vertexNode = Fn(() => {
+      const positionNode = Fn(() => {
         const idx = instanceIndex
         const height = heightBuffer.element(idx)
 
@@ -143,8 +143,8 @@ function Base() {
           .add(vec3(0, cellSize / 2, 0)) // 步骤1: 坐标系原点移到底部
           .mul(vec3(1, height, 1)) // 步骤2: 基于底部进行 Y 轴高度缩放
           .add(positionBuffer.element(idx)) // 步骤3: 将缩放完的实例移动到它该在的网格位置
-
-        return cameraProjectionMatrix.mul(modelViewMatrix.mul(vec4(pos, 1)))
+        return pos
+        // return cameraProjectionMatrix.mul(modelViewMatrix.mul(vec4(pos, 1)))
       })
 
       return {
@@ -152,7 +152,7 @@ function Base() {
         computeInit,
         computeUpdate,
         getColor,
-        vertexNode,
+        positionNode,
       }
     }, [count])
 
@@ -169,7 +169,7 @@ function Base() {
     <instancedMesh args={[undefined, undefined, count]}>
       <boxGeometry args={[cellSize, cellSize, cellSize]} />
       <meshPhongNodeMaterial
-        vertexNode={vertexNode()}
+        positionNode={positionNode()}
         // positionNode={positionBuffer.toAttribute()}
         colorNode={getColor()}
         // metalnessNode={uniforms.uMetalness}

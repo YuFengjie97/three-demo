@@ -161,11 +161,17 @@ export default function () {
       particleMaterial.blending = THREE.AdditiveBlending
       particleMaterial.depthWrite = false
       particleMaterial.positionNode = particlePositions.toAttribute()
-      particleMaterial.scaleNode = vec2(particleSize)
-      particleMaterial.rotationNode = atan(
-        particleVelocities.toAttribute().y,
-        particleVelocities.toAttribute().x,
-      )
+      // particleMaterial.positionNode = Fn(() => {
+      //   const pos = particlePositions.element(instanceIndex)
+      //   return pos
+      // })()
+
+      // particleMaterial.scaleNode = vec2(particleSize)
+      particleMaterial.scaleNode = vec2(3.)
+      // particleMaterial.rotationNode = atan(
+      //   particleVelocities.toAttribute().y,
+      //   particleVelocities.toAttribute().x,
+      // )
 
       particleMaterial.colorNode = Fn(() => {
         const life = particlePositions.toAttribute().w

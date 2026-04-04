@@ -5,6 +5,10 @@ export const sin3 = Fn(([v]: [Node<'vec3'>]) => {
   return vec3(sin(v.x), sin(v.y), sin(v.z))
 })
 
+export const s1 = Fn(([v]: [Node<'float'>]) => {
+  return sin(v).mul(.5).add(.5)
+})
+
 export const cos3 = Fn(([v]: [Node<'vec3'>]) => {
   return vec3(cos(v.x), cos(v.y), cos(v.z))
 })

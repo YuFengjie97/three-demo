@@ -59,6 +59,8 @@ export default [
   route('/webgpu/bar', 'routes/webgpu/bar/index.tsx'),
   route('/webgpu/turbulence', 'routes/webgpu/turbulence/index.tsx'),
   route('/webgpu/relief', 'routes/webgpu/relief/index.tsx'),
+  route('/webgpu/disco-ball', 'routes/webgpu/discoBall/index.tsx'),
+  route('/webgpu/circle-circle-particle', 'routes/webgpu/circleCircleParticle/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

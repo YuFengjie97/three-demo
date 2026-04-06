@@ -46,7 +46,7 @@ function Part1({ color }: { color: string }) {
           fragmentShader={line1PointsFragment}
           transparent={true}
           depthWrite={false}
-          size={0.5}
+          size={.5}
         />
       </points>
     </>

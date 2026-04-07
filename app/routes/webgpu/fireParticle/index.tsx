@@ -1,17 +1,12 @@
-import { Loader, OrbitControls, useGLTF, useTexture } from "@react-three/drei";
-import { Canvas, extend, useFrame, useThree, type ThreeToJSXElements } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo } from "react";
+import { OrbitControls, useTexture } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Suspense, useMemo } from "react";
 import * as THREE from "three/webgpu";
-import { Fn, sin, dot, smoothstep, time, vec3, vec4, instanceIndex, instancedArray, uniform, mx_noise_vec3, positionGeometry, cameraProjectionMatrix, modelViewMatrix, float, positionLocal, texture, mix, varying, vec2, oneMinus, uv, hash, deltaTime, If, fract, rotate, rotateUV, billboarding, distance, max, select } from "three/tsl";
+import { Fn, sin, dot, smoothstep, length, time, vec3, vec4, instanceIndex, instancedArray, uniform, mx_noise_vec3, positionGeometry, cameraProjectionMatrix, modelViewMatrix, float, positionLocal, texture, mix, varying, vec2, oneMinus, uv, hash, deltaTime, If, fract, rotate, rotateUV, billboarding, distance, max, select } from "three/tsl";
 import { useControls } from "leva";
 import { asset } from "~/utils/asset";
 import { palette } from "~/utils/tsl";
-
-declare module "@react-three/fiber" {
-  interface ThreeElements extends ThreeToJSXElements<typeof THREE> {}
-}
-
-extend(THREE as any);
+import WebGPUCanvas from "~/components/WebGpuCanvas";
 
 function Base() {
   const count = 2000;
@@ -21,10 +16,10 @@ function Base() {
   const uniforms = useMemo(() => {
     return {
       uTex: tex,
-      uSpeed: uniform(6.),
+      uSpeed: uniform(6),
       uDeathSpeed: uniform(0.7),
       uColor: uniform(new THREE.Color(0xff0000)),
-      uNoiseScale: uniform(2.)
+      uNoiseScale: uniform(2),
     };
   }, [tex]);
   useControls({
@@ -49,18 +44,18 @@ function Base() {
     uColor: {
       value: uniforms.uColor.value.getStyle(),
       onChange(v) {
-        uniforms.uColor.value = new THREE.Color(v)
-      }
+        uniforms.uColor.value = new THREE.Color(v);
+      },
     },
     uNoiseScale: {
       value: uniforms.uNoiseScale.value,
-      min:.01,
+      min: 0.01,
       max: 5,
-      step: .01,
-      onChange(v){
-        uniforms.uNoiseScale.value = v
-      }
-    }
+      step: 0.01,
+      onChange(v) {
+        uniforms.uNoiseScale.value = v;
+      },
+    },
   });
 
   const { mat, computeUpdate } = useMemo(() => {
@@ -77,15 +72,15 @@ function Base() {
 
     const getPosition = Fn(() => {
       const pos = positionLocal.toVar();
-      const posBuf = posBuffer.element(instanceIndex)
+      const posBuf = posBuffer.element(instanceIndex);
       pos.addAssign(posBuf);
 
       // 边缘粒子缩小
-      const toCenter = distance(posBuf, vec3(0,posBuf.y,0))
-      const scale = float(1).div(toCenter)
-      scale.assign(select(scale.greaterThan(1), 1, scale))
+      const toCenter = distance(posBuf, vec3(0, posBuf.y, 0));
+      // const toCenter = length(posBuf);
+      const scale = float(1).div(toCenter.add(1));
 
-      return pos.mul(scale)
+      return pos.mul(scale);
     });
     const computeUpdate = Fn(() => {
       const pos = posBuffer.element(instanceIndex);
@@ -94,11 +89,12 @@ function Base() {
       const lifeTime = life.x;
       const lifeSpeed = life.y;
 
-      const s = uniforms.uNoiseScale
-      const acc = mx_noise_vec3(pos.mul(vec3(s)).add(vec3(lifeSpeed, time, float(instanceIndex).mul(0.5))));
-      vel.assign(mix(vel, acc, .3).normalize());
+      const s = uniforms.uNoiseScale;
+      const acc = mx_noise_vec3(pos.mul(vec3(s)).add(time.mul(.1),lifeSpeed,instanceIndex.toFloat()));
+      // vel.assign(mix(vel, acc, 0.8).normalize());
+      vel.assign(acc)
       const velUp = vec3(0, 1, 0);
-      vel.assign(mix(vel, velUp, 0.3));
+      vel.assign(mix(vel, velUp, 0.6));
       pos.addAssign(vel.mul(uniforms.uSpeed).mul(deltaTime));
 
       lifeTime.addAssign(deltaTime.mul(uniforms.uDeathSpeed));
@@ -126,7 +122,7 @@ function Base() {
     mat.transparent = true;
     mat.depthWrite = false;
     mat.blending = THREE.AdditiveBlending;
-    mat.vertexNode = billboarding()
+    mat.vertexNode = billboarding();
 
     return { mat, computeUpdate };
   }, [count]);
@@ -147,25 +143,14 @@ function Base() {
 
 export default function App() {
   return (
-    <div className="h-screen">
-      <Canvas
-        camera={{ position: [0, 0, 10] }}
-        // @ts-ignore
-        gl={async (props) => {
-          const renderer = new THREE.WebGPURenderer(props as any);
-          await renderer.init();
-          return renderer;
-        }}
-      >
-        <ambientLight />
-        <directionalLight position={[5, 10, 0]} intensity={2} />
-        <axesHelper args={[10]} />
-        <OrbitControls />
-        <Suspense fallback={null}>
-          <Base />
-        </Suspense>
-      </Canvas>
-      <Loader />
-    </div>
+    <WebGPUCanvas>
+      {/* <ambientLight /> */}
+      {/* <directionalLight position={[5, 10, 0]} intensity={2} /> */}
+      <axesHelper args={[10]} />
+      <OrbitControls />
+      <Suspense fallback={null}>
+        <Base />
+      </Suspense>
+    </WebGPUCanvas>
   );
 }

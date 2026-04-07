@@ -1,1 +1,0 @@
-import{F as t,g as r,A as a,X as n,V as m}from"./three.tsl-Du_vVCpb.js";const p=t(([s])=>r(a(s.x),a(s.y),a(s.z))),i=t(([s])=>a(s).mul(.5).add(.5)),d=t(([s])=>r(n(s.x),n(s.y),n(s.z))),x=t(([s,o,u,e,c])=>o.add(u.mul(d(m.mul(2).mul(s).mul(e).add(c)))));export{i as a,x as p,p as s};

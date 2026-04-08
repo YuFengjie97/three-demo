@@ -63,6 +63,8 @@ export default [
   route('/webgpu/circle-circle-particle', 'routes/webgpu/circleCircleParticle/index.tsx'),
   route('/webgpu/fire-particle', 'routes/webgpu/fireParticle/index.tsx'),
   route('/webgpu/earth', 'routes/webgpu/earth/index.tsx'),
+  route('/webgpu/line2', 'routes/webgpu/line2/index.tsx'),
+  route('/webgpu/line', 'routes/webgpu/line/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

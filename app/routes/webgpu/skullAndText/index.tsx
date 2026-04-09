@@ -24,13 +24,13 @@ function Skull() {
     return uniforms;
   }, []);
   // 模型
+  const { nodes } = useGLTF(asset("/model/skull-transformed.glb"));
   const { skullGeo, skullMat, skull } = useMemo(() => {
-    const { nodes } = useGLTF(asset("/model/skull-transformed.glb"));
-
     // @ts-ignore
-    const skullGeo = nodes.Object_2.geometry as THREE.BufferGeometry;
-    skullGeo.scale(2, 2, 2);
-    skullGeo.rotateX(-Math.PI / 4);
+    const skullGeo = nodes.Object_2.geometry.clone() as THREE.BufferGeometry;
+    skullGeo.scale(4, 4, 4);
+    skullGeo.rotateX(-Math.PI / 2);
+    nodes.Object_2.geometry.dispose()
 
     const skullMat = new THREE.MeshStandardNodeMaterial();
     // skullMat.transparent = true
@@ -50,9 +50,8 @@ function Skull() {
     skullMat.metalness = 0.9;
 
     const skull = new THREE.Mesh(skullGeo, skullMat);
-    // skull.rotation.x=-Math.PI/2
     return { skullGeo, skullMat, skull };
-  }, []);
+  }, [nodes]);
 
   // 清理
   useEffect(() => {

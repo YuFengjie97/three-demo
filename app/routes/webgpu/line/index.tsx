@@ -30,6 +30,14 @@ function getLineGeo(dir: THREE.Vector3) {
   const points: THREE.Vector3[] = [];
   // 【修改这里】：每次推入两个相邻的顶点形成一段独立的线
   // 注意：这里用 curvePointNum - 1 作为分母，确保能取到 1.0 的终点
+  /**
+   * 这里不是A-B-C-D
+   * 而是A-B-B-C-C-D
+   * 因为最后merge了所有的lineGeo（为什么这么做？因为分别绘制400条线段非常耗drawCall（可能吧））
+   * 合并为一个bufferGeo能提高最开始的初始化速度
+   * 然后使用linesegment而不是line分割掉B-B C-C
+   * 看上去像是A-B-C-D 其实是A-B..B-C..C-D
+   */
   const segments = curvePointNum - 1;
   for (let i = 0; i < segments; i++) {
     const p1 = curve.getPointAt(i / segments);

@@ -11,21 +11,17 @@ export class CharAtlasCanvas {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
   canvasSize = 1024;
-  constructor(chars: string) {
+  fontFamily: string
+  constructor(chars: string, fontFamily: string) {
     this.chars = chars
+    this.fontFamily = fontFamily
     const length = chars.length
     this.gridSize = Math.ceil(Math.sqrt(length))
     this.canvas = document.createElement('canvas')
     this.canvas.width = this.canvasSize;
     this.canvas.height = this.canvasSize;
     this.ctx = this.canvas.getContext('2d')!
-
-    const fontUrl = asset('/font/ttf/subset-STXINWEI.TTF')
-    const customFont = new FontFace('MyCustomFont', `url(${fontUrl})`);
-    customFont.load().then((loadedFont) => {
-      document.fonts.add(loadedFont);
-      this.draw()
-    })
+    this.draw()
   }
   draw() {
     const { canvasSize, gridSize, ctx, chars } = this
@@ -34,8 +30,8 @@ export class CharAtlasCanvas {
     ctx.fillStyle = "white"; // 字体颜色
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    // ctx.font = `bold ${cellSize * 0.7}px  sans-serif`;
-    ctx.font = `bold ${cellSize * 0.7}px 'MyCustomFont', sans-serif`;
+    // ctx.font = `bold ${cellSize * 0.7}px '华文新魏', 'Microsoft YaHei', sans-serif`;
+    ctx.font = `bold ${cellSize * 0.7}px '${this.fontFamily}', sans-serif`;
 
     for (let i = 0; i < chars.length; i++) {
       const col = i % gridSize;

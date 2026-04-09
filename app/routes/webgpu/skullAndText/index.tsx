@@ -13,16 +13,16 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import { bloom } from "three/examples/jsm/tsl/display/BloomNode.js";
 import { useMouseRay } from "~/utils/mouseRay";
 import { CharAtlasCanvas } from "~/utils/CharAtlasTexture";
+import { useLoadFont } from "~/hook/useLoadFont";
 
-function Base() {
+function Skull() {
   const uniforms = useMemo(() => {
     const uniforms = {
-      uHitPosition: uniform(new THREE.Vector3(0, 0, 0)),
-      uHitUV: uniform(new THREE.Vector2(0, 0)),
+      uHitPosition: uniform(new THREE.Vector3(9999,9999,9999)),
+      uHitUV: uniform(new THREE.Vector2(9999,9999)),
     };
     return uniforms;
   }, []);
-
   // 模型
   const { skullGeo, skullMat, skull } = useMemo(() => {
     const { nodes } = useGLTF(asset("/model/skull-transformed.glb"));
@@ -41,13 +41,13 @@ function Base() {
       // const d = length(positionGeometry.sub(uHitPosition))
       let d = length(uv().sub(uniforms.uHitUV));
       // d = abs(sin(d.mul(40).add(time.mul(4))));
-      d.assign(pow(float(0.1).div(d),2.));
+      d.assign(pow(float(0.1).div(d), 2));
       return mix(vec3(1, 0, 0), vec3(0, 1, 0), d);
     });
 
     skullMat.colorNode = getColor();
-    skullMat.roughness = .1
-    skullMat.metalness = .9
+    skullMat.roughness = 0.1;
+    skullMat.metalness = 0.9;
 
     const skull = new THREE.Mesh(skullGeo, skullMat);
     // skull.rotation.x=-Math.PI/2
@@ -73,14 +73,27 @@ function Base() {
     } else {
       // 可选：如果没有击中，把坐标设到很远的地方，让形变恢复
       uniforms.uHitPosition.value.set(9999, 9999, 9999);
-      uniforms.uHitUV.value.set(9999,9999);
+      uniforms.uHitUV.value.set(9999, 9999);
     }
   });
 
-  //--------------instanceMesh-----------------
+  const fontFamily = "subset2-STXinwei";
+  const fontUrl = asset("/font/ttf/subset2-STXinwei.ttf");
+  const canvasfontLoaded = useLoadFont(fontFamily, fontUrl);
+  console.log(canvasfontLoaded);
+  
+  const charAtlasCanvas = new CharAtlasCanvas("鬼魅神佛惧人活疯骨善恶苦", fontFamily);
 
+  return (
+    <>
+      <primitive object={skull} />
+      {canvasfontLoaded && <Chars uniforms={uniforms} surface={skull} charAtlasCanvas={charAtlasCanvas} />}
+    </>
+  );
+}
+
+function Chars({ uniforms, surface, charAtlasCanvas }) {
   const { charTex, charTexGridSize } = useMemo(() => {
-    const charAtlasCanvas = new CharAtlasCanvas("鬼魅神佛惧人活疯骨善恶苦");
     const charTex = new THREE.CanvasTexture(charAtlasCanvas.canvas);
     charTex.colorSpace = THREE.SRGBColorSpace;
     charTex.minFilter = THREE.LinearFilter;
@@ -116,9 +129,9 @@ function Base() {
       },
     },
   });
-  const { positionArr, getPosition, posUpdate, getColor } = useMemo(() => {
+  const { getPosition, posUpdate, getColor } = useMemo(() => {
     // 取样
-    const sampler = new MeshSurfaceSampler(skull).build();
+    const sampler = new MeshSurfaceSampler(surface).build();
     // const sampler = new MeshSurfaceSampler(skull).setWeightAttribute("uv").build();
     const tarPos = new THREE.Vector3();
     const tarNor = new THREE.Vector3();
@@ -153,7 +166,7 @@ function Base() {
 
     const getColor = Fn(() => {
       const gridSize = float(charTexGridSize);
-      const id = float(instanceIndex)
+      const id = float(instanceIndex);
 
       const totalCells = gridSize.mul(gridSize);
       const ha = mod(id, totalCells);
@@ -163,11 +176,13 @@ function Base() {
 
       const offset = vec2(x, y).div(gridSize);
       const uv2 = uv().div(gridSize).add(offset);
-      uv2.x = oneMinus(uv2.x)
+      uv2.x = oneMinus(uv2.x);
 
       const tex = texture(charTex, uv2).r;
       // const col = vec3(0, 1, 0);
-      const col = sin3(vec3(3,2,1).add(positionLocal.mul(.1)).add(id.mul(.1)).add(time.mul(4))).mul(.5).add(.5)
+      const col = sin3(vec3(3, 2, 1).add(positionLocal.mul(0.1)).add(id.mul(0.1)).add(time.mul(4)))
+        .mul(0.5)
+        .add(0.5);
 
       return vec4(col.mul(tex), tex);
     });
@@ -189,7 +204,7 @@ function Base() {
       posBuffer.element(instanceIndex).assign(pos);
     })().compute(sampleCount);
 
-    return { positionArr, getPosition, posUpdate, getColor };
+    return { getPosition, posUpdate, getColor };
   }, [sampleCount]);
 
   const { gl } = useThree();
@@ -199,14 +214,15 @@ function Base() {
   });
 
   return (
-    <>
-      <primitive object={skull} />
-      <instancedMesh args={[undefined, undefined, sampleCount]}>
-        <planeGeometry args={[0.4, 0.4]} />
-        <meshBasicNodeMaterial transparent={true} depthWrite={false} colorNode={getColor()} positionNode={getPosition()} side={THREE.DoubleSide} />
-      </instancedMesh>
-    </>
+    <instancedMesh args={[undefined, undefined, sampleCount]}>
+      <planeGeometry args={[0.4, 0.4]} />
+      <meshBasicNodeMaterial transparent={true} depthWrite={false} colorNode={getColor()} positionNode={getPosition()} side={THREE.DoubleSide} />
+    </instancedMesh>
   );
+}
+
+function Base() {
+  return <Skull />;
 }
 
 export default function App() {

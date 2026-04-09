@@ -4,7 +4,7 @@ import * as THREE from 'three/webgpu'
 
 
 export function useMouseRay(){
-  const mouse = new THREE.Vector2(0, 0);
+  const mouse = new THREE.Vector2(9999, 9999);
 
   const { rayCaster } = useMemo(() => {
     const rayCaster = new THREE.Raycaster();
@@ -22,7 +22,7 @@ export function useMouseRay(){
     return () => {
       document.removeEventListener("pointermove", handlePointmove);
     };
-  }, []);
+  }); // 别传依赖，舔狗形式的useEffect
 
   const { camera } = useThree();
   // rayCaster根据鼠标更新

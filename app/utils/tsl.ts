@@ -1,4 +1,4 @@
-import { Fn, sin, vec3, tan, cos, PI, clamp, float, length, acos, mx_atan2, pow, cross, mat3, atan, vec2, asin, TWO_PI, sqrt, step, mix } from "three/tsl";
+import { Fn, sin, vec3, tan, cos, PI, clamp, float, length, acos, mx_atan2, pow, cross, mat3, atan, vec2, asin, TWO_PI, sqrt, step, mix, mx_noise_vec3, vec4, triNoise3D } from "three/tsl";
 import type { Node } from "three/webgpu";
 
 export const sin3 = Fn(([v]: [Node<'vec3'>]) => {
@@ -142,3 +142,45 @@ export const sdEquilateralTriangle = Fn(([p, r]: [Node<'vec2'>, Node<'float'>]) 
     // 注意：TSL 的 sign 返回的是 -1, 0, 1
     return length(finalP).negate().mul(finalP.y.sign())
 })
+
+/**
+ * 基于 triNoise3D 的 3D Curl 流场
+ * @param {Node<vec3>} pos - 粒子位置
+ * @param {Node<float>} time - 时间演变
+ * @param {Node<float>} speed - 噪声演变频率
+ */
+export const getCurlTriNoise = Fn(([ pos, time, speed ]: [Node<'vec3'>, Node<'float'>, Node<'float'>]) => {
+  const eps = float(0.01); // 差分步长
+  
+  // 定义采样势场的内部函数，通过坐标偏移获得三个不相关的噪声分量
+  const getPotential = (p) => {
+    return vec3(
+      triNoise3D(p, speed, time),
+      triNoise3D(p.add(vec3(31.41, 58.22, 12.34)), speed, time), // 随机偏移避免对称
+      triNoise3D(p.add(vec3(92.13, 15.76, 44.91)), speed, time)
+    );
+  };
+
+  // 1. 在三个轴向上进行正负采样
+  const p_dx = getPotential(pos.add(vec3(eps, 0, 0)));
+  const m_dx = getPotential(pos.sub(vec3(eps, 0, 0)));
+  
+  const p_dy = getPotential(pos.add(vec3(0, eps, 0)));
+  const m_dy = getPotential(pos.sub(vec3(0, eps, 0)));
+  
+  const p_dz = getPotential(pos.add(vec3(0, 0, eps)));
+  const m_dz = getPotential(pos.sub(vec3(0, 0, eps)));
+
+  // 2. 根据 Curl 公式计算分量
+  // Curl.x = dAz/dy - dAy/dz
+  const x = p_dy.z.sub(m_dy.z).sub(p_dz.y.sub(m_dz.y));
+  
+  // Curl.y = dAx/dz - dAz/dx
+  const y = p_dz.x.sub(m_dz.x).sub(p_dx.z.sub(m_dx.z));
+  
+  // Curl.z = dAy/dx - dAx/dy
+  const z = p_dx.y.sub(m_dx.y).sub(p_dy.x.sub(m_dy.x));
+
+  // 3. 归一化输出，得到纯方向向量
+  return vec3(x, y, z).normalize();
+});

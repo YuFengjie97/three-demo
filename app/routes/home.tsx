@@ -70,6 +70,7 @@ export default function Home() {
           <LinkImg to='/webgpu/earth' img='/img/preview/38.png' />
           <LinkImg to='/webgpu/line' img='/img/preview/39.png' />
           <LinkImg to='/webgpu/skull-and-text' img='/img/preview/40.png' />
+          <LinkImg to='/webgpu/audio-points' img='/img/preview/41.png' />
 
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             Music Visual

@@ -246,7 +246,7 @@ function WebGPUEffects() {
 
   const {strength, radius, threshold} = useControls({
     strength: {
-      value: 2.,
+      value: 1.,
       min: .01,
       max: 3,
       step: .01

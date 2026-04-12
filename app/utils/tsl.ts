@@ -14,7 +14,7 @@ export const cos3 = Fn(([v]: [Node<'vec3'>]) => {
 })
 
 export const palette = Fn(([t, a, b, c, d]: [Node<'float'>, Node<'vec3'>, Node<'vec3'>, Node<'vec3'>, Node<'vec3'>]) => {
-  return a.add(b.mul(cos3(PI.mul(2).mul(t).mul(c).add(d))))
+  return a.add(b.mul(cos3(PI.mul(2).mul(t.mul(c).add(d)))))
 })
 
 export const powV3 = Fn(([v3, v]: [Node<'vec3'>, Node<'vec3'>]) => {

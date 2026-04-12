@@ -15,13 +15,13 @@ import { useAudioAnalyser, type BinInfo } from "~/hook/useAuido";
 
 function Base() {
   const { camera } = useThree();
-  camera.position.set(0, 0, 20);
+  camera.position.set(0, 0, 30);
 
   const fftSize = 1024;
   // const audioUrl = asset("/sound/yanqi.mp3");
-  const audioUrl = asset("/sound/savageLove.aac");
+  // const audioUrl = asset("/sound/savageLove.aac");
   // const audioUrl = asset("/sound/shaderToy_5.mp3");
-  // const audioUrl = asset("/sound/hero.mp3");
+  const audioUrl = asset("/sound/hero.mp3");
 
   const { sound, analyser, subInfo, midInfo, highInfo, freqAvg } = useAudioAnalyser(fftSize, audioUrl);
   useControls({
@@ -34,7 +34,7 @@ function Base() {
   });
   interface Control {
     uBeatActive: THREE.UniformNode<"float", number>
-    smooth: {value: number}
+    smooth: THREE.UniformNode<"float", number>
     lerp: {value: number}
     threshold: {value: number}
   }
@@ -48,35 +48,42 @@ function Base() {
     uBeatActive: uniform(.1),
     subControl: {
       uBeatActive: uniform(0.1),
-      smooth: {value: 0},
-      lerp: {value: 0.1},
-      threshold: {value: 1.01}
+      smooth: uniform(0),
+      lerp: {value: 1},
+      threshold: {value: 10}
     },
     midControl: {
       uBeatActive: uniform(0.1),
-      smooth: {value: 0},
-      lerp: {value: 0.1},
-      threshold: {value: 1.01}
+      smooth: uniform(0),
+      lerp: {value: 1},
+      threshold: {value: 10}
     },
     highControl: {
       uBeatActive: uniform(0.1),
-      smooth: {value: 0},
-      lerp: {value: 0.1},
-      threshold: {value: 1.01}
+      smooth: uniform(0),
+      lerp: {value: 1},
+      threshold: {value: 10}
     },
   }), [])
+
+  const resetBeat = (control: Control) => {
+    return
+    // const {uBeatActive, smooth} = control
+    // uBeatActive.value = 0.1
+    // smooth.value = 0
+  }
   useControls({
     subControl: folder({
-      sublerp: {value: .1, min: 0.01, max: .2, step: .01, onChange(v) {subControl.lerp.value = v}},
-      subthreshold: {value: 1.01, min: 1., max: 1.5, step: .01, onChange(v){subControl.threshold.value = v}}
+      sublerp: {value: 1, min: 1, max: 10, onChange(v) {resetBeat(subControl); subControl.lerp.value = v}},
+      subthreshold: {value: 10, min: 1., max: 1000, onChange(v){resetBeat(subControl);subControl.threshold.value = v}}
     }),
     midControl: folder({
-      midlerp: {value: .1, min: 0.01, max: .2, step: .01, onChange(v) {midControl.lerp.value = v}},
-      midthreshold: {value: 1.01, min: 1., max: 1.5, step: .01, onChange(v){midControl.threshold.value = v}}
+      midlerp: {value: 1, min: 1, max: 10, onChange(v) {resetBeat(midControl);midControl.lerp.value = v}},
+      midthreshold: {value: 10, min: 1., max: 400,  onChange(v){resetBeat(midControl);midControl.threshold.value = v}}
     }),
     highControl: folder({
-      highlerp: {value: .1, min: 0.01, max: .2, step: .01, onChange(v) {highControl.lerp.value = v}},
-      highthreshold: {value: 1.01, min: 1., max: 1.5, step: .01, onChange(v){highControl.threshold.value = v}}
+      highlerp: {value: 1, min: 1, max: 10, onChange(v) {resetBeat(highControl);highControl.lerp.value = v}},
+      highthreshold: {value: 10, min: 1., max: 400, onChange(v){resetBeat(highControl);highControl.threshold.value = v}}
     })
   })
 
@@ -84,21 +91,23 @@ function Base() {
     const {freqAvg} = info
     const {smooth, lerp, threshold, uBeatActive} = control
 
-    smooth.value += (freqAvg.value - smooth.value)*lerp.value
-    if(freqAvg.value > smooth.value*threshold.value){
+    smooth.value += (freqAvg.value - smooth.value) * lerp.value * .0001
+    if(freqAvg.value > smooth.value*(1+threshold.value*.1)){
       uBeatActive.value = 1
     }else{
       uBeatActive.value *= .9
-      uBeatActive.value = Math.max(.1, uBeatActive.value)
+      if(uBeatActive.value < 1e-4){
+        uBeatActive.value = 0
+      }
     }
   }
 
   const uniforms = useMemo(
     () => ({
-      uSpeed: uniform(5.),
+      uSpeed: uniform(40.),
       uCurlScale: uniform(0.1),
       uCurlOffset: uniform(0),
-      uLifeSpeed: uniform(1.6),
+      uLifeSpeed: uniform(1.),
       uColScale: uniform(new THREE.Vector3(0.5, 1.5, .6)),
     }),
     [],
@@ -115,25 +124,20 @@ function Base() {
       highControl.uBeatActive.value
     );
 
-
-    if (maxBeat >= 0.99) { // 只要有一个触发了 1
+    if (maxBeat >= 0.99) {
       uBeatActive.value = 1.0;
-      // uBeatActive.value = subBeat * .4 + midBeat * .2 + highBeat*.1;
     } else {
-      // 衰减稍微放慢一点，让加速有个过程
-      uBeatActive.value *= 0.95; 
+      uBeatActive.value *= 0.9; 
     }
   })
-
-  
 
   
   useControls({
     uSpeed: {
       value: uniforms.uSpeed.value,
-      min: 0.01,
-      max: 50,
-      step: 0.01,
+      min: 0.1,
+      max: 200,
+      step: 0.1,
       onChange(v) {
         uniforms.uSpeed.value = v;
       },
@@ -158,9 +162,9 @@ function Base() {
     },
     uLifeSpeed: {
       value: uniforms.uLifeSpeed.value,
-      min: 0.01,
-      max: 5,
-      step: 0.01,
+      min: 0.1,
+      max: 10,
+      step: 0.1,
       onChange(v) {
         uniforms.uLifeSpeed.value = v;
       },
@@ -213,13 +217,12 @@ function Base() {
       const life = lifeBuffer.element(idx).toVar();
 
       const noiseInput = pos.mul(uniforms.uCurlScale).add(uniforms.uCurlOffset)
-      const range = smoothstep(1, -1, simplexNoise3d(posOrg));
-      // const freq = max(0.1, smoothstep(.8, 1., subInfo.freqAvg).mul(4.))
-      const beatMultiplier = uBeatActive.pow(2.0).mul(10.0);
-      const acc = curlNoise3d(noiseInput).mul(range).mul(max(0.1, beatMultiplier));
+      const range = smoothstep(.5, -1, simplexNoise3d(posOrg));
+      const beatMultiplier = subControl.uBeatActive.mul(.8).add(.1);
+      const acc = curlNoise3d(noiseInput).mul(range).mul(beatMultiplier);
 
-      pos.addAssign(acc.mul(deltaTime).mul(uniforms.uSpeed));
-      life.addAssign(deltaTime.mul(uniforms.uLifeSpeed));
+      pos.addAssign(deltaTime.mul(acc).mul(uniforms.uSpeed));
+      life.addAssign(deltaTime.mul(uniforms.uLifeSpeed).mul(.1));
 
       If(life.greaterThan(1), () => {
         life.assign(fract(life));
@@ -246,10 +249,11 @@ function Base() {
       // const col = vec3(1,0,0)
 
       const spherePos = spherePosBuffer.element(instanceIndex).toVar();
+      const acc = accBuffer.element(instanceIndex).toVar()
       const life = lifeBuffer.element(instanceIndex).toVar();
       const fade = smoothstep(0, 0.2, life).mul(smoothstep(1, 0.7, life));
-      const colOffset = dot(spherePos, uniforms.uColScale)
-      const col = sin3(vec3(3, 2, 1).add(colOffset)).mul(.5).add(.5)
+      // const colOffset = dot(spherePos, uniforms.uColScale)
+      const col = sin3(vec3(3, 2, 1).add(acc.mul(2.1)))
       
       // const col = palette(dot(acc, vec3(.1)).mul(.3), vec3(0.5, 0.5, 0.5),vec3(0.5, 0.5, 0.5),	vec3(1.0, 1.0, 1.0),	vec3(0.00, 0.10, 0.20))
       // const col = palette(sin(spherePos.x.mul(.2)).div(.2), vec3(0.5, 0.5, 0.5),vec3(0.5, 0.5, 0.5),	vec3(1.0, 1.0, 1.0),	vec3(0.00, 0.33, 0.67))
@@ -273,7 +277,7 @@ function Base() {
   return (
     <>
       <instancedMesh args={[undefined, undefined, particleCount]}>
-        <planeGeometry args={[0.3, 0.3]} />
+        <planeGeometry args={[.4,.4]} />
         <spriteNodeMaterial toneMapped={true} positionNode={positionNode} colorNode={colorNode} transparent={true} depthWrite={false} blendAlpha={THREE.AdditiveBlending} />
       </instancedMesh>
     </>

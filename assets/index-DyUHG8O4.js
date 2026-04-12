@@ -1,0 +1,141 @@
+import{w as T,o as e,r as o}from"./chunk-EPOLDU6W-D-U-5P6E.js";import{C as M,a as m,u as j}from"./extends-CQKH8FHF.js";import{u as W}from"./leva.esm-CD9oxMAJ.js";import{u as L}from"./useUniformTime-p2f39nCE.js";import{a as n}from"./asset-BvcpElq9.js";import{O as A}from"./OrbitControls-Df7v6KnC.js";import{L as F}from"./Loader-DtNERok4.js";import{T as v,S as d,f as U,V as k,U as r,C as D,I as V,g as z}from"./three.module-CqEfS7dP.js";import"./index-7OC5HNn7.js";import"./index-D369hMBv.js";import"./client-EdRjCdko.js";import"./index-n5PR1bfd.js";const b=`#define GLSLIFY 1
+varying vec2 vUv;
+varying vec3 vPos;
+varying vec3 vWorldNormal;
+varying vec3 vWorldPos;
+
+void main(){
+  vUv = uv;
+  vPos = position;
+  vWorldNormal = normalize(mat3(modelMatrix) * normal);
+
+  vec4 pos = vec4(position, 1.);
+
+  vec4 modelPos = modelMatrix * pos;
+
+  vWorldPos = modelPos.xyz;
+
+  vec4 viewPos = viewMatrix * modelPos;
+
+  gl_Position = projectionMatrix * viewPos;
+}
+`,G=`#define GLSLIFY 1
+uniform sampler2D uTexDay;
+uniform sampler2D uTexNight;
+uniform sampler2D uTexCloud;
+uniform sampler2D uTexSpe;
+
+uniform vec3 uSunPos;
+uniform float uTime;
+uniform float uCloudVal;
+uniform vec3 uAtomsphereDayCol;
+uniform vec3 uAtomsphereToNightCol;
+
+varying vec2 vUv;
+varying vec3 vPos;
+varying vec3 vWorldNormal;
+varying vec3 vWorldPos;
+
+void main(){
+
+  vec2 uv = vUv;
+
+  // 纹理
+  vec3 texDay = texture(uTexDay, uv).rgb;
+  vec3 texNight = texture(uTexNight, uv).rgb;
+  vec3 texCloud = texture(uTexCloud, uv).rgb;
+  vec3 texSpe = texture(uTexSpe, uv).rgb;
+
+  // 白天黑夜混合
+  vec3 ligthDir = normalize(-uSunPos);   // 以为太阳光几乎平行(太阳巨大,光强大),这里为平行光
+  float L_DOT_N = dot(-ligthDir, vWorldNormal);
+  float dayMix = smoothstep(0.1, 1., L_DOT_N);
+  vec3 col = mix(texNight, texDay, dayMix);
+
+  // 云朵混合  
+  float cloudMix = smoothstep(uCloudVal, 1., texCloud.r) * dayMix;
+  col = mix(col, vec3(1), cloudMix);
+
+  // 大气混合
+  float atomMix = smoothstep(-.3, .3, L_DOT_N);
+  vec3 atomCol = mix(uAtomsphereToNightCol, uAtomsphereDayCol, atomMix);
+  // 菲涅尔
+  vec3 viewDir = normalize(vWorldPos - cameraPosition);
+  float fresnel = pow(
+                      1. - max(0.,dot(-viewDir, vWorldNormal)),
+                    2.);
+  col = mix(col, atomCol, atomMix * fresnel);
+
+  // 反射高光
+  float spec = pow(max(0., dot(-viewDir, reflect(ligthDir, vWorldNormal))), 32.);
+  vec3 specCol = mix(vec3(1), col, fresnel);  // 按照菲涅尔设置高光颜色
+  col = mix(col, specCol, spec * texSpe.r);
+
+  gl_FragColor.xyz = col;
+
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+}`,O=`#define GLSLIFY 1
+varying vec2 vUv;
+varying vec3 vPos;
+varying vec3 vWorldNormal;
+varying vec3 vWorldPos;
+
+void main(){
+  vUv = uv;
+  vPos = position;
+  vWorldNormal = normalize(mat3(modelMatrix) * normal);
+
+  vec4 pos = vec4(position, 1.);
+
+  vec4 modelPos = modelMatrix * pos;
+
+  vWorldPos = modelPos.xyz;
+
+  vec4 viewPos = viewMatrix * modelPos;
+
+  gl_Position = projectionMatrix * viewPos;
+}
+`,E=`#define GLSLIFY 1
+uniform vec3 uSunPos;
+uniform float uTime;
+uniform float uCloudVal;
+uniform vec3 uAtomsphereDayCol;
+uniform vec3 uAtomsphereToNightCol;
+
+varying vec2 vUv;
+varying vec3 vPos;
+varying vec3 vWorldNormal;
+varying vec3 vWorldPos;
+
+void main(){
+
+  vec2 uv = vUv;
+
+  vec3 ligthDir = normalize(-uSunPos);
+  float L_DOT_N = dot(-ligthDir, vWorldNormal);
+
+  // 大气混合
+  float atomMix = smoothstep(-.3, .3, L_DOT_N);
+  vec3 atomCol = mix(uAtomsphereToNightCol, uAtomsphereDayCol, atomMix);
+  // 菲涅尔
+  vec3 viewDir = normalize(vWorldPos - cameraPosition);
+  float fresnel = pow(
+                      1. - max(0.,dot(-viewDir, vWorldNormal)),
+                    2.);
+
+  vec3 col = atomCol * atomMix * fresnel;
+
+  float spec = pow(max(0., dot(-viewDir, reflect(ligthDir, vWorldNormal))), 32.);
+  vec3 specCol = mix(vec3(1), col, fresnel);  // 按照菲涅尔设置高光颜色
+  col = mix(col, specCol, spec);
+
+  float edgeAlpha = dot(-viewDir, vWorldNormal);
+  edgeAlpha = smoothstep(0., -.5, edgeAlpha);
+  // col *= vec3(edgeAlpha);
+
+  gl_FragColor = vec4(col, edgeAlpha);
+
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+}`;function I(){const t=m(v,n("/img/texture/earth_2k/2k_earth_daymap.jpg")),l=m(v,n("/img/texture/earth_2k/2k_earth_nightmap.jpg")),s=m(v,n("/img/texture/earth_2k/2k_earth_clouds.jpg"));o.useEffect(()=>{t.colorSpace=d,l.colorSpace=d,s.colorSpace=d,t.anisotropy=8,l.anisotropy=8,s.anisotropy=8},[t,l,s]);const N=m(v,n("/img/texture/earth_2k/2k_earth_specular_map.jpg")),{r:x,phi:f,theta:h,cloudVal:c,dayCol:u,toNightCol:p}=W({r:{value:1.5,min:1,max:3},phi:{value:1.57,min:-3.15,max:3.15},theta:{value:1.57,min:-3.15,max:3.15},cloudVal:{value:.2,min:0,max:.4},dayCol:{value:"#00aaff"},toNightCol:{value:"#ff6600"}}),g=o.useRef(null),y=o.useMemo(()=>new U,[]),i=o.useMemo(()=>new k,[]),w=L(),a=o.useMemo(()=>({...w,uTexDay:new r(t),uTexNight:new r(l),uTexCloud:new r(s),uTexSpe:new r(N),uSunPos:new r(i),uCloudVal:new r(c),uAtomsphereDayCol:new r(new D(u)),uAtomsphereToNightCol:new r(new D(p))}),[]);o.useEffect(()=>{y.set(x,f,h),i.setFromSpherical(y),g.current.position.copy(i),a.uSunPos.value.copy(i)},[x,f,h]),o.useEffect(()=>{a.uCloudVal.value=c,a.uAtomsphereDayCol.value.set(u),a.uAtomsphereToNightCol.value.set(p)},[c,u,p]);const C=o.useRef(null);j((_,S)=>{C.current.rotation.y+=S*.1});const P=o.useMemo(()=>new V(1,20),[]);return e.jsxs(e.Fragment,{children:[e.jsxs("mesh",{ref:g,position:i,children:[e.jsx("icosahedronGeometry",{args:[.1,10]}),e.jsx("meshBasicMaterial",{color:16711680})]}),e.jsx("mesh",{ref:C,geometry:P,children:e.jsx("shaderMaterial",{uniforms:a,vertexShader:b,fragmentShader:G})}),e.jsx("mesh",{geometry:P,scale:1.05,children:e.jsx("shaderMaterial",{uniforms:a,vertexShader:O,fragmentShader:E,side:z,transparent:!0})})]})}const oe=T(function(){return e.jsx(e.Fragment,{children:e.jsxs("div",{className:"h-screen",children:[e.jsxs(M,{camera:{position:[0,0,2],fov:75,near:.1,far:10},children:[e.jsx(A,{}),e.jsx("ambientLight",{}),e.jsx(o.Suspense,{fallback:null,children:e.jsx(I,{})})]}),e.jsx(F,{})]})})});export{oe as default};

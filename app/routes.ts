@@ -67,6 +67,7 @@ export default [
   route('/webgpu/skull-and-text', 'routes/webgpu/skullAndText/index.tsx'),
   route('/webgpu/ball', 'routes/webgpu/ball/index.tsx'),
   route('/webgpu/audio-points', 'routes/webgpu/audioPoints/index.tsx'),
+  route('/webgpu/cube', 'routes/webgpu/cube/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

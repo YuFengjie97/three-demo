@@ -13,3 +13,9 @@ body {
     color-scheme: dark;
   }
 }
+
+/* 防止控件内部元素超出 */
+/* .tp-lblv:has(.tp-ttv){
+  overflow: hidden;
+  background: red;
+} */

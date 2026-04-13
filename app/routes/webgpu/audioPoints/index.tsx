@@ -100,7 +100,7 @@ function Base() {
       uCurlScale: uniform(0.04),
       uCurlOffset: uniform(0),
       uLifeSpeed: uniform(1.),
-      uColScale: uniform(new THREE.Vector3(0.5, 1.5, .6)),
+      uColScale: uniform(new THREE.Vector3(0.1, 1.5, .6)),
       uColOffset: uniform(new THREE.Vector3(0.5, 1., .5)),
     }),
     [],

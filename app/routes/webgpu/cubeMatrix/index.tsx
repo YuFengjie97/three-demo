@@ -315,7 +315,7 @@ export default function App() {
   return (
     <WebGPUCanvas>
       <Fog />
-      <axesHelper args={[20]} />
+      {/* <axesHelper args={[20]} /> */}
       <ambientLight intensity={1} />
       <Light />
       <OrbitControls />

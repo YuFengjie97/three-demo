@@ -11,7 +11,7 @@ extend(THREE as any);
 
 export default function WebGPUCanvas({ children }) {
   return (
-    <div className="h-screen">
+    <div className="h-screen overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 10] }}
         dpr={[1, 1.5]}

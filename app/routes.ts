@@ -71,6 +71,7 @@ export default [
   route('/webgpu/cube-matrix', 'routes/webgpu/cubeMatrix/index.tsx'),
   route('/webgpu/cube-matrix-flow', 'routes/webgpu/cubeMatrixFlow/index.tsx'),
   route('/webgpu/raymarch', 'routes/webgpu/raymarch/index.tsx'),
+  route('/webgpu/map-height', 'routes/webgpu/mapHeight/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

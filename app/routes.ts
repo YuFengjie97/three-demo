@@ -69,6 +69,7 @@ export default [
   route('/webgpu/audio-points', 'routes/webgpu/audioPoints/index.tsx'),
   route('/webgpu/cube', 'routes/webgpu/cube/index.tsx'),
   route('/webgpu/cube-matrix', 'routes/webgpu/cubeMatrix/index.tsx'),
+  route('/webgpu/raymarch', 'routes/webgpu/raymarch/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

@@ -1,4 +1,4 @@
-import { Fn, sin, vec3, tan, cos, PI, clamp, float, length, acos, mx_atan2, pow, cross, mat3, atan, vec2, asin, TWO_PI, sqrt, step, mix, mx_noise_vec3, vec4, triNoise3D } from "three/tsl";
+import { Fn, sin, vec3, tan, cos, PI, clamp, float, length, acos, mx_atan2, pow, cross, mat3, atan, vec2, asin, TWO_PI, sqrt, step, mix, mx_noise_vec3, vec4, triNoise3D, exp, oneMinus } from "three/tsl";
 import type { Node } from "three/webgpu";
 
 export const sin3 = Fn(([v]: [Node<'vec3'>]) => {
@@ -184,3 +184,24 @@ export const getCurlTriNoise = Fn(([ pos, time, speed ]: [Node<'vec3'>, Node<'fl
   // 3. 归一化输出，得到纯方向向量
   return vec3(x, y, z).normalize();
 });
+
+// 射线盒子相交检测。size为盒子大小
+export const rayBoxDist = Fn(([ro, rd, size]: [Node<'vec3'>,Node<'vec3'>,Node<'vec3'>]) => {
+  const m = vec3(1.0).div(rd);
+  const n = m.mul(ro);
+  const k = m.abs().mul(size);
+  const t1 = n.negate().sub(k);
+  const t2 = n.negate().add(k);
+  const tN = t1.x.max(t1.y).max(t1.z); // 进入距离
+  const tF = t2.x.min(t2.y).min(t2.z); // 离开距离
+  // 返回 vec2(进入, 离开)
+  return vec2(tN, tF);
+});
+
+export const exp3 = Fn(([v]: [Node<'vec3'>]) => {
+  return vec3(exp(v.x),exp(v.x),exp(v.x))
+})
+
+export const expToneMapping = Fn(([col]: [Node<'vec3'>]) => {
+  return oneMinus( exp3(col.negate()) )
+})

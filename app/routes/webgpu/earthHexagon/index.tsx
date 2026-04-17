@@ -166,7 +166,7 @@ export function generateGoldberg(m: number, radius: number = 1): GoldbergFace[] 
   return Array.from(centersMap.values());
 }
 
-function Cloud() {
+function Earth() {
   const { camera } = useThree();
   camera.position.set(0, 10, 15);
 
@@ -355,7 +355,7 @@ function Cloud() {
 }
 
 function Base() {
-  return <Cloud />;
+  return <Earth />;
 }
 
 export default function App() {

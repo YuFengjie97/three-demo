@@ -1,4 +1,4 @@
-import { Fn, sin, vec3, tan, cos, PI, clamp, float, length, acos, mx_atan2, pow, cross, mat3, atan, vec2, asin, TWO_PI, sqrt, step, mix, mx_noise_vec3, vec4, triNoise3D, exp, oneMinus } from "three/tsl";
+import { Fn, sin, vec3, tan, cos, PI, clamp, float, length, acos, mx_atan2, pow, cross, mat3, atan, vec2, asin, TWO_PI, sqrt, step, mix, mx_noise_vec3, vec4, triNoise3D, exp, oneMinus, abs, smoothstep } from "three/tsl";
 import type { Node } from "three/webgpu";
 
 export const sin3 = Fn(([v]: [Node<'vec3'>]) => {
@@ -61,13 +61,31 @@ export const sphericalToCartesian = Fn(([rtp]: [Node<'vec3'>]) => {
 })
 
 
-export const lookAt = Fn(([dir]: [Node<'vec3'>]) => {
+export const lookAt2 = Fn(([dir]: [Node<'vec3'>]) => {
   const right = cross(dir, vec3(0., 1, 0)).normalize()
   const up = cross(right, dir).normalize()
 
   const rotationMatrix = mat3(right, up, dir);
   return rotationMatrix
 })
+
+export const lookAt = Fn(([dir]: [Node<'vec3'>]) => {
+  // 1. 归一化目标向量
+  const z = dir.normalize();
+
+  // 2. 检查 dir 是否与原生的 Y 轴平行
+  // 如果 abs(z.y) > 0.99，说明在极点，切换参考向量为 Z 轴 (0, 0, 1)
+  const isPole = abs(z.y).greaterThan(0.99);
+  const upReference = isPole ? vec3(0, 0, 1) : vec3(0, 1, 0);
+
+  // 3. 计算右向量和上向量
+  const x = cross(upReference, z).normalize();
+  const y = cross(z, x).normalize();
+
+  // 4. 构造旋转矩阵
+  // 注意：在 WebGPU/TSL 中，mat3(col0, col1, col2) 是按列构造的
+  return mat3(x, y, z);
+});
 
 
 export const getSphereUV = Fn(([pos]: [any]) => {
@@ -204,4 +222,10 @@ export const exp3 = Fn(([v]: [Node<'vec3'>]) => {
 
 export const expToneMapping = Fn(([col]: [Node<'vec3'>]) => {
   return oneMinus( exp3(col.negate()) )
+})
+
+// v1 < v2
+export const smoothRange = Fn(([v1, v2, v]: [Node<'float'>,Node<'float'>, Node<'float'>]) => {
+  const eps = float(.1)
+  return smoothstep(v1.sub(eps), v1.add(eps), v).mul(smoothstep(v2.add(eps), v2.sub(eps), v))
 })

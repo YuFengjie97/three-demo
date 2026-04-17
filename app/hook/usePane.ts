@@ -15,6 +15,11 @@ export function usePane() {
     return globalInstance;
   }, []);
 
-  return { pane };
+  const dispose = () => {
+    pane.dispose()
+    globalInstance = null
+  }
+
+  return { pane, dispose };
 }
 

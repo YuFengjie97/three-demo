@@ -1,0 +1,1 @@
+import{P as n}from"./tweakpane-ZayJk8yu.js";import{r as o}from"./chunk-EPOLDU6W-D-U-5P6E.js";let e=null;function p(){const s=o.useMemo(()=>(e||(e=new n),e),[]);return{pane:s,dispose:()=>{s.dispose(),e=null}}}export{p as u};

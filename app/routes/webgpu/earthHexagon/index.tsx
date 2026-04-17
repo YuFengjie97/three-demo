@@ -174,9 +174,9 @@ function Earth() {
 
   const uf = useMemo(() => {
     return {
-      heightMin: uniform(0.6),  // 最小基准高度
+      heightMin: uniform(0.1),  // 最小基准高度
       levelNum: uniform(10),     // 高度分层数
-      levelHeight: uniform(.4), // 每层高的高度
+      levelHeight: uniform(.2), // 每层高的高度
 
       noiseScale: uniform(0.18),
       noiseOffset: uniform(0.),

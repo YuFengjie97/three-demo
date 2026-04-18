@@ -167,10 +167,10 @@ export function generateGoldberg(m: number, radius: number = 1): GoldbergFace[] 
 }
 
 function Earth() {
-  const { camera } = useThree();
+  const { camera, gl, scene } = useThree();
   camera.position.set(0, 10, 15);
 
-  const [detail, setDetail] = useState(60)
+  const [detail, setDetail] = useState(40)
 
   const uf = useMemo(() => {
     return {
@@ -232,7 +232,7 @@ function Earth() {
       const B = cross(T, N).normalize();
       const rotationMatrix = mat3(T, N, B);
 
-      const scale = float(6.3/detail);
+      const scale = float(7./detail);
       const noiseVal = simplexNoise3d(pos.mul(uf.noiseScale).add(uf.noiseOffset))
       const n = smoothstep(-1, 1, noiseVal);
 
@@ -240,15 +240,19 @@ function Earth() {
       const land = seaRange.oneMinus()
 
 
-      const seaCol = mix(uf.seaCol0, uf.seaCol1, pow(seaRange,2)).mul(seaRange)
+      // const seaCol = mix(uf.seaCol0, uf.seaCol1, pow(seaRange,2)).mul(seaRange)
+      const seaCol = uf.seaCol1.mul(seaRange)
 
       const landNoise = mx_noise_float(pos.mul(uf.landNoiseScale).add(uf.landNoiseOffset)).mul(land).mul(.5).add(.5)
       const grassRange = smoothRange(0,uf.grassRange,landNoise)
       const rockRange = smoothRange(uf.grassRange,uf.rockRange,landNoise)
       const snowRang  = smoothRange(uf.rockRange,1,landNoise)
 
-      const grassCol = mix(uf.grassCol0, uf.grassCol1, grassRange).mul(grassRange)
-      const rockCol = mix(uf.rockCol0, uf.rockCol1, grassRange).mul(rockRange)
+      // const grassCol = mix(uf.grassCol0, uf.grassCol1, grassRange).mul(grassRange)
+      // const rockCol = mix(uf.rockCol0, uf.rockCol1, grassRange).mul(rockRange)
+
+      const grassCol = uf.grassCol1.mul(grassRange)
+      const rockCol = uf.rockCol1.mul(rockRange)
       const snowCol= vec3(.8).mul(snowRang)
 
       const landCol = grassCol.add(rockCol).add(snowCol)
@@ -301,31 +305,31 @@ function Earth() {
     rangeFolder.addBinding(mat.uf.rockRange, "value", { label: "rockRange", min: 0.01, max: 1 });
 
     const colFolder = pane.addFolder({title: 'color', expanded: false})
-    colFolder.addBinding({col: new THREE.Color(mat.uf.seaCol0.value).getHex()}, "col", { label: "seaCol0", view:'color' }).on('change', ({value}) => {
-      const c = new THREE.Color(value)
-      const{r,g,b} = c
-      mat.uf.seaCol0.value.set(r,g,b)
-    });
+    // colFolder.addBinding({col: new THREE.Color(mat.uf.seaCol0.value).getHex()}, "col", { label: "seaCol0", view:'color' }).on('change', ({value}) => {
+    //   const c = new THREE.Color(value)
+    //   const{r,g,b} = c
+    //   mat.uf.seaCol0.value.set(r,g,b)
+    // });
     colFolder.addBinding({col: new THREE.Color(mat.uf.seaCol1.value).getHex()}, "col", { label: "seaCol1", view:'color' }).on('change', ({value}) => {
       const c = new THREE.Color(value)
       const{r,g,b} = c
       mat.uf.seaCol1.value.set(r,g,b)
     });
-    colFolder.addBinding({col: new THREE.Color(mat.uf.grassCol0.value).getHex()}, "col", { label: "grassCol0", view:'color' }).on('change', ({value}) => {
-      const c = new THREE.Color(value)
-      const{r,g,b} = c
-      mat.uf.grassCol0.value.set(r,g,b)
-    });
+    // colFolder.addBinding({col: new THREE.Color(mat.uf.grassCol0.value).getHex()}, "col", { label: "grassCol0", view:'color' }).on('change', ({value}) => {
+    //   const c = new THREE.Color(value)
+    //   const{r,g,b} = c
+    //   mat.uf.grassCol0.value.set(r,g,b)
+    // });
     colFolder.addBinding({col: new THREE.Color(mat.uf.grassCol1.value).getHex()}, "col", { label: "grassCol1", view:'color' }).on('change', ({value}) => {
       const c = new THREE.Color(value)
       const{r,g,b} = c
       mat.uf.grassCol1.value.set(r,g,b)
     });
-    colFolder.addBinding({col: new THREE.Color(mat.uf.rockCol0.value).getHex()}, "col", { label: "rockCol0", view:'color' }).on('change', ({value}) => {
-      const c = new THREE.Color(value)
-      const{r,g,b} = c
-      mat.uf.rockCol0.value.set(r,g,b)
-    });
+    // colFolder.addBinding({col: new THREE.Color(mat.uf.rockCol0.value).getHex()}, "col", { label: "rockCol0", view:'color' }).on('change', ({value}) => {
+    //   const c = new THREE.Color(value)
+    //   const{r,g,b} = c
+    //   mat.uf.rockCol0.value.set(r,g,b)
+    // });
     colFolder.addBinding({col: new THREE.Color(mat.uf.rockCol1.value).getHex()}, "col", { label: "rockCol1", view:'color' }).on('change', ({value}) => {
       const c = new THREE.Color(value)
       const{r,g,b} = c
@@ -337,18 +341,18 @@ function Earth() {
     }
   }, []);
 
-  const map = useTexture(asset('/img/texture/matcap/776C62_292622_474039_3C342C.png'))
+  const map = useTexture(asset('/img/texture/matcap/2D2D2F_C6C2C5_727176_94949B.png'))
 
   return (
     <instancedMesh args={[undefined, undefined, mat.count]}>
       <cylinderGeometry args={[1, 1, 0.5, 6, 6]} />
-      <meshMatcapNodeMaterial
+      <meshStandardNodeMaterial
         positionNode={mat.positionNode}
         colorNode={mat.colorNode}
-        matcap={map}
+        // matcap={map}
         // side={THREE.DoubleSide}
-        // metalness={.2}
-        // roughness={.9}
+        metalness={.0}
+        roughness={.9}
       />
     </instancedMesh>
   );
@@ -362,7 +366,7 @@ export default function App() {
   return (
     <WebGPUCanvas>
       <ambientLight intensity={1} />
-      {/* <directionalLight position={[0, 10, 10]} intensity={2.1} /> */}
+      <directionalLight position={[0, 10, 10]} intensity={2.1} />
       <axesHelper args={[20]} />
       <OrbitControls />
       <Suspense fallback={null}>

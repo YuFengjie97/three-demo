@@ -189,11 +189,11 @@ function Earth() {
       rockRange: uniform(.7),
 
       seaCol0: uniform(new THREE.Color(0x65e2ff)),
-      seaCol1: uniform(new THREE.Color(0x1d62b0)),
+      seaCol1: uniform(new THREE.Color(0x1d77b0)),
       grassCol0: uniform(new THREE.Color(0xa5d3aa)),
-      grassCol1: uniform(new THREE.Color(0x71e911)),
+      grassCol1: uniform(new THREE.Color(0x487a15)),
       rockCol0: uniform(new THREE.Color(0xb3b05c)),
-      rockCol1: uniform(new THREE.Color(0xa07700)),
+      rockCol1: uniform(new THREE.Color(0x8d701c)),
     };
   }, []) 
 
@@ -233,10 +233,10 @@ function Earth() {
       const rotationMatrix = mat3(T, N, B);
 
       const scale = float(7./detail);
-      const noiseVal = simplexNoise3d(pos.mul(uf.noiseScale).add(uf.noiseOffset))
-      const n = smoothstep(-1, 1, noiseVal);
+      // const baseNoise = simplexNoise3d(pos.mul(uf.noiseScale).add(uf.noiseOffset)).mul(.5).add(.5)
+      const baseNoise = mx_noise_float(pos.mul(uf.noiseScale).add(uf.noiseOffset)).mul(.5).add(.5)
 
-      const seaRange = smoothRange(0, uf.seaRange, n);
+      const seaRange = smoothRange(0, uf.seaRange, baseNoise);
       const land = seaRange.oneMinus()
 
 
@@ -257,7 +257,7 @@ function Earth() {
 
       const landCol = grassCol.add(rockCol).add(snowCol)
 
-      const landHeight = land.mul(landNoise).mul(uf.levelNum).floor().mul(uf.levelHeight)
+      const landHeight = landNoise.mul(uf.levelNum).floor().mul(uf.levelHeight)
       
       const height = uf.heightMin.toVar().add(landHeight)
 

@@ -226,6 +226,6 @@ export const expToneMapping = Fn(([col]: [Node<'vec3'>]) => {
 
 // v1 < v2
 export const smoothRange = Fn(([v1, v2, v]: [Node<'float'>,Node<'float'>, Node<'float'>]) => {
-  const eps = float(.1)
+  const eps = float(.001)
   return smoothstep(v1.sub(eps), v1.add(eps), v).mul(smoothstep(v2.add(eps), v2.sub(eps), v))
 })

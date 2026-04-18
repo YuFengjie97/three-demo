@@ -236,7 +236,7 @@ function Earth() {
       // const baseNoise = simplexNoise3d(pos.mul(uf.noiseScale).add(uf.noiseOffset)).mul(.5).add(.5)
       const baseNoise = mx_noise_float(pos.mul(uf.noiseScale).add(uf.noiseOffset)).mul(.5).add(.5)
 
-      const seaRange = smoothRange(0, uf.seaRange, baseNoise);
+      const seaRange = step(baseNoise, uf.seaRange) //smoothRange(0, uf.seaRange, baseNoise);
       const land = seaRange.oneMinus()
 
 
@@ -244,9 +244,9 @@ function Earth() {
       const seaCol = uf.seaCol1.mul(seaRange)
 
       const landNoise = mx_noise_float(pos.mul(uf.landNoiseScale).add(uf.landNoiseOffset)).mul(land).mul(.5).add(.5)
-      const grassRange = smoothRange(0,uf.grassRange,landNoise)
-      const rockRange = smoothRange(uf.grassRange,uf.rockRange,landNoise)
-      const snowRang  = smoothRange(uf.rockRange,1,landNoise)
+      const grassRange = step(0, landNoise).mul(step(landNoise, uf.grassRange)) // smoothRange(0,uf.grassRange,landNoise)
+      const rockRange = step(uf.grassRange, landNoise).mul(step(landNoise, uf.rockRange)) // smoothRange(uf.grassRange,uf.rockRange,landNoise)
+      const snowRang  = step(uf.rockRange, landNoise).mul(step(landNoise, 1)) // smoothRange(uf.rockRange,1,landNoise)
 
       // const grassCol = mix(uf.grassCol0, uf.grassCol1, grassRange).mul(grassRange)
       // const rockCol = mix(uf.rockCol0, uf.rockCol1, grassRange).mul(rockRange)

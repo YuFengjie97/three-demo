@@ -82,7 +82,7 @@ function Cloud() {
 
   const mat = useMemo(() => {
 
-    const facePos = attribute<'vec3'>('_facevertexcenter', 'vec3')
+    const facePos = attribute<'vec3'>('_facevertexcenter', 'vec3')  // 注意这里的属性名来自blender中的命名属性节点
 
     const uf = {
       seaCol: uniform(new THREE.Color(0x52a2d5)),

@@ -54,6 +54,7 @@ import {
   transformedNormalWorld,
   rotate,
   mx_rotate3d,
+  attribute,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
 import WebGPUCanvas from "~/components/WebGpuCanvas";
@@ -64,85 +65,133 @@ import { simplexNoise3d } from "~/utils/tsl/simplexNoise3d";
 import { bloom } from "three/examples/jsm/tsl/display/BloomNode.js";
 import { useAudioAnalyser, type BinInfo } from "~/hook/useAuido";
 import { usePane } from "~/hook/usePane";
-
-type Vector3 = [number, number, number];
-
-interface GoldbergFace {
-  pos: Vector3;
-  type: "pentagon" | "hexagon";
-  tangent: Vector3;
-}
+import { Pane } from "tweakpane";
 
 
 function Cloud() {
-  const {camera} = useThree()
-  camera.position.set(0,10,20)
+  const {camera,scene} = useThree()
+  camera.position.set(0,0,10)
+  scene.background = new THREE.Color(0x6c5ce7)
 
-  const { nodes } = useGLTF(asset('/model/hexagonSphere.glb'))
-  console.log(1111, nodes);
-  const geo = nodes.ball.geometry as THREE.BufferGeometry
+  // const { nodes } = useGLTF(asset('/model/goldbergBall.glb'))
+  const { nodes } = useGLTF(asset('/model/goldbergBall-transformed.glb'))
+  // @ts-ignore
+  const geo = nodes.base.geometry as THREE.BufferGeometry
+  console.log(geo);
 
-  const { nodes: insNodes } = useGLTF(asset('/model/hexagonBar.glb'))
-  const insGeo = insNodes.bar.geometry
-
-
-  const positionArr = geo.getAttribute('_facecenter').array as Float32Array
-  const normalArr = geo.getAttribute('_facenormal').array as Float32Array
-  const typeArr  =geo.getAttribute('_facetype').array as Float32Array
-  const count = positionArr.length / 3
-  
-  
 
   const mat = useMemo(() => {
-    const positionBuffer = instancedArray(positionArr, "vec3");
-    const normalBuffer = instancedArray(normalArr, "vec3");
+
+    const facePos = attribute<'vec3'>('_facevertexcenter', 'vec3')
+
+    const uf = {
+      seaCol: uniform(new THREE.Color(0x52a2d5)),
+      grassCol: uniform(new THREE.Color(0x529540)),
+      rockCol: uniform(new THREE.Color(0xc5842a)),
+      snowCol: uniform(new THREE.Color(0xc2b3b3)),
+
+      seaRange: uniform(float(.5)),
+      grassRange: uniform(float(.6)),
+      rockRange: uniform(float(.8)),
+
+      noiseOffset: uniform(float(0))
+    }
+    const vFacePos = varying(vec3(0))
+    const vCol = varying(vec3(0))
 
     const positionNode = Fn(() => {
-      const pos = positionBuffer.element(instanceIndex); // 表面中心点
-      const N = normalBuffer.element(instanceIndex).normalize(); // 法线
+      vFacePos.assign(facePos)
 
-      // 1. 定义一个参考的向上向量
-      // 如果法线刚好是 (0, 1, 0)，叉乘会失败，所以加个判断
-      const up = select(abs(N.y).greaterThan(0.9), vec3(1, 0, 0), vec3(0, 1, 0));
+      const dir = facePos.toVar()  // 这里在blender分配的属性稍微有一丢丢问题,不要归一化
+      const noise = mx_noise_float(facePos.mul(.4)).mul(.5).add(.5)
 
-      // 2. 构造三轴（Gram-Schmidt 过程）
-      const xAxis = cross(up, N).normalize();
-      const zAxis = cross(xAxis, N).normalize();
+      // 1.区分海洋和陆地
+      const sea = step(uf.seaRange, noise)
+      const seaCol = sea.mul(uf.seaCol)
 
-      const rotationMatrix = mat3(xAxis, N, zAxis);
+      const noiseInput = facePos.add(uf.noiseOffset)
 
-      // 4. 让圆柱体“底面”贴合球面
-      // 假设圆柱体高度为 h，几何体本身中心在 (0,0,0)
-      // 我们需要先在局部坐标系里把圆柱体向上移动 h/2
-      const h = 0.5; // 这里填你创建 CylinderGeometry 时的高度
-      const localPos = positionLocal.add(vec3(0, 1, 0));
+      // 2.在陆地上区分,草地,岩石,雪山 0-grass-rock-snow-1
+      const land = sea.oneMinus()
+      const noiseLand = mx_noise_float(noiseInput.add(3)).mul(.5).add(.5)
+      const snow = land.mul(step(uf.rockRange, noiseLand))
+      const rock = land.mul(step(uf.grassRange, noiseLand).mul(step(noiseLand, uf.rockRange)))
+      const grass = land.mul(step(noiseLand, uf.grassRange))
 
-      const rot = lookAt(pos.normalize())
 
-      // 5. 应用旋转并平移到球面的位置
-      return rot.mul(positionLocal.mul(.9)).add(pos)
-    })();
+
+      const snowCol = snow.mul(uf.snowCol)
+      const rockCol = rock.mul(mix(uf.rockCol, vec3(-.2), mx_noise_float(noiseInput.add(55))))
+      const grassCol = grass.mul(mix(uf.grassCol, vec3(-.2), mx_noise_float(noiseInput.add(66))))
+
+
+      // 高度逻辑
+      const noiseHeight = mx_noise_float(noiseInput.add(4)).mul(.5).add(.5)
+      const landHeight = land.mul(noiseHeight).mul(1.4) // 陆地高度随机
+      const noiseSeaHeight = mx_noise_float(noiseInput.mul(.6).add(4).add(time.mul(.3))).mul(.5).add(.5) // 海洋高度随时间起伏
+      const seaHeight = sea.mul(noiseSeaHeight).mul(.6)
+      const height = landHeight.add(seaHeight)
+      height.mulAssign(.1)
+
+      seaCol.assign(mix(seaCol, vec3(-.1), noiseSeaHeight.oneMinus())) // 颜色随高度变化
+      vCol.assign(seaCol.add(snowCol).add(rockCol).add(grassCol))
+
+      return positionLocal.add(dir.mul(height))
+    })()
 
     const colorNode = Fn(() => {
-      const pos = positionBuffer.element(instanceIndex);
-      const col = sin3(vec3(3, 2, 1).add(float(instanceIndex)))
-        .mul(0.5)
-        .add(0.5);
-      return col;
+      return vCol
+      // return sin3(vec3(3,2,1).add(vFacePos.mul(2))).mul(.5).add(.5)
     })();
 
 
-    return { count, positionNode, colorNode };
+    return {  positionNode, colorNode, uf};
   }, []);
+
+    useEffect(() => {
+      const pane = new Pane()
+      pane.addBinding(mat.uf.noiseOffset, "value", { label: "noiseOffset", min: 0., max: 10 });
+
+
+      const colFolder = pane.addFolder({title: 'color'})
+      colFolder.addBinding({col: new THREE.Color(mat.uf.seaCol.value).getHex()}, "col", { label: "seaCol", view:'color' }).on('change', ({value}) => {
+        const c = new THREE.Color(value)
+        const{r,g,b} = c
+        mat.uf.seaCol.value.set(r,g,b)
+      });
+      colFolder.addBinding({col: new THREE.Color(mat.uf.grassCol.value).getHex()}, "col", { label: "grassCol", view:'color' }).on('change', ({value}) => {
+        const c = new THREE.Color(value)
+        const{r,g,b} = c
+        mat.uf.grassCol.value.set(r,g,b)
+      });
+      colFolder.addBinding({col: new THREE.Color(mat.uf.rockCol.value).getHex()}, "col", { label: "rockCol", view:'color' }).on('change', ({value}) => {
+        const c = new THREE.Color(value)
+        const{r,g,b} = c
+        mat.uf.rockCol.value.set(r,g,b)
+      });
+      colFolder.addBinding({col: new THREE.Color(mat.uf.snowCol.value).getHex()}, "col", { label: "snowCol", view:'color' }).on('change', ({value}) => {
+        const c = new THREE.Color(value)
+        const{r,g,b} = c
+        mat.uf.snowCol.value.set(r,g,b)
+      });
+
+      const rangeFolder = pane.addFolder({title: 'range'})
+      rangeFolder.addBinding(mat.uf.seaRange, "value", { label: "seaRange", min: 0.01, max: 1 });
+      rangeFolder.addBinding(mat.uf.grassRange, "value", { label: "grassRange", min: 0.01, max: 1 });
+      rangeFolder.addBinding(mat.uf.rockRange, "value", { label: "rockRange", min: 0.01, max: 1 });
+
+    }, [])
   return (
-    <instancedMesh args={[insGeo, undefined, mat.count]}>
-      {/* <cylinderGeometry args={[1, 1, 0.5, 6]} /> */}
-      <meshStandardNodeMaterial
+    <mesh geometry={geo}>
+      <meshStandardMaterial
         positionNode={mat.positionNode}
-        colorNode={mat.colorNode}
         // side={THREE.DoubleSide}
-      />
-    </instancedMesh>
+        colorNode={mat.colorNode}
+        roughness={1.}
+        metalness={.0}
+        />
+        
+    </mesh>
   );
 }
 
@@ -154,7 +203,8 @@ export default function App() {
   return (
     <WebGPUCanvas>
       <ambientLight intensity={1} />
-      <directionalLight position={[0, 10, 10]} intensity={1.1} />
+      <directionalLight position={[0, 10, 10]} intensity={4.1} />
+      <directionalLight position={[0, -10, -10]} intensity={2.5} />
       <axesHelper args={[20]} />
       <OrbitControls />
       <Suspense fallback={null}>

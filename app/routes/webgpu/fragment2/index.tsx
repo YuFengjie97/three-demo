@@ -122,7 +122,8 @@ function Model() {
 
   return (
     <mesh geometry={geo}>
-      <meshPhysicalNodeMaterial 
+      <meshPhysicalNodeMaterial
+        // wireframe
         roughnessNode={mat.uf.roughness}
         metalnessNode={mat.uf.metalness}
         positionNode={mat.positionNode}

@@ -191,7 +191,7 @@ export default function App() {
     <WebGPUCanvas>
       <ambientLight intensity={2} />
       {/* <pointLight position={[0,0,-2]} intensity={4} /> */}
-      <directionalLight position={[-5, 5, 5]} intensity={2.1} />
+      <directionalLight position={[-5, 5, 5]} intensity={4.1} />
       {/* <axesHelper args={[20]} /> */}
       <OrbitControls />
       <Suspense fallback={null}>

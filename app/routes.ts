@@ -76,6 +76,7 @@ export default [
   route('/webgpu/earth-hexagon-2', 'routes/webgpu/earthHexagon2/index.tsx'),
   route('/webgpu/lightning', 'routes/webgpu/lightning/index.tsx'),
   route('/webgpu/fragment', 'routes/webgpu/fragment/index.tsx'),
+  route('/webgpu/fragment-2', 'routes/webgpu/fragment2/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

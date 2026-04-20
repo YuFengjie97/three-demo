@@ -71,7 +71,7 @@ import { SkyboxFairyForestDay } from "~/components/model/SkyboxFairyForestDay";
 import { MeshSurfaceSampler } from "three/examples/jsm/Addons.js";
 
 function Model() {
-  const { nodes, materials } = useGLTF(asset("/model/ball_suipian-transformed.glb"));
+  const { nodes, materials } = useGLTF(asset("/model/starFragment-transformed.glb"));
 
   // @ts-ignore
   // const geoBase = nodes.plane.geometry as THREE.BufferGeometry;

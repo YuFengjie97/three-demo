@@ -77,6 +77,7 @@ export default [
   route('/webgpu/lightning', 'routes/webgpu/lightning/index.tsx'),
   route('/webgpu/fragment', 'routes/webgpu/fragment/index.tsx'),
   route('/webgpu/fragment-2', 'routes/webgpu/fragment2/index.tsx'),
+  route('/webgpu/particle-sin-fish', 'routes/webgpu/particleSinFish/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

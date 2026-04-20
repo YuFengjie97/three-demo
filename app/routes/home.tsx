@@ -76,6 +76,7 @@ export default function Home() {
           <LinkImg to='/webgpu/earth-hexagon' img='/img/preview/44.png' />
           <LinkImg to='/webgpu/earth-hexagon-2' img='/img/preview/45.png' />
           <LinkImg to='/webgpu/fragment-2' img='/img/preview/46.png' />
+          <LinkImg to='/webgpu/particle-sin-fish' img='/img/preview/47.png' />
 
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             Music Visual

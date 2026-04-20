@@ -90,8 +90,8 @@ function Model() {
 
     const uf = {
       colSeed: uniform(vec3(3,2,1)),
-      roughness: uniform(.5),
-      metalness: uniform(.6)
+      roughness: uniform(.1),
+      metalness: uniform(1.)
     }
 
     const positionNode = Fn(() => {
@@ -139,6 +139,8 @@ function Model() {
 
 function Base() {
   const groupRef = useRef<THREE.Group>(null);
+  const { gl, scene, camera, size } = useThree();
+  camera.position.set(-4,-6,13)
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
@@ -156,7 +158,6 @@ function Base() {
 function WebGPUEffects() {
   const { gl, scene, camera, size } = useThree();
   gl.toneMapping = THREE.AgXToneMapping
-  camera.position.set(0,0,16)
 
 
   const renderPipeline = useMemo(() => {
@@ -195,7 +196,7 @@ export default function App() {
       <Suspense fallback={null}>
         <Base />
         {/* <WebGPUEffects /> */}
-        <Environment background blur={0.4} path={asset("/img/skybox/sky_98_cubemap_2k")} />
+        <Environment background blur={0.5} path={asset("/img/skybox/sky_98_cubemap_2k")} />
         {/* <SkyboxFairyForestDay /> */}
       </Suspense>
     </WebGPUCanvas>

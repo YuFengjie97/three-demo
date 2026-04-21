@@ -75,6 +75,7 @@ export default function Home() {
           <LinkImg to='/webgpu/cube-matrix-flow' img='/img/preview/43.png' />
           <LinkImg to='/webgpu/earth-hexagon' img='/img/preview/44.png' />
           <LinkImg to='/webgpu/earth-hexagon-2' img='/img/preview/45.png' />
+          <LinkImg to='/webgpu/earth-hexagon-3' img='/img/preview/48.png' />
           <LinkImg to='/webgpu/fragment-2' img='/img/preview/46.png' />
           <LinkImg to='/webgpu/particle-sin-fish' img='/img/preview/47.png' />
 

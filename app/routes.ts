@@ -80,6 +80,7 @@ export default [
   route('/webgpu/fragment', 'routes/webgpu/fragment/index.tsx'),
   route('/webgpu/fragment-2', 'routes/webgpu/fragment2/index.tsx'),
   route('/webgpu/particle-sin-fish', 'routes/webgpu/particleSinFish/index.tsx'),
+  route('/webgpu/point-Link', 'routes/webgpu/pointLink/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

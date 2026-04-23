@@ -82,6 +82,7 @@ export default [
   route('/webgpu/particle-sin-fish', 'routes/webgpu/particleSinFish/index.tsx'),
   route('/webgpu/point-Link', 'routes/webgpu/pointLink/index.tsx'),
   route('/webgpu/cube-x-cube', 'routes/webgpu/cubeXcube/index.tsx'),
+  route('/webgpu/death-ball', 'routes/webgpu/deathBall/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

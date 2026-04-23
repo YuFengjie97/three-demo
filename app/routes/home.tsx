@@ -4,8 +4,8 @@ import MagMouse from '~/components/MagMouse'
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: 'New React Router App' },
-    { name: 'description', content: 'Welcome to React Router!' },
+    { title: 'yfj threejs demo' },
+    { name: 'description', content: 'yufengjie threejs demo' },
   ]
 }
 

@@ -80,6 +80,7 @@ export default function Home() {
           <LinkImg to='/webgpu/particle-sin-fish' img='/img/preview/47.png' />
           <LinkImg to='/webgpu/cube-x-cube' img='/img/preview/49.png' />
           <LinkImg to='/webgpu/death-ball' img='/img/preview/50.png' />
+          <LinkImg to='/webgpu/point-link-ball' img='/img/preview/51.png' />
 
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             Music Visual

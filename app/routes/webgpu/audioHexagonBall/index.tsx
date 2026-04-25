@@ -16,7 +16,7 @@ import { AudioAnalyser } from "~/utils/AudioAnalyser";
 
 function Base() {
   const { camera, scene } = useThree();
-  camera.position.set(0, 0, 20);
+  camera.position.set(0, 0, 15);
 
   const pane = new Pane();
 

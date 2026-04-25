@@ -2,6 +2,7 @@ import { Loader } from "@react-three/drei";
 import { Canvas, extend, type ThreeToJSXElements } from "@react-three/fiber";
 import { Suspense } from "react";
 import * as THREE from "three/webgpu";
+import { Inspector } from "three/examples/jsm/inspector/Inspector.js";
 
 declare module "@react-three/fiber" {
   interface ThreeElements extends ThreeToJSXElements<typeof THREE> {}
@@ -18,6 +19,7 @@ export default function WebGPUCanvas({ children }) {
         // @ts-ignore
         gl={async (props) => {
           const renderer = new THREE.WebGPURenderer(props as any);
+          // renderer.inspector = new Inspector()
           await renderer.init();
           return renderer;
         }}

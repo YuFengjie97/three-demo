@@ -14,8 +14,7 @@ body {
   }
 }
 
-/* 防止控件内部元素超出 */
-/* .tp-lblv:has(.tp-ttv){
+/* tweakpane滑块超出窗口范围,触发滚动 */
+.tp-dfwv{
   overflow: hidden;
-  background: red;
-} */
+}

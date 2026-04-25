@@ -84,6 +84,7 @@ export default [
   route('/webgpu/point-link-ball', 'routes/webgpu/pointLinkBall/index.tsx'),
   route('/webgpu/cube-x-cube', 'routes/webgpu/cubeXcube/index.tsx'),
   route('/webgpu/death-ball', 'routes/webgpu/deathBall/index.tsx'),
+  route('/webgpu/audio-hexagon-ball', 'routes/webgpu/audioHexagonBall/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

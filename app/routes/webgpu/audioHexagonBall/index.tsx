@@ -145,7 +145,7 @@ export default function App() {
       // <pointLight position={[0,0,0]} intensity={4}/> */}
       {/* <directionalLight position={[0, 0, 10]} intensity={4.1} /> */}
       {/* <directionalLight position={[0, 0, -10]} intensity={4.1} /> */}
-      <axesHelper args={[20]} />
+      {/* <axesHelper args={[20]} /> */}
       <OrbitControls />
       <Suspense fallback={null}>
         <Base />

@@ -70,7 +70,6 @@ export default function Home() {
           <LinkImg to='/webgpu/earth' img='/img/preview/38.png' />
           <LinkImg to='/webgpu/line' img='/img/preview/39.png' />
           <LinkImg to='/webgpu/skull-and-text' img='/img/preview/40.png' />
-          <LinkImg to='/webgpu/audio-points' img='/img/preview/41.png' />
           <LinkImg to='/webgpu/cube-matrix' img='/img/preview/42.png' />
           <LinkImg to='/webgpu/cube-matrix-flow' img='/img/preview/43.png' />
           <LinkImg to='/webgpu/earth-hexagon' img='/img/preview/44.png' />
@@ -86,6 +85,9 @@ export default function Home() {
             Music Visual
           </h1>
           <LinkImg to='/three/mv1' img='/img/preview/26.png' />
+          <LinkImg to='/webgpu/audio-points' img='/img/preview/41.png' />
+          <LinkImg to='/webgpu/audio-hexagon-ball' img='/img/preview/52.png' />
+
         </div>
       </div>
     </>

@@ -21,39 +21,36 @@ export default function Home() {
           </h1>
           <LinkImg to='/three/csm' img='/img/preview/1.png' />
 
-          <LinkImg to='/three/sea' img='/img/preview/2.png' />
+          {/* <LinkImg to='/three/sea' img='/img/preview/2.png' /> */}
           <LinkImg to='/three/points' img='/img/preview/3.png' />
           <LinkImg to='/three/planet' img='/img/preview/4.png' />
           <LinkImg to='/three/real-earth' img='/img/preview/5.png' />
           <LinkImg to='/three/trail' img='/img/preview/6.png' />
-          <LinkImg to='/three/cloth-pattern' img='/img/preview/7.png' />
+          {/* <LinkImg to='/three/cloth-pattern' img='/img/preview/7.png' /> */}
           <LinkImg to='/three/china-3d' img='/img/preview/8.png' />
           <LinkImg to='/three/flow-point-line' img='/img/preview/9.png' />
-          <LinkImg
-            to='/three/hexagon-vertex-offset'
-            img='/img/preview/10.png'
-          />
-          <LinkImg to='/three/boxframes' img='/img/preview/11.png' />
+          {/* <LinkImgto='/three/hexagon-vertex-offset'img='/img/preview/10.png'/> */}
+          {/* <LinkImg to='/three/boxframes' img='/img/preview/11.png' /> */}
           <LinkImg to='/three/swords' img='/img/preview/12.png' />
           <LinkImg to='/three/fulu' img='/img/preview/13.png' />
-          <LinkImg to='/three/line' img='/img/preview/14.png' />
+          {/* <LinkImg to='/three/line' img='/img/preview/14.png' /> */}
           {/* <LinkImg to='/three/line2' img='/img/preview/15.png' /> */}
           <LinkImg to='/three/tube-line' img='/img/preview/16.png' />
           <LinkImg to='/three/tube-line2' img='/img/preview/17.png' />
           <LinkImg to='/three/zuowangdao' img='/img/preview/18.png' />
-          <LinkImg to='/three/particle1' img='/img/preview/19.png' />
+          {/* <LinkImg to='/three/particle1' img='/img/preview/19.png' /> */}
           <LinkImg to='/three/particle2' img='/img/preview/20.png' />
           <LinkImg to='/three/particle4-universe' img='/img/preview/21.png' />
           <LinkImg to='/three/particle5-storm' img='/img/preview/29.png' />
 
           <LinkImg to='/three/ball' img='/img/preview/22.png' />
           <LinkImg to='/three/tree' img='/img/preview/23.png' />
-          <LinkImg to='/three/growTree' img='/img/preview/24.png' />
-          <LinkImg to='/three/model-vertex-col' img='/img/preview/25.png' />
+          {/* <LinkImg to='/three/growTree' img='/img/preview/24.png' /> */}
+          {/* <LinkImg to='/three/model-vertex-col' img='/img/preview/25.png' /> */}
 
           <LinkImg to='/three/curve' img='/img/preview/27.png' />
           <LinkImg to='/three/curve2' img='/img/preview/30.png' />
-          <LinkImg to='/three/curve-tube' img='/img/preview/28.png' />
+          {/* <LinkImg to='/three/curve-tube' img='/img/preview/28.png' /> */}
           {/* <LinkImg to='/three/model-line' img='/img/preview/0.png' /> */}
 
           <LinkImg to='/three/thomas-attractor' img='/img/preview/31.png' />
@@ -63,9 +60,9 @@ export default function Home() {
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             WebGPU
           </h1>
-          <LinkImg to='/webgpu/particle' img='/img/preview/34.png' />
-          <LinkImg to='/webgpu/bar' img='/img/preview/35.png' />
-          <LinkImg to='/webgpu/relief' img='/img/preview/36.png' />
+          {/* <LinkImg to='/webgpu/particle' img='/img/preview/34.png' /> */}
+          {/* <LinkImg to='/webgpu/bar' img='/img/preview/35.png' /> */}
+          {/* <LinkImg to='/webgpu/relief' img='/img/preview/36.png' /> */}
           <LinkImg to='/webgpu/fire-particle' img='/img/preview/37.png' />
           <LinkImg to='/webgpu/earth' img='/img/preview/38.png' />
           <LinkImg to='/webgpu/line' img='/img/preview/39.png' />
@@ -84,7 +81,7 @@ export default function Home() {
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             Music Visual
           </h1>
-          <LinkImg to='/three/mv1' img='/img/preview/26.png' />
+          {/* <LinkImg to='/three/mv1' img='/img/preview/26.png' /> */}
           <LinkImg to='/webgpu/audio-points' img='/img/preview/41.png' />
           <LinkImg to='/webgpu/audio-hexagon-ball' img='/img/preview/52.png' />
 

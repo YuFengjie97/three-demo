@@ -1,4 +1,4 @@
-import { useFBO, useTexture } from "@react-three/drei";
+import { Html, useFBO, useTexture } from "@react-three/drei";
 import { useContext, useEffect, useMemo, useRef, useState, type Ref, type RefObject } from "react";
 import * as THREE from "three";
 import { MeshSurfaceSampler } from "three/examples/jsm/Addons.js";
@@ -70,15 +70,17 @@ import { useFrame } from "@react-three/fiber";
 import { mathSmoothstep } from "~/utils/math";
 
 export default function Line({
+  earthRef,
   earthRadius,
   start,
   end,
-  planeSpeed
+  planeSpeed,
 }: {
+  earthRef: RefObject<THREE.Mesh>;
   earthRadius: number;
   start: THREE.Vector3;
   end: THREE.Vector3;
-  planeSpeed: RefObject<{value: number}>
+  planeSpeed: RefObject<{ value: number }>;
 }) {
   const { pane, colSeed } = useContext(BaseContext);
   const rand = Math.random();
@@ -115,36 +117,67 @@ export default function Line({
 
   const life = { value: Math.random() };
   const planeRef = useRef<THREE.Object3D>(null);
-  const planeType = Math.floor(Math.random() * 3)
+  const planeType = Math.floor(Math.random() * 3);
+
+  const _pos = new THREE.Vector3();
+  const _target = new THREE.Vector3();
+  const _up = new THREE.Vector3();
+  const _matrix = new THREE.Matrix4();
+
   useFrame((_, deltaTime) => {
     if (!planeRef.current) return;
 
     life.value += deltaTime * planeSpeed.current.value;
-    if (life.value > 1) {
-      life.value = life.value % 1;
-    }
-    const pos = curve.getPoint(life.value);
-    const tarPos = curve.getPoint(life.value+.001)
-    planeRef.current.position.set(...pos.toArray());
+    if (life.value > 1) life.value %= 1;
 
-    const scale = mathSmoothstep(0,.1,life.value) * mathSmoothstep(1,.9,life.value)
-    planeRef.current.scale.set(scale,scale,scale)
+    curve.getPoint(life.value, _pos);
+    curve.getPoint(Math.min(life.value + 0.001, 1), _target); // 防止超过 1
 
-    planeRef.current.lookAt(tarPos)
+    // 3. 关键：计算飞机的“向上”向量
+    // 飞机是在球面上飞，所以它的 Up 应该是当前位置点的法线（即指向球心方向的延长线）
+    _up.copy(_pos).normalize();
+
+    // 4. 使用 lookAt 的矩阵版本，明确指定 up 向量
+    // 这样可以强制飞机的背部永远朝向太空，肚子朝向地面
+    _matrix.lookAt(_pos, _target, _up);
+    planeRef.current.quaternion.setFromRotationMatrix(_matrix);
+
+    planeRef.current.position.copy(_pos);
+    const s = mathSmoothstep(0, 0.1, life.value) * mathSmoothstep(1, 0.9, life.value);
+    planeRef.current.scale.set(s, s, s);
   });
-
-  
 
   return (
     <>
+      {/* <Html position={start} occlude={[earthRef]}>
+        <div className="bg-amber-300 select-none">
+          dfdf
+        </div>
+      </Html>
+      <Html position={end} occlude={[earthRef]}>
+        <div className="bg-green-500 select-none">
+          xxx
+        </div>
+      </Html> */}
       <mesh>
         <tubeGeometry args={[curve, 100, 0.02, 8, false]} />
         <meshBasicNodeMaterial colorNode={colorNode} transparent />
       </mesh>
-      {planeType === 0 && <Plane1 ref={planeRef} />}
-      {planeType === 1 && <Plane2 ref={planeRef} />}
-      {planeType === 2 && <Plane3 ref={planeRef} />}
-      
+      {planeType === 0 && (
+        <group ref={planeRef}>
+          <Plane1 rotation-y={Math.PI} />
+        </group>
+      )}
+      {planeType === 1 && (
+        <group ref={planeRef}>
+          <Plane2 rotation-y={Math.PI} />
+        </group>
+      )}
+      {planeType === 2 && (
+        <group ref={planeRef}>
+          <Plane3 rotation-y={Math.PI} />
+        </group>
+      )}
     </>
   );
 }

@@ -81,7 +81,7 @@ function Base() {
   const colSeed = useMemo(() => uniform(vec3(3, 2, 1)), []);
 
   useEffect(() => {
-    pane.addBinding(colSeed, "value", { min: 0, max: 20 });
+    pane.addBinding(colSeed, "value", {label: 'lineCol', min: 0, max: 20 });
   }, []);
 
   return (

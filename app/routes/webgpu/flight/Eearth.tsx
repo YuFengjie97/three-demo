@@ -75,15 +75,15 @@ export default function Earth() {
   const norMap = useTexture(asset("/img/texture/earth_2k/2k_earth_normal_map.jpg"));
   // const specMap = useTexture(asset('/img/texture/earth_2k/2k_earth_specular_map.jpg'))
   const cloudMap = useTexture(asset("/img/texture/earth_2k/2k_earth_clouds.jpg"));
-  const surfaceRef = useRef<THREE.Mesh>(null);
+  const earthRef = useRef<THREE.Mesh>(null);
   const [sampPoints, setSampPoints] = useState<Array<LineProp>>([]);
 
-  const count = 50;
+  const count = 60;
   const earthRadius = 5;
 
   useEffect(() => {
-    if (!surfaceRef.current) return;
-    const sampler = new MeshSurfaceSampler(surfaceRef.current).build();
+    if (!earthRef.current) return;
+    const sampler = new MeshSurfaceSampler(earthRef.current).build();
     const posArr: LineProp[] = [];
     const start = new THREE.Vector3(0, 0, 0);
     const end = new THREE.Vector3(0, 0, 0);
@@ -116,8 +116,8 @@ export default function Earth() {
 
   return (
     <>
-      <mesh ref={surfaceRef}>
-        <sphereGeometry args={[earthRadius, 48, 48]} />
+      <mesh ref={earthRef}>
+        <sphereGeometry args={[earthRadius, 16, 16]} />
         <meshStandardNodeMaterial
           colorNode={mat.colorNode}
           normalMap={norMap}
@@ -129,6 +129,7 @@ export default function Earth() {
         return (
           <Line
             key={i}
+            earthRef={earthRef}
             earthRadius={earthRadius}
             start={item.start}
             end={item.end}

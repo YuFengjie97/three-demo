@@ -1,1 +1,0 @@
-function l(o,s=1){const n=new Float32Array(o*3),h=1.414214;for(let t=0;t<o;t++){const i=t/o,e=2*Math.PI*t/h,c=Math.acos(1-2*i),r=Math.sin(c)*Math.cos(e)*s,M=Math.sin(c)*Math.sin(e)*s,g=Math.cos(c)*s,a=t*3;n[a+0]=r,n[a+1]=M,n[a+2]=g}return n}export{l as g};

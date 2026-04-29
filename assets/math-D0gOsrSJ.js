@@ -1,0 +1,1 @@
+function m(t,o=1){const n=new Float32Array(t*3),s=1.414214;for(let a=0;a<t;a++){const i=a/t,e=2*Math.PI*a/s,c=Math.acos(1-2*i),r=Math.sin(c)*Math.cos(e)*o,M=Math.sin(c)*Math.sin(e)*o,l=Math.cos(c)*o,h=a*3;n[h+0]=r,n[h+1]=M,n[h+2]=l}return n}function p(t,o,n){const s=Math.max(0,Math.min(1,(n-t)/(o-t)));return s*s*(3-2*s)}export{m as g,p as m};

@@ -97,7 +97,7 @@ export default function App() {
       <ambientLight intensity={0.1} />
       {/* <hemisphereLight args={[0xff0000, 0x00ff00]} intensity={1}/> */}
       <directionalLight position={[-10, 10, 10]} intensity={1.1} />
-      <axesHelper args={[10]} />
+      {/* <axesHelper args={[10]} /> */}
       <OrbitControls />
       <Suspense fallback={null}>
         <Base />

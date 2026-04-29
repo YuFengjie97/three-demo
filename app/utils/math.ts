@@ -25,3 +25,16 @@ export function getFibonacciSphere(count, radius = 1) {
 
   return result;
 }
+
+/**
+ * @param {number} edge0 下限
+ * @param {number} edge1 上限
+ * @param {number} x 输入值
+ */
+export function mathSmoothstep(edge0, edge1, x) {
+  // 1. 将 x 约束在 [edge0, edge1] 之间，并归一化到 [0, 1]
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+  
+  // 2. 使用多项式插值: 3t^2 - 2t^3
+  return t * t * (3 - 2 * t);
+}

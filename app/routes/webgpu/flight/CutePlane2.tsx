@@ -17,4 +17,4 @@ export default function Model(props) {
   )
 }
 
-useGLTF.preload('/cute_plane_2-transformed.glb')
+// useGLTF.preload('/cute_plane_2-transformed.glb')

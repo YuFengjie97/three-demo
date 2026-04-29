@@ -99,11 +99,9 @@ export default function App() {
       <directionalLight position={[-10, 10, 10]} intensity={1.1} />
       {/* <axesHelper args={[10]} /> */}
       <OrbitControls />
-      <Suspense fallback={null}>
-        <Base />
-        {/* <WebGPUEffects /> */}
-        <Environment background blur={0.4} path={asset("/img/skybox/sky_98_cubemap_2k")} />
-      </Suspense>
+      <Base />
+      {/* <WebGPUEffects /> */}
+      <Environment background blur={0.4} path={asset("/img/skybox/sky_98_cubemap_2k")} />
     </WebGPUCanvas>
   );
 }

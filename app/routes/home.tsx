@@ -78,6 +78,7 @@ export default function Home() {
           <LinkImg to='/webgpu/death-ball' img='/img/preview/50.png' />
           <LinkImg to='/webgpu/point-link-ball' img='/img/preview/51.png' />
           <LinkImg to='/webgpu/flight' img='/img/preview/53.png' />
+          <LinkImg to='/webgpu/mouse-grass' img='/img/preview/54.png' />
 
           <h1 data-type='mag' className='text-5xl w-fit my-10 col-span-full text-amber-50'>
             Music Visual

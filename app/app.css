@@ -16,5 +16,5 @@ body {
 
 /* tweakpane滑块超出窗口范围,触发滚动 */
 .tp-dfwv{
-  overflow: hidden;
+  /* overflow: hidden; */
 }

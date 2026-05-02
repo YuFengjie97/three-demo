@@ -11,7 +11,7 @@ import { lookAt, sin3 } from "~/utils/tsl";
 import { getFibonacciSphere } from "~/utils/math";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { bloom } from "three/examples/jsm/tsl/display/BloomNode.js";
-import { useMouseRay } from "~/utils/mouseRay";
+import { useMouseRay } from "~/hook/useMouseRay";
 import { CharAtlasCanvas } from "~/utils/CharAtlasTexture";
 import { useLoadFont } from "~/hook/useLoadFont";
 

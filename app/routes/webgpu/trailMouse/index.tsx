@@ -49,6 +49,7 @@ import {
   acos,
   sin,
   mod,
+  billboarding,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
 import WebGPUCanvas from "~/components/WebGpuCanvas";
@@ -56,13 +57,12 @@ import { asset } from "~/utils/asset";
 import { bloom } from "three/examples/jsm/tsl/display/BloomNode.js";
 import { Pane } from "tweakpane";
 import { useMouseRay } from "~/hook/useMouseRay";
-import { sin3 } from "~/utils/tsl";
 
 const mousePos = uniform(new THREE.Vector3(0, 0, 0));
-const mouseDataLen = 200;
+const mouseDataLen = 60; // 存储鼠标位置的数据长度, 也可以理解为帧数量,帧速度
 const frameCount = uniform(0);
 
-function Plane() {
+function Surface() {
   const { rayCaster } = useMouseRay();
 
   const meshRef = useRef<THREE.Mesh>(null);
@@ -78,9 +78,10 @@ function Plane() {
   });
 
   return (
-    <mesh ref={meshRef}>
-      <planeGeometry args={[20, 20]} />
-      <meshBasicMaterial wireframe />
+    <mesh ref={meshRef} visible>
+      {/* <planeGeometry args={[20, 20]} /> */}
+      <icosahedronGeometry args={[20,2]}/>
+      <meshBasicMaterial wireframe side={THREE.DoubleSide}/>
     </mesh>
   );
 }
@@ -99,21 +100,51 @@ function Trail() {
     })().compute(1);
 
     const vCol = varying(vec3(0, 0, 0));
+    const vH = varying(float(0))
 
     const positionNode = Fn(() => {
       const h01 = positionLocal.y.add(0.5);
+      vH.assign(h01)
 
-      const hIdx = mod(floor(h01.mul(mouseDataLen)).add(0), mouseDataLen);
+      // 2. 偏移索引：减去 1 才是当前帧刚写入的最新的点
+      // 减去 floor(...) 得到历史点
+      const latestIdx = frameCount.sub(1).add(mouseDataLen).mod(mouseDataLen);
+      const hIdx = latestIdx
+        .sub(floor(h01.mul(mouseDataLen - 1)))
+        .add(mouseDataLen)
+        .mod(mouseDataLen);
 
       const pos = mousePosHistoryBuffer.element(hIdx).toVar();
 
-      vCol.assign(sin(vec3(3,2,1).add(h01.mul(10))).mul(.5).add(.5));
+      // 3. 别忘了抹掉 positionLocal.y
+      const vOffset = vec3(positionLocal.x, 0, positionLocal.z);
 
-      return positionLocal.add(pos);
+      vCol.assign(
+        sin(vec3(3, 2, 1).add(h01.mul(10)))
+          .mul(0.5)
+          .add(0.5),
+      );
+      return pos.add(vOffset);
     })();
 
+    const positionNode2 = Fn(() => {
+      const latestIdx = frameCount.sub(1).add(mouseDataLen).mod(mouseDataLen);
+      const latestPos = mousePosHistoryBuffer.element(latestIdx).toVar()
+      const currentPos = mousePosHistoryBuffer.element(frameCount).toVar()
+      // const latestPos = vec3(0)
+      // const currentPos = sin(vec3(3,2,1).add(time))
+      const forward = currentPos.sub(latestPos).normalize()
+      const right = cross(forward, vec3(0,1,0)).normalize()
+      const up = cross(right, forward).normalize()
+      const lookAtRot = mat3(right, up, forward)
+      const pos = lookAtRot.mul(positionLocal)
+
+      return pos
+    })()
 
     const colorNode = Fn(() => {
+      return vec3(1,0,0)
+      const fade = smoothstep(.5,0.,vH);
       return vCol;
     })();
 
@@ -128,8 +159,19 @@ function Trail() {
 
   return (
     <mesh>
-      <cylinderGeometry args={[0.1, 0.5, 1, 16, 50]} />
-      <meshBasicNodeMaterial wireframe positionNode={mat.positionNode} colorNode={mat.colorNode} />
+      <cylinderGeometry args={[1, 1, 1, 12, 50]} />
+      {/* <planeGeometry args={[1,2,1,50]}/> */}
+      <meshBasicNodeMaterial
+        // roughness={0.9}
+        // metalness={0.}
+        wireframe
+        positionNode={mat.positionNode}
+        colorNode={mat.colorNode}
+        transparent
+        side={THREE.DoubleSide}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
     </mesh>
   );
 }
@@ -141,7 +183,7 @@ function Base() {
 
   return (
     <>
-      <Plane />
+      <Surface />
       <Trail />
     </>
   );
@@ -154,7 +196,7 @@ export default function App() {
 
       {/* <pointLight position={[0,7,0]} intensity={4}/>
       // <pointLight position={[0,0,0]} intensity={4}/> */}
-      {/* <directionalLight position={[0, 0, 10]} intensity={4.1} /> */}
+      <directionalLight position={[0, 0, 10]} intensity={4.1} />
       {/* <directionalLight position={[0, 0, -10]} intensity={4.1} /> */}
       <axesHelper args={[10]} />
       <OrbitControls />

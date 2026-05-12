@@ -90,6 +90,7 @@ export default [
   route('/webgpu/mouse-grass', 'routes/webgpu/mouseGrass/index.tsx'),
   route('/webgpu/trail-mouse', 'routes/webgpu/trailMouse/index.tsx'),
   route('/webgpu/trail-mouse-particle', 'routes/webgpu/trailMouseParticle/index.tsx'),
+  route('/webgpu/link-alien-bone', 'routes/webgpu/linkAlienBone/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

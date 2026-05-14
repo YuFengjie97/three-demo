@@ -83,7 +83,7 @@ import mitt from "mitt";
 
 const emitter = mitt();
 
-const sampleCount = 15;
+const sampleCount = 40;
 
 const samplePoint = Array.from({ length: sampleCount }).map((item) => new THREE.Vector3(0, 0, 0));
 
@@ -104,11 +104,8 @@ function Spider() {
 
   // 把落点单独提出来,因为它确定线的终点和dot点云的位置
   const endPosBuffer = useMemo(() => {
-    const endPosBuffer = storage(
-      new THREE.BufferAttribute(new Float32Array(tubularSegments), 3),
-      "vec3",
-      tubularSegments,
-    );
+    const endPosBuffer = instancedArray(sampleCount, 'vec3')
+
     return endPosBuffer
   }, [])
 
@@ -124,7 +121,7 @@ function Spider() {
       new THREE.Vector3(l, -l, 0),
       new THREE.Vector3(0, 0, 0), // 终点为000,可以完美匹配线段终点
     ]);
-    const geo = new THREE.TubeGeometry(path, tubularSegments - 1, 0.04, radialSegments - 1);
+    const geo = new THREE.TubeGeometry(path, tubularSegments - 1, 0.03, radialSegments - 1);
     
 
     const vSegIdx01 = varying(float(0));
@@ -272,7 +269,7 @@ function Base() {
   camera.position.set(0, 0, .4);
 
   // 随机采样位置-->供给落点采样
-  const count = 1000;
+  const count = 40000;
   const sampleSurfaceRef = useRef<THREE.Mesh>(null);
   const { points } = useMemo(() => {
     const points: THREE.Vector3[] = Array.from({ length: count }).map(
@@ -295,7 +292,7 @@ function Base() {
   // 鼠标移动时,重新采样落点
   const hitPos = new THREE.Vector3(0, 0, 0);
   const sampleDistMax = 3;
-  const sampleDistMin = 1;
+  const sampleDistMin = 0;
   function reSample() {
     let idx = 0;
     for (let i = 0; i < count; i++) {

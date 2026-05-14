@@ -15,10 +15,11 @@ export default function WebGPUCanvas({ children }) {
     <div className="h-screen overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 10] }}
-        dpr={[1, 1.5]}
+        dpr={[1, 2]}
         // @ts-ignore
         gl={async (props) => {
           const renderer = new THREE.WebGPURenderer(props as any);
+          renderer.toneMapping=THREE.NeutralToneMapping
           // renderer.inspector = new Inspector()
           await renderer.init();
           return renderer;

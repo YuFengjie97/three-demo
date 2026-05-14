@@ -117,11 +117,11 @@ function Spider() {
     const path = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0, 0, 0), // 起点为000,可以完整匹配线段起点
       new THREE.Vector3(l, l, 0),
-      new THREE.Vector3(l * 2, 0, 0),
+      // new THREE.Vector3(l * 2, 0, 0),
       new THREE.Vector3(l, -l, 0),
       new THREE.Vector3(0, 0, 0), // 终点为000,可以完美匹配线段终点
     ]);
-    const geo = new THREE.TubeGeometry(path, tubularSegments - 1, 0.03, radialSegments - 1);
+    const geo = new THREE.TubeGeometry(path, tubularSegments - 1, 0.04, radialSegments - 1);
     
 
     const vSegIdx01 = varying(float(0));
@@ -137,8 +137,8 @@ function Spider() {
       // 起点和终点部分随机噪音偏移
       const n = mx_noise_vec3(
         segIdx01
-          .mul(0.4) // 噪音缩放
-          .add(float(instanceIndex).mul(2.2)) // 每条线不一样的噪音偏移
+          .mul(0.1) // 噪音缩放
+          .add(float(instanceIndex).mul(.1)) // 每条线不一样的噪音偏移
           .add(time.mul(2.2)),
       )
         .mul(smoothstep(0, 0.5, segIdx01))
@@ -208,11 +208,11 @@ function Spider() {
       {/* <meshBasicNodeMaterial /> */}
       <meshBasicNodeMaterial
         positionNode={mat.positionNode}
+        colorNode={mat.colorNode}
         side={THREE.DoubleSide}
         transparent
         depthWrite={false}
         blending={THREE.AdditiveBlending}
-        colorNode={mat.colorNode}
       />
     </instancedMesh>
 
@@ -269,7 +269,7 @@ function Base() {
   camera.position.set(0, 0, .4);
 
   // 随机采样位置-->供给落点采样
-  const count = 40000;
+  const count = 10000;
   const sampleSurfaceRef = useRef<THREE.Mesh>(null);
   const { points } = useMemo(() => {
     const points: THREE.Vector3[] = Array.from({ length: count }).map(
@@ -292,7 +292,7 @@ function Base() {
   // 鼠标移动时,重新采样落点
   const hitPos = new THREE.Vector3(0, 0, 0);
   const sampleDistMax = 3;
-  const sampleDistMin = 0;
+  const sampleDistMin = 2;
   function reSample() {
     let idx = 0;
     for (let i = 0; i < count; i++) {

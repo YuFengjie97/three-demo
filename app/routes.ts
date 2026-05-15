@@ -93,6 +93,7 @@ export default [
   route('/webgpu/link-alien-bone', 'routes/webgpu/linkAlienBone/index.tsx'),
   route('/webgpu/line-spider', 'routes/webgpu/lineSpider/index.tsx'),
   route('/webgpu/line-spider-2', 'routes/webgpu/lineSpider2/index.tsx'),
+  route('/webgpu/vat-test', 'routes/webgpu/vatTest/index.tsx'),
 
 
   route('/three/some-test', 'routes/three/someTest/index.tsx'),

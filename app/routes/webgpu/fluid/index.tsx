@@ -67,7 +67,6 @@ import {
   Loop,
   Discard,
   frameId,
-  modelNormalMatrix,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
 import WebGPUCanvas from "~/components/WebGpuCanvas";
@@ -82,65 +81,77 @@ import { Pane } from "tweakpane";
 import { useMouseRay } from "~/hook/useMouseRay";
 import { LineGeometry, MeshSurfaceSampler } from "three/examples/jsm/Addons.js";
 import mitt from "mitt";
+import { attachPointerSplats, FluidSimulation } from 'three-fluid-fx/tsl'
 
-function Base() {
-  const frameCount = uniform(0);
-  const vatFrames = uniform(100);
-  const vatPosMin = vec3(0, -11.4, 0);
-  const vatPosMax = vec3(0, 11.4, 12.4);
 
-  useFrame((_, delta) => {
-    frameCount.value += delta * 60;
-  });
+function Base(){
+  const size = 100
+  const count = size*size
+  const {gl,size: stageSize} = useThree()
+  const renderer = gl as unknown as THREE.WebGPURenderer
 
-  const { nodes, materials } = useGLTF(asset("/model/vatTest/cube.glb"));
-  const geo = nodes.cube_vat.geometry as THREE.BufferGeometry;
-  console.log(geo);
 
-  const vat = useTexture(asset("/model/vatTest/cube_vat.png"));
-  // const vat = useTexture(asset("/model/roseVat/Rose_nrm.png"));
-  vat.minFilter = vat.magFilter = THREE.NearestFilter;
-  vat.generateMipmaps = false;
+  const {fluid, posNode, updatePos} = useMemo(() => {
+    const fluid = new FluidSimulation(renderer, {
+      profile: 'balanced',
+      splatRadius: 0.001,
+      splatForce: 6,
+    })
+    fluid.enableDye = true
+    fluid.resize(stageSize.width, stageSize.height)
+    const detachPointer = attachPointerSplats(renderer.domElement, fluid)
 
-  // 纹理uv以左下角为原点
-  const { posNode, norNode, colNode } = useMemo(() => {
+
+    const radius = 5
+    const geo = new THREE.IcosahedronGeometry(radius, 6)
+    const posArr = geo.getAttribute('position').array as Float32Array
+
+
+    const posBuffer = instancedArray(posArr, 'vec3')
+
     const posNode = Fn(() => {
-      const u = uv(1).x;
-      const currentFrame = float(frameCount).mod(vatFrames).floor();
-      const v = currentFrame.add(0.5).div(vatFrames).mul(.5).add(.5);
-      const posOffset = texture(vat, vec2(u, v)).rgb.mul(vatPosMax.sub(vatPosMin)).add(vatPosMin);
-      return positionLocal.add(posOffset);
-    })();
+      const pos = posBuffer.element(instanceIndex).toVar()
+      return positionLocal.add(pos)
+    })()
 
-    const norNode = Fn(() => {
-      const u = uv(1).x;
-      const currentFrame = float(frameCount).mod(vatFrames).floor();
-      const v = currentFrame.add(0.5).div(vatFrames).mul(.5);
+    const updatePos = Fn(() => {
+      const pos = posBuffer.element(instanceIndex).toVar()
 
-      const rawNormal = texture(vat, vec2(u, v)).rgb;
-      const decodedNormal = rawNormal.mul(2.0).sub(1.0).normalize();
-      return decodedNormal;
-    })();
+      const phi = atan(pos.y, pos.x); 
+      const u = phi.div(Math.PI * 2).add(0.5);
+      const theta = acos(pos.z.div(radius).clamp(-1, 1)); 
+      const v = theta.div(Math.PI)
+      const uv = vec2(u,v)
 
-    const colNode = Fn(() => {
-      return norNode;
-    })();
+      const vel = texture(fluid.velocityNode, uv).xyz
+      pos.addAssign(vel.mul(deltaTime).mul(3))
+      posBuffer.element(instanceIndex).assign(pos)
+    })().compute(count)
 
-    return { posNode, norNode, colNode };
-  }, [vat]); // 这里的依赖项加上 vat 确保纹理加载后更新
+    return {fluid, posNode, updatePos}
+  }, [])
 
-  return (
-    <mesh geometry={geo}>
-      <meshBasicNodeMaterial positionNode={posNode} normalNode={norNode} colorNode={colNode} />
-    </mesh>
-  );
+
+  useFrame((_,delta)=>{
+    fluid.step(delta)
+    renderer.compute(updatePos)
+  })
+
+
+  return(
+    <instancedMesh args={[undefined, undefined, count]}>
+      <icosahedronGeometry args={[.1, 1]}/>
+      <meshBasicNodeMaterial positionNode={posNode}/>
+    </instancedMesh>
+  )
 }
+
 
 export default function App() {
   return (
     <WebGPUCanvas>
       <ambientLight intensity={0.4} />
-      {/* <axesHelper args={[20]} /> */}
+      <axesHelper args={[10]} /> 
       <OrbitControls />
       <Suspense fallback={null}>
         <Base />

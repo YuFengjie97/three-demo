@@ -109,6 +109,7 @@ function Base() {
   const {camera,gl} = useThree()
   camera.position.set(0,0,20)
   gl.toneMapping = THREE.NeutralToneMapping
+  gl.toneMappingExposure = 1.2
 
   const { posArr } = useMemo(() => {
     const geo = new THREE.IcosahedronGeometry(5, 1);
@@ -136,7 +137,7 @@ function Base() {
     ]);
     const tubularSegments = 50;
     const radialSegments = 6;
-    const geo = new THREE.TubeGeometry(path, tubularSegments - 1, 0.03, radialSegments - 1);
+    const geo = new THREE.TubeGeometry(path, tubularSegments - 1, 0.08, radialSegments - 1);
 
     const vCol = varying(vec3(0));
 

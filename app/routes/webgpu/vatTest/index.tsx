@@ -68,6 +68,7 @@ import {
   Discard,
   frameId,
   modelNormalMatrix,
+  transformedNormalView,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
 import WebGPUCanvas from "~/components/WebGpuCanvas";
@@ -136,14 +137,32 @@ function Base() {
   );
 }
 
+function NorTest(){
+  const {posNode} = useMemo(() => {
+    const posNode = Fn(() => {
+      const offset = mx_noise_float(positionLocal.xy.add(time))
+      return positionLocal.add(vec3(0,0,offset))
+    })()
+    return {posNode}
+  }, [])
+  return (
+    <mesh>
+      <planeGeometry args={[10,10,20,20]}/>
+      <meshNormalNodeMaterial positionNode={posNode} normalNode={transformedNormalView} side={THREE.DoubleSide} />
+    </mesh>
+  )
+}
+
 export default function App() {
   return (
     <WebGPUCanvas>
       <ambientLight intensity={0.4} />
-      {/* <axesHelper args={[20]} /> */}
+      <pointLight position={[4,4,4]} intensity={1}/>
+      <axesHelper args={[20]} />
       <OrbitControls />
       <Suspense fallback={null}>
-        <Base />
+        {/* <Base /> */}
+        <NorTest />
         <Environment
           background
           blur={0.4}
